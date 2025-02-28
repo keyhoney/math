@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>수학1</title>
+  <title>수학12222</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf_viewer.css" />
   <style>
@@ -38,23 +38,44 @@
 
     nav ul {
       list-style: none;
+      padding-left: 0;
     }
 
-    nav ul li {
-      margin-bottom: 10px;
+    /* 트리 구조 */
+    nav li {
+      margin-bottom: 6px;
+      position: relative;
     }
 
-    nav ul li a {
+    /* 서브메뉴는 기본적으로 숨김 처리 */
+    li > ul {
+      display: none;
+      margin-left: 15px; /* 트리 구조 들여쓰기 */
+      border-left: 1px dashed #ccc;
+      padding-left: 10px;
+    }
+
+    li.open > ul {
+      display: block; /* 열려있을 때 보이도록 */
+    }
+
+    /* 트리 토글용 아이콘 표시 (간단히 +, - 아이콘으로) */
+    li span.toggle {
+      cursor: pointer;
+      font-weight: bold;
+      margin-right: 6px;
+    }
+
+    /* 링크 스타일 */
+    a {
       text-decoration: none;
       color: #333;
       font-size: 1rem;
-      padding: 6px 8px;
-      display: block;
+      padding: 4px 8px;
       border-radius: 4px;
-      cursor: pointer;
     }
 
-    nav ul li a:hover {
+    a:hover {
       background-color: #e2e2e2;
     }
 
@@ -95,10 +116,35 @@
   <nav>
     <h2>수학1 목차</h2>
     <ul>
-      <li><a href="#" onclick="loadPdf('pdf/지수.pdf');" aria-label="지수 PDF 보기">지수</a></li>
-      <li><a href="#" onclick="loadPdf('pdf/로그.pdf');" aria-label="로그 PDF 보기">로그</a></li>
-      <li><a href="#" onclick="loadPdf('pdf/삼각함수.pdf');" aria-label="삼각함수 PDF 보기">삼각함수</a></li>
-      <li><a href="#" onclick="loadPdf('pdf/수열.pdf');" aria-label="수열 PDF 보기">수열</a></li>
+      <!-- 트리 구조 예시 -->
+      <li>
+        <span class="toggle" onclick="toggleSubmenu(this)">[+]</span> 지수
+        <ul>
+          <li><a href="#" onclick="loadPdf('pdf/지수.pdf')">지수 개념</a></li>
+          <li><a href="#" onclick="loadPdf('pdf/로그.pdf')">지수 예제</a></li>
+        </ul>
+      </li>
+      <li>
+        <span class="toggle" onclick="toggleSubmenu(this)">[+]</span> 로그
+        <ul>
+          <li><a href="#" onclick="loadPdf('pdf/로그.pdf')">로그 개념</a></li>
+          <li><a href="#" onclick="loadPdf('pdf/지수.pdf')">로그 예제</a></li>
+        </ul>
+      </li>
+      <li>
+        <span class="toggle" onclick="toggleSubmenu(this)">[+]</span> 삼각함수
+        <ul>
+          <li><a href="#" onclick="loadPdf('pdf/삼각함수.pdf')">삼각함수 개념</a></li>
+          <li><a href="#" onclick="loadPdf('pdf/삼각함수_예제.pdf')">삼각함수 예제</a></li>
+        </ul>
+      </li>
+      <li>
+        <span class="toggle" onclick="toggleSubmenu(this)">[+]</span> 수열
+        <ul>
+          <li><a href="#" onclick="loadPdf('pdf/수열.pdf')">수열 개념</a></li>
+          <li><a href="#" onclick="loadPdf('pdf/수열_예제.pdf')">수열 예제</a></li>
+        </ul>
+      </li>
     </ul>
   </nav>
 
@@ -108,6 +154,19 @@
   </main>
 
   <script>
+    /* 트리 메뉴를 토글하는 함수 */
+    function toggleSubmenu(toggleElement) {
+      const li = toggleElement.closest('li');
+      if (li.classList.contains('open')) {
+        li.classList.remove('open');
+        toggleElement.textContent = '[+]';
+      } else {
+        li.classList.add('open');
+        toggleElement.textContent = '[-]';
+      }
+    }
+
+    /* PDF.js 렌더링 함수 */
     async function loadPdf(fileName) {
       const pdfjsLib = window['pdfjs-dist/build/pdf'];
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
