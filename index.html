@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>수학1 - PDF 뷰어</title>
+  <title>수학1 예시 - PDF 뷰어1</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf_viewer.css" />
   <style>
     * {
       margin: 0;
@@ -62,11 +64,9 @@
       width: 100%;
     }
 
-    #pdf-viewer {
+    canvas {
       width: 100%;
-      height: calc(100vh - 60px);
-      border: none;
-      background-color: #fff;
+      height: auto;
     }
 
     @media screen and (max-width: 768px) {
@@ -78,9 +78,6 @@
       }
       main {
         margin-left: 0;
-      }
-      #pdf-viewer {
-        height: calc(100vh - 60px);
       }
     }
   </style>
@@ -97,12 +94,31 @@
   </nav>
 
   <main>
-    <embed id="pdf-viewer" src="" type="application/pdf" width="100%" height="calc(100vh - 60px)">
+    <canvas id="pdf-canvas"></canvas>
   </main>
 
   <script>
-    function loadPdf(fileName) {
-      document.getElementById('pdf-viewer').src = fileName;
+    async function loadPdf(fileName) {
+      const pdfjsLib = window['pdfjs-dist/build/pdf'];
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+
+      const loadingTask = pdfjsLib.getDocument(fileName);
+      const pdf = await loadingTask.promise;
+
+      const page = await pdf.getPage(1);
+      const scale = 1.5; // 확대 비율
+      const viewport = page.getViewport({ scale: scale });
+
+      const canvas = document.getElementById('pdf-canvas');
+      const context = canvas.getContext('2d');
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+
+      const renderContext = {
+        canvasContext: context,
+        viewport: viewport
+      };
+      await page.render(renderContext).promise;
     }
   </script>
 </body>
