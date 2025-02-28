@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>수학1 예시</title>
+  <title>수학1 예시 - PDF 뷰어</title>
   <style>
     /* 기본 스타일 초기화 */
     * {
@@ -85,7 +85,7 @@
         margin-left: 0;
       }
       #pdf-viewer {
-        height: 500px; /* 모바일에서는 고정 높이 등으로 조정 가능 */
+        height: calc(100vh - 60px); /* 모바일에서도 동적으로 조정 */
       }
     }
   </style>
@@ -95,24 +95,22 @@
   <nav>
     <h2>수학1 목차</h2>
     <ul>
-      <!-- 링크 클릭 시 loadPdf 함수로 PDF 파일을 로드 -->
-      <li><a onclick=\"loadPdf('지수.pdf')\">지수</a></li>
-      <li><a onclick=\"loadPdf('로그.pdf')\">로그</a></li>
-      <li><a onclick=\"loadPdf('삼각함수.pdf')\">삼각함수</a></li>
-      <li><a onclick=\"loadPdf('수열.pdf')\">수열</a></li>
+      <li><a href="#" onclick="loadPdf('pdf/지수.pdf');" aria-label="지수 PDF 보기">지수</a></li>
+      <li><a href="#" onclick="loadPdf('pdf/로그.pdf');" aria-label="로그 PDF 보기">로그</a></li>
+      <li><a href="#" onclick="loadPdf('pdf/삼각함수.pdf');" aria-label="삼각함수 PDF 보기">삼각함수</a></li>
+      <li><a href="#" onclick="loadPdf('pdf/수열.pdf');" aria-label="수열 PDF 보기">수열</a></li>
     </ul>
   </nav>
 
   <!-- 우측 메인 콘텐츠 (PDF를 표시할 영역) -->
   <main>
-    <iframe id=\"pdf-viewer\"></iframe>
+    <iframe id="pdf-viewer"></iframe>
   </main>
 
   <script>
     // 메뉴를 클릭했을 때 iframe에 PDF를 로드하는 함수
     function loadPdf(fileName) {
       // PDF 파일 경로를 지정하면 해당 PDF 파일이 iframe에 로드됨
-      // 예: "pdf/지수.pdf" 형태로 폴더 구조에 맞게 파일 경로 수정 가능
       document.getElementById('pdf-viewer').src = fileName;
     }
   </script>
