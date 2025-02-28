@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>수학1 예시</title>
+  <style>
+    /* 기본 스타일 초기화 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: sans-serif;
+      background-color: #f8f8f8;
+      display: flex;
+    }
+
+    /* 왼쪽 메뉴(사이드바) 스타일 */
+    nav {
+      width: 220px;
+      height: 100vh;
+      background-color: #f1f1f1;
+      border-right: 1px solid #ccc;
+      padding: 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      overflow-y: auto;
+    }
+
+    nav h2 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    nav ul {
+      list-style: none;
+    }
+
+    nav ul li {
+      margin-bottom: 10px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-size: 1rem;
+      padding: 6px 8px;
+      display: block;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    nav ul li a:hover {
+      background-color: #e2e2e2;
+    }
+
+    /* 우측 콘텐츠 영역 스타일 */
+    main {
+      margin-left: 220px; /* 사이드바 너비와 동일하게 설정 */
+      padding: 20px;
+      width: 100%;
+    }
+
+    /* Iframe을 위해 공간을 확보 */
+    #pdf-viewer {
+      width: 100%;
+      height: calc(100vh - 60px); /* 여백을 조금 제외한 높이 */
+      border: none;
+      background-color: #fff;
+    }
+
+    /* 반응형 디자인을 고려해 간단 처리를 추가 */
+    @media screen and (max-width: 768px) {
+      nav {
+        position: relative;
+        width: 100%;
+        height: auto;
+        border-right: none;
+      }
+      main {
+        margin-left: 0;
+      }
+      #pdf-viewer {
+        height: 500px; /* 모바일에서는 고정 높이 등으로 조정 가능 */
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 왼쪽 사이드바 메뉴 -->
+  <nav>
+    <h2>수학1 목차</h2>
+    <ul>
+      <!-- 링크 클릭 시 loadPdf 함수로 PDF 파일을 로드 -->
+      <li><a onclick=\"loadPdf('지수.pdf')\">지수</a></li>
+      <li><a onclick=\"loadPdf('로그.pdf')\">로그</a></li>
+      <li><a onclick=\"loadPdf('삼각함수.pdf')\">삼각함수</a></li>
+      <li><a onclick=\"loadPdf('수열.pdf')\">수열</a></li>
+    </ul>
+  </nav>
+
+  <!-- 우측 메인 콘텐츠 (PDF를 표시할 영역) -->
+  <main>
+    <iframe id=\"pdf-viewer\"></iframe>
+  </main>
+
+  <script>
+    // 메뉴를 클릭했을 때 iframe에 PDF를 로드하는 함수
+    function loadPdf(fileName) {
+      // PDF 파일 경로를 지정하면 해당 PDF 파일이 iframe에 로드됨
+      // 예: "pdf/지수.pdf" 형태로 폴더 구조에 맞게 파일 경로 수정 가능
+      document.getElementById('pdf-viewer').src = fileName;
+    }
+  </script>
+</body>
+</html>
