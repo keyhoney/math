@@ -70,15 +70,16 @@
       flex-direction: column;
       gap: 20px; /* 페이지 사이 여백 */
       align-items: center; /* 수평 중앙 정렬 */
-      justify-content: center; /* 수직 중앙 정렬 */
-      height: 100vh; /* 전체 뷰포트 높이 */
+      justify-content: flex-start; /* 수직 정렬을 위에서부터 */
+      height: auto; /* 높이를 자동으로 조정 */
+      padding: 20px; /* 여백 추가 */
     }
 
     canvas {
-      width: 100%;
-      height: auto;
-      border: 1px solid #ccc;
-      background-color: #fff;
+      max-width: 100%; /* 최대 너비를 100%로 설정 */
+      height: auto; /* 비율에 맞게 높이 자동 조정 */
+      border: 1px solid #ccc; /* 경계선 */
+      background-color: #fff; /* 배경색 */
     }
 
     @media screen and (max-width: 768px) {
@@ -148,7 +149,7 @@
 
       // 기존에 표시된 페이지들 제거
       const pdfContainer = document.getElementById('pdf-container');
-      pdfContainer.innerHTML = '';
+      pdfContainer.innerHTML = '<h1>송현여고</h1>'; // 제목 유지
 
       // PDF 불러오기
       const loadingTask = pdfjsLib.getDocument(fileName);
