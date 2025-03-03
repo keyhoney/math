@@ -39,7 +39,7 @@
     nav h3 {
       border-top: 2px solid #ccc; /* 가로줄 추가 */
       padding-top: 10px; /* 가로줄과 텍스트 간의 여백 */
-      margin-top: 20px; /* 상단 여백 추가 */
+      margin-top: 10px; /* 상단 여백 추가 */
     }
     
     nav ul {
@@ -65,22 +65,22 @@
     }
 
     main {
-      margin-left: 220px;
+      margin-left: 330px; /* nav의 너비와 동일하게 설정 */
       padding: 20px;
-      width: 100%;
+      width: calc(100% - 330px); /* nav의 너비를 제외한 나머지 공간을 차지 */
     }
 
     /* PDF 페이지들을 담을 컨테이너 */
     #pdf-container {
       display: flex;
       flex-direction: column;
-      gap: 20px; /* 페이지 사이 여백 */
+      gap: 0px; /* 페이지 사이 여백 */
     }
 
     canvas {
       width: 100%;
       height: auto;
-      border: 1px solid #ccc;
+      border: 0px solid #ccc;
       background-color: #fff;
     }
 
