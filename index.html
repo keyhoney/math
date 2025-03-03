@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>수학1</title>
+  <title>수학1 F</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf_viewer.css" />
   <style>
@@ -69,17 +69,13 @@
       display: flex;
       flex-direction: column;
       gap: 20px; /* 페이지 사이 여백 */
-      align-items: center; /* 수평 중앙 정렬 */
-      justify-content: flex-start; /* 수직 정렬을 위에서부터 */
-      height: auto; /* 높이를 자동으로 조정 */
-      padding: 20px; /* 여백 추가 */
     }
 
     canvas {
-      max-width: 100%; /* 최대 너비를 100%로 설정 */
-      height: auto; /* 비율에 맞게 높이 자동 조정 */
-      border: 1px solid #ccc; /* 경계선 */
-      background-color: #fff; /* 배경색 */
+      width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+      background-color: #fff;
     }
 
     @media screen and (max-width: 768px) {
@@ -109,19 +105,9 @@
     <h4>2. 지수함수와 로그함수</h4>
     <ul>
       <li><a href="#" onclick="loadPdf('pdf/지수.pdf');">01. 지수함수의 뜻과 그래프</a></li>
-      <li><a href="#" onclick="loadPdf('pdf/지수.pdf');">02. 로그함수의 뜻과 그래프</a></li>
-      <li><a href="#" onclick="loadPdf('pdf/지수.pdf');">03. 지수함수와 로그함수의 활용</a></li>
-    </ul>   
-    <h3>Ⅱ. 삼각함수</h3>
-    <h4>1. 삼각함수</h4>
+ 사인법칙</h4>
     <ul>
-      <li><a href="#" onclick="loadPdf('pdf/지수.pdf');">01. 일반각과 호도법</a></li>
-      <li><a href="#" onclick="loadPdf('pdf/지수.pdf');">02. 삼각함수의 뜻</a></li>
-      <li><a href="#" onclick="loadPdf('pdf/지수.pdf');">03. 삼각함수의 그래프</a></li>    
-    </ul>
-    <h4>2. 사인법칙과 코사인법칙</h4>
-    <ul>
-      <li><a href="#" onclick="loadPdf('pdf/지수.pdf');">01. 사인법칙과 코사인법칙</a></li>
+      <li><a href="#" onclick="loadPdf('pdf/지수.pdf');">01. 사인법칙과 코사인법</a></li>
     </ul>   
     <h3>Ⅲ. 수열</h3>
     <h4>1. 등차수열과 등비수열</h4>
@@ -139,7 +125,7 @@
 
   <main>
     <!-- 여러 페이지를 렌더링할 컨테이너 -->
-    <div id="pdf-container"><h1>송현여고</h1></div>
+    <div id="pdf-container"></div>
   </main>
 
   <script>
@@ -149,7 +135,7 @@
 
       // 기존에 표시된 페이지들 제거
       const pdfContainer = document.getElementById('pdf-container');
-      pdfContainer.innerHTML = '<h1>송현여고</h1>'; // 제목 유지
+      pdfContainer.innerHTML = '';
 
       // PDF 불러오기
       const loadingTask = pdfjsLib.getDocument(fileName);
