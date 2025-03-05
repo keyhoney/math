@@ -178,7 +178,7 @@
             // 모든 페이지를 차례대로 로드하여 canvas에 렌더링
             for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
                 const page = await pdf.getPage(pageNum);
-                const scale = 2; // 확대 비율
+                const scale = 3; // 확대 비율
                 const viewport = page.getViewport({ scale: scale });
 
                 // canvas 동적으로 생성
