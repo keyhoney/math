@@ -100,8 +100,8 @@
 <body>
   <nav>
     <h2>수학1</h2>
-    <h3><a href=https://www.ebsi.co.kr/ebs/pot/tchr/join/202502000002328>EBSi 초대장</a></h3>
-    <h3><a href=https://ai-beta.ebs.co.kr/ebs/ai/xipa/MyPaper.ebs>EBSi Danchoo</a></h3>
+    <h3><a href=https://www.ebsi.co.kr/ebs/pot/tchr/join/202502000002328><div id="rainbowText">EBSi 초대장</div></a></h3>
+    <h3><a href=https://ai-beta.ebs.co.kr/ebs/ai/xipa/MyPaper.ebs><div id="rainbowText">EBSi Danchoo</div></a></h3>
     <h3>Ⅰ. 지수함수와 로그함수</h3>
     <h4>1. 지수와 로그</h4>
     <ul>
@@ -147,6 +147,15 @@
   </main>
 
   <script>
+
+            const colors = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#4B0082', '#9400D3'];
+        let index = 0;
+        function changeColor() {
+            document.getElementById('rainbowText').style.color = colors[index];
+            index = (index + 1) % colors.length;
+        }
+        setInterval(changeColor, 300);
+    
     async function loadPdf(fileName) {
       const pdfjsLib = window['pdfjs-dist/build/pdf'];
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
