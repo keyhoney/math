@@ -100,8 +100,8 @@
 <body>
   <nav>
     <h2>수학1</h2>
-    <h3><a href=https://www.ebsi.co.kr/ebs/pot/tchr/join/202502000002328><div id="rainbowText">EBSi 초대장</div></a></h3>
-    <h3><a href=https://ai-beta.ebs.co.kr/ebs/ai/xipa/MyPaper.ebs><div id="rainbowText">EBSi Danchoo</div></a></h3>
+    <h3><a href="https://www.ebsi.co.kr/ebs/pot/tchr/join/202502000002328"><div class="rainbowText">EBSi 초대장</div></a></h3>
+    <h3><a href="https://ai-beta.ebs.co.kr/ebs/ai/xipa/MyPaper.ebs"><div class="rainbowText">EBSi Danchoo</div></a></h3>
     <h3>Ⅰ. 지수함수와 로그함수</h3>
     <h4>1. 지수와 로그</h4>
     <ul>
@@ -147,41 +147,45 @@
   </main>
 
   <script>
-
-            const colors = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#4B0082', '#9400D3'];
+        const colors = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#4B0082', '#9400D3'];
         let index = 0;
+
         function changeColor() {
-            document.getElementById('rainbowText').style.color = colors[index];
+            const elements = document.querySelectorAll('.rainbowText');
+            elements.forEach(element => {
+                element.style.color = colors[index];
+            });
             index = (index + 1) % colors.length;
         }
+
         setInterval(changeColor, 300);
     
-    async function loadPdf(fileName) {
-      const pdfjsLib = window['pdfjs-dist/build/pdf'];
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+        async function loadPdf(fileName) {
+            const pdfjsLib = window['pdfjs-dist/build/pdf'];
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
 
-      // 기존에 표시된 페이지들 제거
-      const pdfContainer = document.getElementById('pdf-container');
-      pdfContainer.innerHTML = '';
+            // 기존에 표시된 페이지들 제거
+            const pdfContainer = document.getElementById('pdf-container');
+            pdfContainer.innerHTML = '';
 
-      // PDF 불러오기
-      const loadingTask = pdfjsLib.getDocument(fileName);
-      const pdf = await loadingTask.promise;
+            // PDF 불러오기
+            const loadingTask = pdfjsLib.getDocument(fileName);
+            const pdf = await loadingTask.promise;
 
-      // 전체 페이지 수 확인
-      const totalPages = pdf.numPages;
+            // 전체 페이지 수 확인
+            const totalPages = pdf.numPages;
 
-      // 모든 페이지를 차례대로 로드하여 canvas에 렌더링
-      for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
-        const page = await pdf.getPage(pageNum);
-        const scale = 1.5; // 확대 비율
-        const viewport = page.getViewport({ scale: scale });
+            // 모든 페이지를 차례대로 로드하여 canvas에 렌더링
+            for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+                const page = await pdf.getPage(pageNum);
+                const scale = 1.5; // 확대 비율
+                const viewport = page.getViewport({ scale: scale });
 
-        // canvas 동적으로 생성
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
+                // canvas 동적으로 생성
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
 
         // 렌더링 컨텍스트 설정
         const renderContext = {
