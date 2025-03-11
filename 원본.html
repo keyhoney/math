@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>송현여고 플립러닝 시스템</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf_viewer.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: sans-serif;
+      background-color: #f8f8f8;
+      display: flex;
+    }
+
+    nav {
+      width: 330px;
+      height: 100vh;
+      background-color: #f1f1f1;
+      border-right: 1px solid #ccc;
+      padding: 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      overflow-y: auto;
+    }
+
+    nav h2 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    
+    nav h3 {
+      border-top: 2px solid #ccc; /* 가로줄 추가 */
+      padding-top: 10px; /* 가로줄과 텍스트 간의 여백 */
+      margin-top: 10px; /* 상단 여백 추가 */
+    }
+    
+    nav ul {
+      list-style: none;
+    }
+
+    nav ul li {
+      margin-bottom: 10px;
+    }
+
+    nav ul li a {
+      text-decoration: none; /* 밑줄 제거 */
+      color: #333;
+      font-size: 1rem;
+      padding: 6px 8px;
+      display: block;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    nav ul li a:hover {
+      background-color: #e2e2e2;
+    }
+
+    main {
+      margin-left: 330px; /* nav의 너비와 동일하게 설정 */
+      padding: 20px;
+      width: calc(100% - 330px); /* nav의 너비를 제외한 나머지 공간을 차지 */
+    }
+
+    /* PDF 페이지들을 담을 컨테이너 */
+    #pdf-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0px; /* 페이지 사이 여백 */
+    }
+
+    canvas {
+      width: 100%;
+      height: auto;
+      border: 0px solid #ccc;
+      background-color: #fff;
+    }
+
+    @media screen and (max-width: 768px) {
+      nav {
+        position: relative;
+        width: 100%;
+        height: auto;
+        border-right: none;
+      }
+      main {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h2>수학1</h2>
+    <h3><a href="https://www.ebsi.co.kr/ebs/pot/tchr/join/202502000002328"><div class="rainbowText">EBSi 초대장 (인증번호 : sh2025)</div></a></h3>
+    <h3><a href="https://ai-beta.ebs.co.kr/ebs/ai/xipa/MyPaper.ebs"><div class="rainbowText">EBSi Danchoo</div></a></h3>
+    <h3>Ⅰ. 지수함수와 로그함수</h3>
+    <h4>1. 지수와 로그</h4>
+    <ul>
+      <li><a href="#" onclick="loadPdf('pdf/거듭제곱과 거듭제곱근.pdf');">01. 거듭제곱과 거듭제곱근</a></li>
+      <li><a href="#" onclick="loadPdf('pdf/지수의 확장.pdf');">02. 지수의 확장</a></li>
+      <li><a href="#" onclick="loadPdf('pdf/로그의 뜻과 성질.pdf');">03. 로그의 뜻과 성질</a></li>
+      <li><a href="#" onclick="loadPdf('pdf/상용로그.pdf');">04. 상용로그</a></li>      
+    </ul>
+    <h4>2. 지수함수와 로그함수</h4>
+    <ul>
+      <li><a href="#" onclick="loadPdf('pdf/준비중.pdf');">01. 지수함수의 뜻과 그래프</a></li>
+      <li><a href="#" onclick="loadPdf('pdf/준비중.pdf');">02. 로그함수의 뜻과 그래프</a></li>
+      <li><a href="#" onclick="loadPdf('pdf/준비중.pdf');">03. 지수함수와 로그함수의 활용</a></li>
+    </ul>   
+    <h3>Ⅱ. 삼각함수</h3>
+    <h4>1. 삼각함수</h4>
+    <ul>
+      <li><a href="#" onclick="loadPdf('pdf/준비중.pdf');">01. 일반각과 호도법</a></li>
+      <li><a href="#" onclick="loadPdf('pdf/준비중.pdf');">02. 삼각함수의 뜻</a></li>
+      <li><a href="#" onclick="loadPdf('pdf/준비중.pdf');">03. 삼각함수의 그래프</a></li>    
+    </ul>
+    <h4>2. 사인법칙과 코사인법칙</h4>
+    <ul>
+      <li><a href="#" onclick="loadPdf('pdf/준비중.pdf');">01. 사인법칙과 코사인법칙</a></li>
+    </ul>   
+    <h3>Ⅲ. 수열</h3>
+    <h4>1. 등차수열과 등비수열</h4>
+    <ul>
+      <li><a href="#" onclick="loadPdf('pdf/준비중.pdf');">01. 수열의 뜻</a></li>
+      <li><a href="#" onclick="loadPdf('pdf/준비중.pdf');">02. 등차수열</a></li>
+      <li><a href="#" onclick="loadPdf('pdf/준비중.pdf');">03. 등비수열</a></li>  
+    </ul>    
+    <h4>2. 수열의 합과 수학적 귀납법</h4>
+    <ul>
+      <li><a href="#" onclick="loadPdf('pdf/준비중.pdf');">01. 수열의 합</a></li>
+      <li><a href="#" onclick="loadPdf('pdf/준비중.pdf');">02. 수학적 귀납법</a></li>
+    </ul>   
+  </nav>
+
+  <main>
+    <!-- 여러 페이지를 렌더링할 컨테이너 -->
+    <div id="pdf-container"><h1></h1></div>
+  </main>
+
+  <script>
+        const colors = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#4B0082', '#9400D3'];
+        let index = 0;
+
+        function changeColor() {
+            const elements = document.querySelectorAll('.rainbowText');
+            elements.forEach(element => {
+                element.style.color = colors[index];
+            });
+            index = (index + 1) % colors.length;
+        }
+
+        setInterval(changeColor, 300);
+    
+        async function loadPdf(fileName) {
+            const pdfjsLib = window['pdfjs-dist/build/pdf'];
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+
+            // 기존에 표시된 페이지들 제거
+            const pdfContainer = document.getElementById('pdf-container');
+            pdfContainer.innerHTML = '';
+
+            // PDF 불러오기
+            const loadingTask = pdfjsLib.getDocument(fileName);
+            const pdf = await loadingTask.promise;
+
+            // 전체 페이지 수 확인
+            const totalPages = pdf.numPages;
+
+            // 모든 페이지를 차례대로 로드하여 canvas에 렌더링
+            for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+                const page = await pdf.getPage(pageNum);
+                const scale = 3; // 확대 비율
+                const viewport = page.getViewport({ scale: scale });
+
+                // canvas 동적으로 생성
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+        // 렌더링 컨텍스트 설정
+        const renderContext = {
+          canvasContext: context,
+          viewport: viewport,
+        };
+
+        // PDF 페이지 렌더링
+        await page.render(renderContext).promise;
+
+        // 렌더링 완료된 canvas를 화면에 추가
+        pdfContainer.appendChild(canvas);
+      }
+    }
+
+    // 페이지가 로드될 때 main.pdf를 불러옴
+    window.onload = function() {
+      loadPdf('pdf/main.pdf');
+    };
+  </script>
+</body>
+</html>
