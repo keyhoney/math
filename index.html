@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <!-- viewport meta 수정 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>문제 풀이</title>
+  <title>문제 풀이 웹페이지</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
     
@@ -30,7 +30,7 @@
       box-sizing: border-box;
       background-color: #ffb8b8;
       overflow-y: auto;
-      transition: width 0.3s ease;
+      transition: all 0.3s ease;
     }
     
     #center {
@@ -42,14 +42,14 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      transition: width 0.3s ease;
+      transition: all 0.3s ease;
     }
     
     /* 하단 영역: 답 제출 화면 (화면 높이의 10%) */
     #bottom {
       height: 10vh;
       background-color: #ffdfdf;
-      padding: 20px;
+      padding: 10px;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -57,8 +57,15 @@
       align-items: center;
     }
     
+    /* 답 입력 영역: 입력 필드와 버튼을 한 줄에 배치 */
+    #answerArea {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
     #result {
-      margin-top: 10px;
+      margin-top: 5px;
       font-weight: bold;
     }
     
@@ -114,9 +121,10 @@
   </div>
   
   <div id="bottom">
-    <span class="highlight"><h2>답 입력</h2></span>
-    <input type="text" id="answer" placeholder="답을 입력하세요">
-    <button onclick="checkAnswer()">제출</button>
+    <div id="answerArea">
+      <input type="text" id="answer" placeholder="답을 입력하세요">
+      <button onclick="checkAnswer()">제출</button>
+    </div>
     <div id="result"></div>
     <div id="solutionLink" style="margin-top: 10px;"></div>
   </div>
@@ -213,10 +221,11 @@
       const left = document.getElementById("left");
       const center = document.getElementById("center");
       if (menuVisible) {
+        left.style.display = "block";
         left.style.width = "20%";
         center.style.width = "80%";
       } else {
-        left.style.width = "0";
+        left.style.display = "none";
         center.style.width = "100%";
       }
     }
