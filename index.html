@@ -2,8 +2,9 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <!-- viewport meta 수정: width=device-width 로 변경 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>문제 풀이 웹</title>
+    <title>문제 풀이 웹페이지</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
 
@@ -49,7 +50,7 @@
         }
         .collapsible {
             cursor: pointer; 
-            user-select: none; 
+            user-select: none;
             margin: 5px 0;
         }
         .highlight {
@@ -122,53 +123,66 @@
             li.textContent = text;
             li.classList.add("collapsible");
             li.addEventListener("click", function(e) {
-                // :scope > ul 을 사용하여 직계 자식 ul만 선택
                 const childUl = this.querySelector(":scope > ul");
                 if(childUl) {
                     childUl.style.display = childUl.style.display === "block" ? "none" : "block";
                 }
-                e.stopPropagation(); // 상위 요소로의 이벤트 전파 방지
+                e.stopPropagation();
             });
             return li;
         }
 
-        // 메뉴 자동 생성 함수 (모든 하위 메뉴 초기 상태는 닫힘)
+        // JSON 데이터를 대분류 > 중분류 > 소분류별로 그룹화하여 메뉴 생성
         function generateMenu(questions) {
+            const grouped = {};
+            // 그룹화: 동일한 대분류, 중분류, 소분류끼리 묶기
+            questions.forEach(item => {
+                const cat = item.대분류;
+                const sub = item.중분류;
+                const small = item.소분류;
+                if (!grouped[cat]) grouped[cat] = {};
+                if (!grouped[cat][sub]) grouped[cat][sub] = {};
+                if (!grouped[cat][sub][small]) grouped[cat][sub][small] = [];
+                // 기존 문항들에 새 항목들을 추가 (배열 결합)
+                grouped[cat][sub][small] = grouped[cat][sub][small].concat(item.문항들);
+            });
+
             const questionList = document.getElementById("questionList");
-            questions.forEach(question => {
-                // 1단계: 대분류
-                const categoryLi = createCollapsibleItem(question.대분류);
+            // 그룹화된 데이터를 바탕으로 메뉴 생성 (모든 하위 메뉴 초기 상태는 닫힘)
+            for (const cat in grouped) {
+                const categoryLi = createCollapsibleItem(cat);
                 const subList = document.createElement("ul");
-                subList.style.display = "none"; // 초기 닫힘
+                subList.style.display = "none";
                 categoryLi.appendChild(subList);
                 questionList.appendChild(categoryLi);
 
-                // 2단계: 중분류
-                const subCategoryLi = createCollapsibleItem(question.중분류);
-                const subCategoryList = document.createElement("ul");
-                subCategoryList.style.display = "none";
-                subCategoryLi.appendChild(subCategoryList);
-                subList.appendChild(subCategoryLi);
+                for (const sub in grouped[cat]) {
+                    const subCategoryLi = createCollapsibleItem(sub);
+                    const subCategoryList = document.createElement("ul");
+                    subCategoryList.style.display = "none";
+                    subCategoryLi.appendChild(subCategoryList);
+                    subList.appendChild(subCategoryLi);
 
-                // 3단계: 소분류
-                const smallCategoryLi = createCollapsibleItem(question.소분류);
-                const smallCategoryList = document.createElement("ul");
-                smallCategoryList.style.display = "none";
-                smallCategoryLi.appendChild(smallCategoryList);
-                subCategoryList.appendChild(smallCategoryLi);
+                    for (const small in grouped[cat][sub]) {
+                        const smallCategoryLi = createCollapsibleItem(small);
+                        const smallCategoryList = document.createElement("ul");
+                        smallCategoryList.style.display = "none";
+                        smallCategoryLi.appendChild(smallCategoryList);
+                        subCategoryList.appendChild(smallCategoryLi);
 
-                // 4단계: 문항들 (leaf 노드: 별도 토글 기능 없음, 클릭 시 문제 선택)
-                question.문항들.forEach(item => {
-                    const questionLi = document.createElement("li");
-                    questionLi.textContent = item.문항번호;
-                    // 문항 선택 시 이벤트 처리 (상위 메뉴 토글 이벤트와 분리)
-                    questionLi.addEventListener("click", function(e) {
-                        selectQuestion(item);
-                        e.stopPropagation();
-                    });
-                    smallCategoryList.appendChild(questionLi);
-                });
-            });
+                        // 각 문항들을 소분류 아래에 추가
+                        grouped[cat][sub][small].forEach(item => {
+                            const questionLi = document.createElement("li");
+                            questionLi.textContent = item.문항번호;
+                            questionLi.addEventListener("click", function(e) {
+                                selectQuestion(item);
+                                e.stopPropagation();
+                            });
+                            smallCategoryList.appendChild(questionLi);
+                        });
+                    }
+                }
+            }
         }
 
         function toggleMenu() {
