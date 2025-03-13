@@ -67,18 +67,17 @@
       background: rgba(236, 240, 241, 0.2);
     }
     
-    /* 화살표 아이콘: collapsible 항목에 오른쪽에 표시 */
+    /* 화살표 아이콘: collapsible 항목 오른쪽에 ▼ 표시, 펼쳐지면 사라짐 */
     .collapsible::after {
-      content: "▶";
+      content: "▼";
       position: absolute;
       right: 10px;
-      transition: transform 0.3s ease;
       font-size: 12px;
+      transition: opacity 0.3s ease;
     }
     
-    /* 펼쳐진 상태 표시 */
     .collapsible.open::after {
-      transform: rotate(90deg);
+      opacity: 0;
     }
     
     #center {
@@ -252,7 +251,7 @@
       })
       .catch(error => console.error('Error loading JSON:', error));
     
-    // collapsible 아이템 생성 함수 (직계 자식 ul 토글 및 open 클래스 토글)
+    // collapsible 아이템 생성 함수 (자식 ul 토글 및 open 클래스 토글)
     function createCollapsibleItem(text) {
       const li = document.createElement("li");
       li.textContent = text;
@@ -342,7 +341,7 @@
       }
     }
     
-    // 문항 선택 시, 문제 이미지와 "소분류 - 문항번호"를 표시
+    // 문항 선택 시, 문제 이미지와 "소분류 - 문항번호"를 표시합니다.
     function selectQuestion(question, smallCategory) {
       document.getElementById("selectedImage").src = question.문항주소;
       document.getElementById("selectedImage").style.display = "block";
@@ -355,7 +354,7 @@
       document.getElementById("solutionLink").innerHTML = "";
     }
     
-    // 제출 시, 입력 필드를 초기화하고 결과 메시지 및 해설 영상을 표시
+    // 제출 시, 입력 필드를 초기화하고 결과 메시지 및 해설 영상을 표시합니다.
     function checkAnswer() {
       const userAnswer = document.getElementById("answer").value;
       document.getElementById("answer").value = "";
