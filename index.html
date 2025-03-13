@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <!-- viewport meta 수정 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>문제</title>
+  <title>문제 풀이 웹페이지</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
     
@@ -143,6 +143,7 @@
     </div>
     
     <div id="center">
+      <!-- questionTitle에 문항번호가 표시됩니다. -->
       <div id="questionTitle" class="question-title" style="display:none;"></div>
       <img id="selectedImage" src="" alt="선택한 문제 이미지" style="display:none;">
     </div>
@@ -204,7 +205,7 @@
     // JSON 데이터를 대분류 > 중분류 > 소분류별로 그룹화하여 메뉴 생성
     function generateMenu(questions) {
       const grouped = {};
-      // 그룹화: 동일한 대분류, 중분류, 소분류끼리 묶기
+      // 동일한 대분류, 중분류, 소분류끼리 묶기
       questions.forEach(item => {
         const cat = item.대분류;
         const sub = item.중분류;
@@ -241,6 +242,7 @@
             // 각 문항들을 소분류 아래에 추가
             grouped[cat][sub][small].forEach(item => {
               const questionLi = document.createElement("li");
+              // 문항번호를 표시합니다.
               questionLi.textContent = item.문항번호;
               questionLi.addEventListener("click", function(e) {
                 selectQuestion(item);
@@ -253,7 +255,7 @@
       }
     }
     
-    // 토글 시 display 대신 width와 padding을 조정하여 자연스러운 애니메이션 효과 적용
+    // 토글 시 좌측 메뉴의 width와 padding을 애니메이션 효과로 조정
     function toggleMenu() {
       menuVisible = !menuVisible;
       const left = document.getElementById("left");
@@ -269,10 +271,11 @@
       }
     }
     
+    // 문항 선택 시 문제 이미지와 문항번호(문제 제목 대신)를 표시합니다.
     function selectQuestion(question) {
       document.getElementById("selectedImage").src = question.문항주소;
       document.getElementById("selectedImage").style.display = "block";
-      document.getElementById("questionTitle").innerText = question.문항제목;
+      document.getElementById("questionTitle").innerText = question.문항번호;
       document.getElementById("questionTitle").style.display = "block";
       correctAnswer = question.정답;
       solutionLink = question.해설주소;
@@ -281,9 +284,9 @@
       document.getElementById("solutionLink").innerHTML = "";
     }
     
+    // 제출 시 입력 필드를 초기화하고 결과 메시지 및 해설 영상을 표시합니다.
     function checkAnswer() {
       const userAnswer = document.getElementById("answer").value;
-      // 입력 필드 초기화
       document.getElementById("answer").value = "";
       
       const resultDiv = document.getElementById("result");
