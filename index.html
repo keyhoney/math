@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-height, initial-scale=1.0">
-    <title>개념별 새겨봐야 할 기출문제</title>
+    <title>문제 풀이 웹페이지</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
 
@@ -18,7 +18,7 @@
             width: 20%; 
             padding: 20px;
             box-sizing: border-box;
-            background-color: #ffdfdf;
+            background-color: #ffb8b8;
             overflow-y: auto;
         }
         #center {
@@ -118,10 +118,33 @@
         function generateMenu(questions) {
             const questionList = document.getElementById("questionList");
             questions.forEach(question => {
-                const li = document.createElement("li");
-                li.innerText = question.문항번호;
-                li.onclick = () => selectQuestion(question); // 클릭 시 문제 선택
-                questionList.appendChild(li);
+                const categoryLi = document.createElement("li");
+                categoryLi.innerText = question.대분류;
+                categoryLi.classList.add("collapsible");
+                const subList = document.createElement("ul");
+                questionList.appendChild(categoryLi);
+                categoryLi.appendChild(subList);
+
+                const subCategoryLi = document.createElement("li");
+                subCategoryLi.innerText = question.중분류;
+                subCategoryLi.classList.add("collapsible");
+                const subCategoryList = document.createElement("ul");
+                subList.appendChild(subCategoryLi);
+                subCategoryLi.appendChild(subCategoryList);
+
+                const smallCategoryLi = document.createElement("li");
+                smallCategoryLi.innerText = question.소분류;
+                smallCategoryLi.classList.add("collapsible");
+                const smallCategoryList = document.createElement("ul");
+                subCategoryList.appendChild(smallCategoryLi);
+                smallCategoryLi.appendChild(smallCategoryList);
+
+                question.문항들.forEach(item => {
+                    const questionLi = document.createElement("li");
+                    questionLi.innerText = item.문항번호;
+                    questionLi.onclick = () => selectQuestion(item); // 클릭 시 문제 선택
+                    smallCategoryList.appendChild(questionLi);
+                });
             });
         }
 
