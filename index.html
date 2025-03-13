@@ -143,7 +143,7 @@
     </div>
     
     <div id="center">
-      <!-- questionTitle에 문항번호가 표시됩니다. -->
+      <!-- questionTitle에 "소분류 - 문항번호"가 표시됩니다. -->
       <div id="questionTitle" class="question-title" style="display:none;"></div>
       <img id="selectedImage" src="" alt="선택한 문제 이미지" style="display:none;">
     </div>
@@ -245,7 +245,7 @@
               // 문항번호를 표시합니다.
               questionLi.textContent = item.문항번호;
               questionLi.addEventListener("click", function(e) {
-                selectQuestion(item);
+                selectQuestion(item, small);
                 e.stopPropagation();
               });
               smallCategoryList.appendChild(questionLi);
@@ -271,11 +271,11 @@
       }
     }
     
-    // 문항 선택 시 문제 이미지와 문항번호(문제 제목 대신)를 표시합니다.
-    function selectQuestion(question) {
+    // 문항 선택 시, 문제 이미지와 "소분류 - 문항번호"를 표시합니다.
+    function selectQuestion(question, smallCategory) {
       document.getElementById("selectedImage").src = question.문항주소;
       document.getElementById("selectedImage").style.display = "block";
-      document.getElementById("questionTitle").innerText = question.문항번호;
+      document.getElementById("questionTitle").innerText = `${smallCategory} - ${question.문항번호}`;
       document.getElementById("questionTitle").style.display = "block";
       correctAnswer = question.정답;
       solutionLink = question.해설주소;
