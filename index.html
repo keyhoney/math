@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-height, initial-scale=1.0">
-    <title>개념별 새겨봐야 할 기출문제</title>
+    <title>문제 풀이 웹페이지</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
 
@@ -18,7 +18,7 @@
             width: 20%; 
             padding: 20px;
             box-sizing: border-box;
-            background-color: #ffdfdf;
+            background-color: #ffb8b8;
             overflow-y: auto;
         }
         #center {
@@ -150,12 +150,17 @@
                     questionLi.onclick = () => selectQuestion(item); // 클릭 시 문제 선택
                     smallCategoryList.appendChild(questionLi);
                 });
+
+                // 초기 상태로 모든 하위 메뉴를 닫음
+                subList.style.display = "none";
+                subCategoryList.style.display = "none";
+                smallCategoryList.style.display = "none";
             });
 
             // 접기/펼치기 기능 설정
             document.querySelectorAll('.collapsible').forEach(item => {
                 item.addEventListener('click', (event) => {
-                    const nested = item.querySelector('.nested');
+                    const nested = item.querySelector('ul');
                     if (nested) {
                         nested.style.display = nested.style.display === "block" ? "none" : "block"; // 접기/펼치기
                     }
