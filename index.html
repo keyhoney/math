@@ -33,35 +33,43 @@ body { margin: 0; font-family: 'Noto Sans KR', sans-serif; background: #f7f9fc; 
 #solutionLink a:hover { text-decoration: underline; }
 .floating-button { position: fixed; top: 10px; left: 10px; background-color: #e74c3c; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 24px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3); transition: background 0.3s; }
 .floating-button:hover { background-color: #c0392b; }
+@media (max-width: 600px) {
+  #left { width: 0; padding: 0; }
+  #center { width: 100%; padding: 10px; }
+  #centerHeader { font-size: 16px; padding: 6px 12px; }
+  #bottom { flex-direction: column; height: auto; padding: 10px; }
+  #leftBottom, #rightBottom { width: 100%; margin-bottom: 10px; }
+  .floating-button { width: 40px; height: 40px; font-size: 20px; top: 5px; left: 5px; }
+}
 </style>
 </head>
 <body>
 <div id="top">
-<div id="left">
-<h2>문항 선택</h2>
-<ul id="questionList"></ul>
-</div>
-<div id="center">
-<div id="centerHeader">개념별 새겨봐야 할 기출문제</div>
-<div id="questionContent">
-<div id="questionTitle" class="question-title" style="display:none;"></div>
-<img id="selectedImage" src="" alt="선택한 문제 이미지" style="display:none;">
-</div>
-</div>
+  <div id="left">
+    <h2>문항 선택</h2>
+    <ul id="questionList"></ul>
+  </div>
+  <div id="center">
+    <div id="centerHeader">개념별 새겨봐야 할 기출문제</div>
+    <div id="questionContent">
+      <div id="questionTitle" class="question-title" style="display:none;"></div>
+      <img id="selectedImage" src="" alt="선택한 문제 이미지" style="display:none;">
+    </div>
+  </div>
 </div>
 <div id="bottom">
-<div id="leftBottom">
-<div id="answerArea">
-<input type="text" id="answer" placeholder="답을 입력하세요">
-<button onclick="checkAnswer()">제출</button>
-</div>
-</div>
-<div id="rightBottom">
-<div id="resultArea">
-<div id="result"></div>
-<div id="solutionLink" style="margin-top: 5px;"></div>
-</div>
-</div>
+  <div id="leftBottom">
+    <div id="answerArea">
+      <input type="text" id="answer" placeholder="답을 입력하세요">
+      <button onclick="checkAnswer()">제출</button>
+    </div>
+  </div>
+  <div id="rightBottom">
+    <div id="resultArea">
+      <div id="result"></div>
+      <div id="solutionLink" style="margin-top: 5px;"></div>
+    </div>
+  </div>
 </div>
 <button class="floating-button" onclick="toggleMenu()">☰</button>
 <script>
