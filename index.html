@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>개념별 새겨봐야 할 기출 문제</title>
+<title>개념별 새겨봐야 할 기출문제</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 <style>
 body { margin: 0; font-family: 'Noto Sans KR', sans-serif; background: #f7f9fc; display: flex; flex-direction: column; height: 100vh; transition: all 0.3s ease; }
@@ -17,7 +17,7 @@ body { margin: 0; font-family: 'Noto Sans KR', sans-serif; background: #f7f9fc; 
 .collapsible::after { content: "▼"; position: absolute; right: 10px; font-size: 12px; transition: opacity 0.3s ease; }
 .collapsible.open::after { opacity: 0; }
 #center { flex: 1; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; transition: all 0.3s ease; }
-#centerHeader { flex: 0 0 10%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; color: #ffffff; background: linear-gradient(135deg, #3a506b, #5bc0be); padding: 8px 20px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); letter-spacing: 0.5px; }
+#centerHeader { flex: 0 0 5%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; color: #ffffff; background: linear-gradient(135deg, #2c3e50, #34495e); padding: 10px 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); letter-spacing: 1px; }
 #questionContent { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 #questionContent img { max-width: 80%; height: auto; margin-top: 20px; border-radius: 8px; }
 .question-title { font-size: 22px; font-weight: 700; margin-top: 10px; color: #34495e; }
@@ -31,11 +31,11 @@ body { margin: 0; font-family: 'Noto Sans KR', sans-serif; background: #f7f9fc; 
 #result { font-weight: bold; text-align: center; color: #e74c3c; }
 #solutionLink a { color: #3498db; text-decoration: none; font-weight: 700; }
 #solutionLink a:hover { text-decoration: underline; }
-.floating-button { position: fixed; top: 10px; left: 10px; background-color: #e74c3c; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 24px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3); transition: background 0.3s; }
+.floating-button { position: fixed; top: 10px; left: 10px; background-color: #e74c3c; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 24px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3); transition: background 0.3s; z-index: 10000; }
 .floating-button:hover { background-color: #c0392b; }
 @media (max-width: 600px) {
   #center { width: 100%; padding: 10px; }
-  #centerHeader { font-size: 16px; padding: 6px 12px; }
+  #centerHeader { font-size: 28px; padding: 10px 20px; }
   #bottom { flex-direction: column; height: auto; padding: 10px; }
   #leftBottom, #rightBottom { width: 100%; margin-bottom: 10px; }
   .floating-button { width: 40px; height: 40px; font-size: 20px; top: 5px; left: 5px; }
@@ -81,10 +81,7 @@ function createCollapsibleItem(text) {
   li.classList.add("collapsible");
   li.addEventListener("click", function(e) {
     const childUl = this.querySelector(":scope > ul");
-    if(childUl) {
-      if(childUl.style.display === "block") { childUl.style.display = "none"; this.classList.remove("open"); }
-      else { childUl.style.display = "block"; this.classList.add("open"); }
-    }
+    if(childUl) { if(childUl.style.display === "block") { childUl.style.display = "none"; this.classList.remove("open"); } else { childUl.style.display = "block"; this.classList.add("open"); } }
     e.stopPropagation();
   });
   return li;
@@ -140,7 +137,7 @@ function toggleMenu() {
   const left = document.getElementById("left");
   if(window.innerWidth <= 600) {
     if(menuVisible) { left.style.display = "none"; menuVisible = false; }
-    else { left.style.display = "block"; left.style.position = "fixed"; left.style.top = "0"; left.style.left = "0"; left.style.width = "100%"; left.style.height = "100%"; left.style.padding = "20px"; left.style.zIndex = "9999"; menuVisible = true; }
+    else { left.style.display = "block"; left.style.position = "fixed"; left.style.top = "0"; left.style.left = "0"; left.style.width = "100%"; left.style.height = "100%"; left.style.padding = "20px"; left.style.zIndex = "9998"; menuVisible = true; }
   } else {
     menuVisible = !menuVisible;
     const center = document.getElementById("center");
