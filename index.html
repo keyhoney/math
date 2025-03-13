@@ -1,20 +1,170 @@
 <!DOCTYPE html>
 <html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-height, initial-scale=1.0">
+    <title>개념별 새겨봐야 할 기출문제</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
 
-  <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>송현여고 플립러닝 시스템</title>
-
+        body {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Gowun Batang', sans-serif;
+            transition: all 0.3s ease; /* 부드러운 전환 효과 추가 */
+        }
+        #left {
+            width: 20%; 
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #ffdfdf;
+            overflow-y: auto;
+        }
+        #center {
+            width: 65%; 
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: flex-start;
+            transition: width 0.3s ease; /* 부드러운 전환 효과 추가 */
+        }
+        #right {
+            width: 15%; 
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #ffdfdf;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        img {
+            max-width: 100%; 
+            height: auto; 
+            margin-top: 20px; 
+        }
+        .nested {
+            display: none; 
+            padding-left: 20px; 
+        }
+        .collapsible {
+            cursor: pointer; 
+            user-select: none; 
+        }
+        .highlight {
+            color: rgb(0, 0, 0); 
+            text-align: center; 
+        }
+        .floating-button {
+            position: fixed;
+            top: 20px; /* 상단 위치 */
+            left: 20px; /* 좌측 위치 */
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .question-title {
+            font-size: 20px; 
+            font-weight: bold; 
+            margin-top: 10px; 
+        }
+    </style>
 </head>
 <body>
-<br>
-  <br>
-  <br>
-  <div style="text-align: center;">
-    <h3>2학년 학생 수 230명에 비해 웹뷰 수 및 EBSi 과제 제출 건수가 현저히 적어 운영을 잠정 중단합니다.</h3>
-</div>
+    <div id="left">
+        <span class="highlight"><h2>문항 선택</h2></span>
+        <ul id="questionList"></ul>
+    </div>
+    
+    <div id="center">
+        <div id="questionTitle" class="question-title" style="display:none;"></div>
+        <img id="selectedImage" src="" alt="선택한 문제 이미지" style="display:none;">
+    </div>
+    
+    <div id="right">
+        <span class="highlight"><h2>답 입력</h2></span>
+        <input type="text" id="answer" placeholder="답을 입력하세요">
+        <button onclick="checkAnswer()">제출</button>
+        
+        <div id="result"></div>
+        <div id="solutionLink" style="margin-top: 10px;"></div>
+    </div>
+    
+    <button class="floating-button" onclick="toggleMenu()">☰</button>
+    
+    <script>
+        let correctAnswer = "";
+        let solutionLink = "";
+        let menuVisible = true; // 메뉴 상태 변수
 
-  
+        // JSON 데이터 불러오기
+        fetch('questions.json') // JSON 파일 경로
+            .then(response => response.json())
+            .then(data => {
+                generateMenu(data); // 메뉴 생성
+            })
+            .catch(error => console.error('Error loading JSON:', error));
+
+        // 메뉴 자동 생성 함수
+        function generateMenu(questions) {
+            const questionList = document.getElementById("questionList");
+            questions.forEach(question => {
+                const li = document.createElement("li");
+                li.innerText = question.문항번호;
+                li.onclick = () => selectQuestion(question); // 클릭 시 문제 선택
+                questionList.appendChild(li);
+            });
+        }
+
+        function toggleMenu() {
+            menuVisible = !menuVisible; // 상태 반전
+            document.getElementById("left").style.display = menuVisible ? "block" : "none";
+            document.getElementById("center").style.width = menuVisible ? "65%" : "85%";
+            document.getElementById("right").style.width = "15%";
+        }
+
+        function selectQuestion(question) {
+            document.getElementById("selectedImage").src = question.문항주소;
+            document.getElementById("selectedImage").style.display = "block"; // 이미지 표시
+            document.getElementById("questionTitle").innerText = question.문항제목; // 제목 표시
+            document.getElementById("questionTitle").style.display = "block"; // 제목 표시
+            correctAnswer = question.정답; // 정답 설정
+            solutionLink = question.해설주소; // 해설 링크 설정
+            document.getElementById("result").innerHTML = ""; // 이전 결과 초기화
+            document.getElementById("solutionLink").innerHTML = ""; // 해설 링크 초기화
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById("answer").value;
+            const resultDiv = document.getElementById("result");
+            const solutionDiv = document.getElementById("solutionLink");
+
+            if (userAnswer === correctAnswer) {
+                resultDiv.innerHTML = "정답입니다!";
+                solutionDiv.innerHTML = ""; // 정답일 경우 해설 링크 숨김
+            } else {
+                resultDiv.innerHTML = "오답입니다!";
+                solutionDiv.innerHTML = `해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>`;
+            }
+        }
+
+        // 메뉴 접기/펼치기 기능
+        document.querySelectorAll('.collapsible').forEach(item => {
+            item.addEventListener('click', (event) => {
+                const nested = item.querySelector('.nested');
+                nested.style.display = nested.style.display === "block" ? "none" : "block"; // 접기/펼치기
+                event.stopPropagation(); // 클릭 이벤트 전파 방지
+            });
+        });
+    </script>
 </body>
 </html>
