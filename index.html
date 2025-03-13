@@ -2,8 +2,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-height, initial-scale=1.0">
-    <title>문제 풀이 웹페이지</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문제 풀이 웹</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
 
@@ -12,7 +12,7 @@
             height: 100vh;
             margin: 0;
             font-family: 'Gowun Batang', sans-serif;
-            transition: all 0.3s ease; /* 부드러운 전환 효과 추가 */
+            transition: all 0.3s ease;
         }
         #left {
             width: 20%; 
@@ -30,7 +30,7 @@
             flex-direction: column; 
             align-items: center; 
             justify-content: flex-start;
-            transition: width 0.3s ease; /* 부드러운 전환 효과 추가 */
+            transition: width 0.3s ease;
         }
         #right {
             width: 15%; 
@@ -47,13 +47,10 @@
             height: auto; 
             margin-top: 20px; 
         }
-        .nested {
-            display: none; 
-            padding-left: 20px; 
-        }
         .collapsible {
             cursor: pointer; 
             user-select: none; 
+            margin: 5px 0;
         }
         .highlight {
             color: rgb(0, 0, 0); 
@@ -61,8 +58,8 @@
         }
         .floating-button {
             position: fixed;
-            top: 20px; /* 상단 위치 */
-            left: 20px; /* 좌측 위치 */
+            top: 20px;
+            left: 20px;
             background-color: #ff6f61;
             color: white;
             border: none;
@@ -107,7 +104,7 @@
         let menuVisible = true;
 
         // JSON 데이터 불러오기
-        fetch('questions.json') // JSON 파일 경로
+        fetch('questions.json')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -115,62 +112,67 @@
                 return response.json();
             })
             .then(data => {
-                generateMenu(data); // 메뉴 생성
+                generateMenu(data);
             })
             .catch(error => console.error('Error loading JSON:', error));
 
-        // 메뉴 자동 생성 함수
+        // collapsible 아이템 생성 함수 (직계 자식 ul 토글)
+        function createCollapsibleItem(text) {
+            const li = document.createElement("li");
+            li.textContent = text;
+            li.classList.add("collapsible");
+            li.addEventListener("click", function(e) {
+                // :scope > ul 을 사용하여 직계 자식 ul만 선택
+                const childUl = this.querySelector(":scope > ul");
+                if(childUl) {
+                    childUl.style.display = childUl.style.display === "block" ? "none" : "block";
+                }
+                e.stopPropagation(); // 상위 요소로의 이벤트 전파 방지
+            });
+            return li;
+        }
+
+        // 메뉴 자동 생성 함수 (모든 하위 메뉴 초기 상태는 닫힘)
         function generateMenu(questions) {
             const questionList = document.getElementById("questionList");
             questions.forEach(question => {
-                const categoryLi = document.createElement("li");
-                categoryLi.innerText = question.대분류;
-                categoryLi.classList.add("collapsible");
+                // 1단계: 대분류
+                const categoryLi = createCollapsibleItem(question.대분류);
                 const subList = document.createElement("ul");
-                questionList.appendChild(categoryLi);
+                subList.style.display = "none"; // 초기 닫힘
                 categoryLi.appendChild(subList);
+                questionList.appendChild(categoryLi);
 
-                const subCategoryLi = document.createElement("li");
-                subCategoryLi.innerText = question.중분류;
-                subCategoryLi.classList.add("collapsible");
+                // 2단계: 중분류
+                const subCategoryLi = createCollapsibleItem(question.중분류);
                 const subCategoryList = document.createElement("ul");
-                subList.appendChild(subCategoryLi);
+                subCategoryList.style.display = "none";
                 subCategoryLi.appendChild(subCategoryList);
+                subList.appendChild(subCategoryLi);
 
-                const smallCategoryLi = document.createElement("li");
-                smallCategoryLi.innerText = question.소분류;
-                smallCategoryLi.classList.add("collapsible");
+                // 3단계: 소분류
+                const smallCategoryLi = createCollapsibleItem(question.소분류);
                 const smallCategoryList = document.createElement("ul");
-                subCategoryList.appendChild(smallCategoryLi);
+                smallCategoryList.style.display = "none";
                 smallCategoryLi.appendChild(smallCategoryList);
+                subCategoryList.appendChild(smallCategoryLi);
 
+                // 4단계: 문항들 (leaf 노드: 별도 토글 기능 없음, 클릭 시 문제 선택)
                 question.문항들.forEach(item => {
                     const questionLi = document.createElement("li");
-                    questionLi.innerText = item.문항번호;
-                    questionLi.onclick = () => selectQuestion(item); // 클릭 시 문제 선택
+                    questionLi.textContent = item.문항번호;
+                    // 문항 선택 시 이벤트 처리 (상위 메뉴 토글 이벤트와 분리)
+                    questionLi.addEventListener("click", function(e) {
+                        selectQuestion(item);
+                        e.stopPropagation();
+                    });
                     smallCategoryList.appendChild(questionLi);
-                });
-
-                // 초기 상태로 모든 하위 메뉴를 닫음
-                subList.style.display = "none";
-                subCategoryList.style.display = "none";
-                smallCategoryList.style.display = "none";
-            });
-
-            // 접기/펼치기 기능 설정
-            document.querySelectorAll('.collapsible').forEach(item => {
-                item.addEventListener('click', (event) => {
-                    const nested = item.querySelector('ul');
-                    if (nested) {
-                        nested.style.display = nested.style.display === "block" ? "none" : "block"; // 접기/펼치기
-                    }
-                    event.stopPropagation(); // 클릭 이벤트 전파 방지
                 });
             });
         }
 
         function toggleMenu() {
-            menuVisible = !menuVisible; // 상태 반전
+            menuVisible = !menuVisible;
             document.getElementById("left").style.display = menuVisible ? "block" : "none";
             document.getElementById("center").style.width = menuVisible ? "65%" : "85%";
             document.getElementById("right").style.width = "15%";
@@ -178,13 +180,13 @@
 
         function selectQuestion(question) {
             document.getElementById("selectedImage").src = question.문항주소;
-            document.getElementById("selectedImage").style.display = "block"; // 이미지 표시
-            document.getElementById("questionTitle").innerText = question.문항제목; // 제목 표시
-            document.getElementById("questionTitle").style.display = "block"; // 제목 표시
-            correctAnswer = question.정답; // 정답 설정
-            solutionLink = question.해설주소; // 해설 링크 설정
-            document.getElementById("result").innerHTML = ""; // 이전 결과 초기화
-            document.getElementById("solutionLink").innerHTML = ""; // 해설 링크 초기화
+            document.getElementById("selectedImage").style.display = "block";
+            document.getElementById("questionTitle").innerText = question.문항제목;
+            document.getElementById("questionTitle").style.display = "block";
+            correctAnswer = question.정답;
+            solutionLink = question.해설주소;
+            document.getElementById("result").innerHTML = "";
+            document.getElementById("solutionLink").innerHTML = "";
         }
 
         function checkAnswer() {
@@ -194,7 +196,7 @@
 
             if (userAnswer === correctAnswer) {
                 resultDiv.innerHTML = "정답입니다!";
-                solutionDiv.innerHTML = ""; // 정답일 경우 해설 링크 숨김
+                solutionDiv.innerHTML = "";
             } else {
                 resultDiv.innerHTML = "오답입니다!";
                 solutionDiv.innerHTML = `해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>`;
