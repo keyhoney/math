@@ -104,11 +104,16 @@
     <script>
         let correctAnswer = "";
         let solutionLink = "";
-        let menuVisible = true; // 메뉴 상태 변수
+        let menuVisible = true;
 
         // JSON 데이터 불러오기
         fetch('questions.json') // JSON 파일 경로
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 generateMenu(data); // 메뉴 생성
             })
@@ -146,6 +151,17 @@
                     smallCategoryList.appendChild(questionLi);
                 });
             });
+
+            // 접기/펼치기 기능 설정
+            document.querySelectorAll('.collapsible').forEach(item => {
+                item.addEventListener('click', (event) => {
+                    const nested = item.querySelector('.nested');
+                    if (nested) {
+                        nested.style.display = nested.style.display === "block" ? "none" : "block"; // 접기/펼치기
+                    }
+                    event.stopPropagation(); // 클릭 이벤트 전파 방지
+                });
+            });
         }
 
         function toggleMenu() {
@@ -179,15 +195,6 @@
                 solutionDiv.innerHTML = `해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>`;
             }
         }
-
-        // 메뉴 접기/펼치기 기능
-        document.querySelectorAll('.collapsible').forEach(item => {
-            item.addEventListener('click', (event) => {
-                const nested = item.querySelector('.nested');
-                nested.style.display = nested.style.display === "block" ? "none" : "block"; // 접기/펼치기
-                event.stopPropagation(); // 클릭 이벤트 전파 방지
-            });
-        });
     </script>
 </body>
 </html>
