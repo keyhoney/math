@@ -3,20 +3,28 @@
         "대분류": "지수함수와 로그함수",
         "중분류": "지수와 로그",
         "소분류": "거듭제곱과 거듭제곱근",
-        "문항번호": "20210612(가)",
-        "문항주소": "mun/20210612(가).png",
-        "문항제목": "거듭제곱과 거듭제곱근 문제",
-        "정답": "1",
-        "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2001/S20200000595/S20200000595_1M4_000000256695.mp4&strStartTm=485&pType=3&isPlay=true"
+        "문항들": [
+            {
+                "문항번호": "20210612(가)",
+                "문항주소": "mun/20210612(가).png",
+                "문항제목": "거듭제곱과 거듭제곱근 문제",
+                "정답": "1",
+                "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2001/S20200000595/S20200000595_1M4_000000256695.mp4&strStartTm=485&pType=3&isPlay=true"
+            }
+        ]
     },
     {
         "대분류": "지수함수와 로그함수",
         "중분류": "지수와 로그",
         "소분류": "지수의 확장",
-        "문항번호": "20230601",
-        "문항주소": "mun/20230601.png",
-        "문항제목": "지수의 확장 문제",
-        "정답": "1",
-        "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2201/S20220000268/S20220000268_1M4_100030024242.mp4&strStartTm=381&pType=3&isPlay=true"
+        "문항들": [
+            {
+                "문항번호": "20230601",
+                "문항주소": "mun/20230601.png",
+                "문항제목": "지수의 확장 문제",
+                "정답": "1",
+                "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2201/S20220000268/S20220000268_1M4_100030024242.mp4&strStartTm=381&pType=3&isPlay=true"
+            }
+        ]
     }
 ]
