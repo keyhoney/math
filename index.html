@@ -2,15 +2,16 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <!-- viewport meta 수정 -->
+  <!-- viewport meta -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>문제 풀이 웹페이지</title>
+  <!-- Import Noto Sans KR for a modern look -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
-    
     body {
       margin: 0;
-      font-family: 'Gowun Batang', sans-serif;
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f7f9fc;
       display: flex;
       flex-direction: column;
       height: 100vh;
@@ -28,9 +29,34 @@
       width: 20%;
       padding: 20px;
       box-sizing: border-box;
-      background-color: #ffb8b8;
+      background-color: #2c3e50;
+      color: #ecf0f1;
       overflow-y: auto;
       transition: all 0.3s ease;
+    }
+    
+    #left h2 {
+      margin: 0;
+      font-size: 20px;
+      text-align: center;
+    }
+    
+    #left ul {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0 0 0;
+    }
+    
+    #left li {
+      margin: 5px 0;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    #left li:hover {
+      background: rgba(236, 240, 241, 0.2);
     }
     
     #center {
@@ -41,84 +67,101 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: center;
       transition: all 0.3s ease;
+    }
+    
+    #center img {
+      max-width: 80%;
+      height: auto;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .question-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-top: 10px;
+      color: #34495e;
     }
     
     /* 하단 영역: 답 제출 화면 (화면 높이의 10%) */
     #bottom {
       height: 10vh;
-      background-color: #ffdfdf;
+      background-color: #ecf0f1;
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
       padding: 0 20px;
       box-sizing: border-box;
+      border-top: 1px solid #bdc3c7;
     }
     
     /* 좌측 하단 영역: 입력창과 제출 버튼 (좌측 50% 중앙 정렬) */
-    #leftBottom {
+    #leftBottom, #rightBottom {
       width: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
     }
     
-    /* 우측 하단 영역: 결과 메시지와 해설 영상 (우측 50% 중앙 정렬) */
-    #rightBottom {
-      width: 50%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    /* 입력 필드와 제출 버튼 한 줄 배치 */
     #answerArea {
       display: flex;
       align-items: center;
       gap: 10px;
     }
     
+    #answerArea input[type="text"] {
+      padding: 8px;
+      font-size: 16px;
+      border: 1px solid #bdc3c7;
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    
+    #answerArea input[type="text"]:focus {
+      border-color: #3498db;
+    }
+    
+    #answerArea button {
+      padding: 8px 16px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    #answerArea button:hover {
+      background-color: #2980b9;
+    }
+    
     #result {
       font-weight: bold;
       text-align: center;
+      color: #e74c3c;
     }
     
-    input[type="text"] {
-      padding: 5px;
-      font-size: 16px;
+    #solutionLink a {
+      color: #3498db;
+      text-decoration: none;
+      font-weight: 700;
     }
     
-    button {
-      padding: 5px 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    
-    img {
-      max-width: 100%;
-      height: auto;
-      margin-top: 20px;
-    }
-    
-    .collapsible {
-      cursor: pointer;
-      user-select: none;
-      margin: 5px 0;
-    }
-    
-    .highlight {
-      color: rgb(0, 0, 0);
-      text-align: center;
+    #solutionLink a:hover {
+      text-decoration: underline;
     }
     
     .floating-button {
       position: fixed;
       top: 20px;
       left: 20px;
-      background-color: #ff6f61;
+      background-color: #e74c3c;
       color: white;
       border: none;
       border-radius: 50%;
@@ -126,19 +169,19 @@
       height: 50px;
       font-size: 24px;
       cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      transition: background 0.3s;
     }
     
-    .question-title {
-      font-size: 20px;
-      font-weight: bold;
-      margin-top: 10px;
+    .floating-button:hover {
+      background-color: #c0392b;
     }
   </style>
 </head>
 <body>
   <div id="top">
     <div id="left">
-      <span class="highlight"><h2>문항 선택</h2></span>
+      <h2>문항 선택</h2>
       <ul id="questionList"></ul>
     </div>
     
