@@ -47,9 +47,9 @@
       margin: 20px 0 0 0;
     }
     
-    /* 하위 메뉴 구분을 위한 흰색 라인 추가 */
+    /* 세련된 계층 구분: nested ul에 점선(border-left) 적용 */
     #left ul ul {
-      border-left: 2px solid #fff;
+      border-left: 2px dashed rgba(236,240,241,0.7);
       margin-left: 10px;
       padding-left: 10px;
     }
@@ -60,10 +60,25 @@
       border-radius: 4px;
       cursor: pointer;
       transition: background 0.3s;
+      position: relative;
     }
     
     #left li:hover {
       background: rgba(236, 240, 241, 0.2);
+    }
+    
+    /* 화살표 아이콘: collapsible 항목에 오른쪽에 표시 */
+    .collapsible::after {
+      content: "▶";
+      position: absolute;
+      right: 10px;
+      transition: transform 0.3s ease;
+      font-size: 12px;
+    }
+    
+    /* 펼쳐진 상태 표시 */
+    .collapsible.open::after {
+      transform: rotate(90deg);
     }
     
     #center {
@@ -106,7 +121,7 @@
       border-top: 1px solid #bdc3c7;
     }
     
-    /* 좌측 하단 영역: 입력창과 제출 버튼 (좌측 50% 중앙 정렬) */
+    /* 좌측/우측 하단 영역: 각각 50% 중앙 정렬 */
     #leftBottom, #rightBottom {
       width: 50%;
       display: flex;
@@ -237,7 +252,7 @@
       })
       .catch(error => console.error('Error loading JSON:', error));
     
-    // collapsible 아이템 생성 함수 (직계 자식 ul 토글)
+    // collapsible 아이템 생성 함수 (직계 자식 ul 토글 및 open 클래스 토글)
     function createCollapsibleItem(text) {
       const li = document.createElement("li");
       li.textContent = text;
@@ -245,7 +260,13 @@
       li.addEventListener("click", function(e) {
         const childUl = this.querySelector(":scope > ul");
         if(childUl) {
-          childUl.style.display = childUl.style.display === "block" ? "none" : "block";
+          if(childUl.style.display === "block") {
+            childUl.style.display = "none";
+            this.classList.remove("open");
+          } else {
+            childUl.style.display = "block";
+            this.classList.add("open");
+          }
         }
         e.stopPropagation();
       });
@@ -292,7 +313,7 @@
             // 각 문항들을 소분류 아래에 추가
             grouped[cat][sub][small].forEach(item => {
               const questionLi = document.createElement("li");
-              // 문항번호를 표시합니다.
+              // 문항번호 표시
               questionLi.textContent = item.문항번호;
               questionLi.addEventListener("click", function(e) {
                 selectQuestion(item, small);
@@ -321,7 +342,7 @@
       }
     }
     
-    // 문항 선택 시, 문제 이미지와 "소분류 - 문항번호"를 표시합니다.
+    // 문항 선택 시, 문제 이미지와 "소분류 - 문항번호"를 표시
     function selectQuestion(question, smallCategory) {
       document.getElementById("selectedImage").src = question.문항주소;
       document.getElementById("selectedImage").style.display = "block";
@@ -334,7 +355,7 @@
       document.getElementById("solutionLink").innerHTML = "";
     }
     
-    // 제출 시 입력 필드를 초기화하고 결과 메시지 및 해설 영상을 표시합니다.
+    // 제출 시, 입력 필드를 초기화하고 결과 메시지 및 해설 영상을 표시
     function checkAnswer() {
       const userAnswer = document.getElementById("answer").value;
       document.getElementById("answer").value = "";
