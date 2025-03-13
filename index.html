@@ -47,25 +47,34 @@
     
     /* 하단 영역: 답 제출 화면 (화면 높이의 10%) */
     #bottom {
+      position: relative;
       height: 10vh;
       background-color: #ffdfdf;
-      padding: 10px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      /* 내부 배치로 인해 padding은 제거 */
     }
     
-    /* 답 입력 영역: 입력 필드와 버튼을 한 줄에 배치 */
+    /* 결과 영역 (정답/오답, 해설 영상) : 상단에 고정 */
+    #resultArea {
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      right: 20px;
+      text-align: center;
+      pointer-events: none; /* 클릭 방지 (입력 영역 방해하지 않도록) */
+    }
+    
+    /* 답 입력 영역: 하단에 고정, 입력 필드와 제출 버튼은 한 줄에 배치 */
     #answerArea {
+      position: absolute;
+      bottom: 10px;
+      left: 20px;
+      right: 20px;
       display: flex;
       align-items: center;
       gap: 10px;
     }
     
     #result {
-      margin-top: 5px;
       font-weight: bold;
     }
     
@@ -121,12 +130,16 @@
   </div>
   
   <div id="bottom">
+    <!-- 결과 영역: 고정되어 위치가 변경되지 않음 -->
+    <div id="resultArea">
+      <div id="result"></div>
+      <div id="solutionLink" style="margin-top: 5px;"></div>
+    </div>
+    <!-- 답 입력 영역: 고정되어 위치가 변경되지 않음 -->
     <div id="answerArea">
       <input type="text" id="answer" placeholder="답을 입력하세요">
       <button onclick="checkAnswer()">제출</button>
     </div>
-    <div id="result"></div>
-    <div id="solutionLink" style="margin-top: 10px;"></div>
   </div>
   
   <button class="floating-button" onclick="toggleMenu()">☰</button>
@@ -237,6 +250,7 @@
       document.getElementById("questionTitle").style.display = "block";
       correctAnswer = question.정답;
       solutionLink = question.해설주소;
+      // 결과 영역 초기화
       document.getElementById("result").innerHTML = "";
       document.getElementById("solutionLink").innerHTML = "";
     }
@@ -245,7 +259,10 @@
       const userAnswer = document.getElementById("answer").value;
       const resultDiv = document.getElementById("result");
       const solutionDiv = document.getElementById("solutionLink");
-    
+      
+      // 입력 필드 초기화
+      document.getElementById("answer").value = "";
+      
       if (userAnswer === correctAnswer) {
         resultDiv.innerHTML = "정답입니다!";
         solutionDiv.innerHTML = "";
