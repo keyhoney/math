@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>개념별 새겨봐야 할 기출문제</title>
+<title>개념별 새겨봐야 할 기출 문제</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 <style>
 body { margin: 0; font-family: 'Noto Sans KR', sans-serif; background: #f7f9fc; display: flex; flex-direction: column; height: 100vh; transition: all 0.3s ease; }
@@ -34,7 +34,6 @@ body { margin: 0; font-family: 'Noto Sans KR', sans-serif; background: #f7f9fc; 
 .floating-button { position: fixed; top: 10px; left: 10px; background-color: #e74c3c; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 24px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3); transition: background 0.3s; }
 .floating-button:hover { background-color: #c0392b; }
 @media (max-width: 600px) {
-  #left { width: 0; padding: 0; }
   #center { width: 100%; padding: 10px; }
   #centerHeader { font-size: 16px; padding: 6px 12px; }
   #bottom { flex-direction: column; height: auto; padding: 10px; }
@@ -75,11 +74,7 @@ body { margin: 0; font-family: 'Noto Sans KR', sans-serif; background: #f7f9fc; 
 <script>
 let correctAnswer = "";
 let solutionLink = "";
-let menuVisible = true;
-fetch('questions.json')
-.then(response => { if (!response.ok) { throw new Error('Network response was not ok'); } return response.json(); })
-.then(data => { generateMenu(data); })
-.catch(error => console.error('Error loading JSON:', error));
+let menuVisible = false;
 function createCollapsibleItem(text) {
   const li = document.createElement("li");
   li.textContent = text;
@@ -87,13 +82,8 @@ function createCollapsibleItem(text) {
   li.addEventListener("click", function(e) {
     const childUl = this.querySelector(":scope > ul");
     if(childUl) {
-      if(childUl.style.display === "block") {
-        childUl.style.display = "none";
-        this.classList.remove("open");
-      } else {
-        childUl.style.display = "block";
-        this.classList.add("open");
-      }
+      if(childUl.style.display === "block") { childUl.style.display = "none"; this.classList.remove("open"); }
+      else { childUl.style.display = "block"; this.classList.add("open"); }
     }
     e.stopPropagation();
   });
@@ -134,6 +124,10 @@ function generateMenu(questions) {
           questionLi.textContent = item.문항번호;
           questionLi.addEventListener("click", function(e) {
             selectQuestion(item, small);
+            if(window.innerWidth <= 600) { 
+              document.getElementById("left").style.display = "none"; 
+              menuVisible = false; 
+            }
             e.stopPropagation();
           });
           smallCategoryList.appendChild(questionLi);
@@ -143,17 +137,15 @@ function generateMenu(questions) {
   }
 }
 function toggleMenu() {
-  menuVisible = !menuVisible;
   const left = document.getElementById("left");
-  const center = document.getElementById("center");
-  if (menuVisible) {
-    left.style.width = "20%";
-    left.style.padding = "20px";
-    center.style.width = "80%";
+  if(window.innerWidth <= 600) {
+    if(menuVisible) { left.style.display = "none"; menuVisible = false; }
+    else { left.style.display = "block"; left.style.position = "fixed"; left.style.top = "0"; left.style.left = "0"; left.style.width = "100%"; left.style.height = "100%"; left.style.padding = "20px"; left.style.zIndex = "9999"; menuVisible = true; }
   } else {
-    left.style.width = "0";
-    left.style.padding = "0";
-    center.style.width = "100%";
+    menuVisible = !menuVisible;
+    const center = document.getElementById("center");
+    if(menuVisible) { left.style.width = "20%"; left.style.padding = "20px"; center.style.width = "80%"; }
+    else { left.style.width = "0"; left.style.padding = "0"; center.style.width = "100%"; }
   }
 }
 function selectQuestion(question, smallCategory) {
@@ -171,14 +163,13 @@ function checkAnswer() {
   document.getElementById("answer").value = "";
   const resultDiv = document.getElementById("result");
   const solutionDiv = document.getElementById("solutionLink");
-  if (userAnswer === correctAnswer) {
-    resultDiv.innerHTML = "정답입니다!";
-    solutionDiv.innerHTML = "";
-  } else {
-    resultDiv.innerHTML = "오답입니다!";
-    solutionDiv.innerHTML = `해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>`;
-  }
+  if (userAnswer === correctAnswer) { resultDiv.innerHTML = "정답입니다!"; solutionDiv.innerHTML = ""; }
+  else { resultDiv.innerHTML = "오답입니다!"; solutionDiv.innerHTML = `해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>`; }
 }
+fetch('questions.json')
+.then(response => { if (!response.ok) { throw new Error('Network response was not ok'); } return response.json(); })
+.then(data => { generateMenu(data); })
+.catch(error => console.error('Error loading JSON:', error));
 </script>
 </body>
 </html>
