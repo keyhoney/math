@@ -1,221 +1,250 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <!-- viewport meta 수정: width=device-width 로 변경 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>문제 풀이 웹페이지</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
-
-        body {
-            display: flex;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Gowun Batang', sans-serif;
-            transition: all 0.3s ease;
-        }
-        #left {
-            width: 20%; 
-            padding: 20px;
-            box-sizing: border-box;
-            background-color: #ffb8b8;
-            overflow-y: auto;
-        }
-        #center {
-            width: 65%; 
-            padding: 20px;
-            box-sizing: border-box;
-            text-align: center;
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: flex-start;
-            transition: width 0.3s ease;
-        }
-        #right {
-            width: 15%; 
-            padding: 20px;
-            box-sizing: border-box;
-            background-color: #ffdfdf;
-        }
-        #result {
-            margin-top: 20px;
-            font-weight: bold;
-        }
-        img {
-            max-width: 100%; 
-            height: auto; 
-            margin-top: 20px; 
-        }
-        .collapsible {
-            cursor: pointer; 
-            user-select: none;
-            margin: 5px 0;
-        }
-        .highlight {
-            color: rgb(0, 0, 0); 
-            text-align: center; 
-        }
-        .floating-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background-color: #ff6f61;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        .question-title {
-            font-size: 20px; 
-            font-weight: bold; 
-            margin-top: 10px; 
-        }
-    </style>
+  <meta charset="UTF-8">
+  <!-- viewport meta 수정 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>문제 풀이</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
+    
+    body {
+      margin: 0;
+      font-family: 'Gowun Batang', sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      transition: all 0.3s ease;
+    }
+    
+    /* 상단 영역: 좌측 메뉴와 문제 표시 영역 */
+    #top {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+    
+    #left {
+      width: 20%;
+      padding: 20px;
+      box-sizing: border-box;
+      background-color: #ffb8b8;
+      overflow-y: auto;
+      transition: width 0.3s ease;
+    }
+    
+    #center {
+      flex: 1;
+      padding: 20px;
+      box-sizing: border-box;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      transition: width 0.3s ease;
+    }
+    
+    /* 하단 영역: 답 제출 화면 (화면 높이의 10%) */
+    #bottom {
+      height: 10vh;
+      background-color: #ffdfdf;
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    #result {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    
+    img {
+      max-width: 100%;
+      height: auto;
+      margin-top: 20px;
+    }
+    
+    .collapsible {
+      cursor: pointer;
+      user-select: none;
+      margin: 5px 0;
+    }
+    
+    .highlight {
+      color: rgb(0, 0, 0);
+      text-align: center;
+    }
+    
+    .floating-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: #ff6f61;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    
+    .question-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
+  <div id="top">
     <div id="left">
-        <span class="highlight"><h2>문항 선택</h2></span>
-        <ul id="questionList"></ul>
+      <span class="highlight"><h2>문항 선택</h2></span>
+      <ul id="questionList"></ul>
     </div>
     
     <div id="center">
-        <div id="questionTitle" class="question-title" style="display:none;"></div>
-        <img id="selectedImage" src="" alt="선택한 문제 이미지" style="display:none;">
+      <div id="questionTitle" class="question-title" style="display:none;"></div>
+      <img id="selectedImage" src="" alt="선택한 문제 이미지" style="display:none;">
     </div>
+  </div>
+  
+  <div id="bottom">
+    <span class="highlight"><h2>답 입력</h2></span>
+    <input type="text" id="answer" placeholder="답을 입력하세요">
+    <button onclick="checkAnswer()">제출</button>
+    <div id="result"></div>
+    <div id="solutionLink" style="margin-top: 10px;"></div>
+  </div>
+  
+  <button class="floating-button" onclick="toggleMenu()">☰</button>
+  
+  <script>
+    let correctAnswer = "";
+    let solutionLink = "";
+    let menuVisible = true;
     
-    <div id="right">
-        <span class="highlight"><h2>답 입력</h2></span>
-        <input type="text" id="answer" placeholder="답을 입력하세요">
-        <button onclick="checkAnswer()">제출</button>
-        
-        <div id="result"></div>
-        <div id="solutionLink" style="margin-top: 10px;"></div>
-    </div>
+    // JSON 데이터 불러오기
+    fetch('questions.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        generateMenu(data);
+      })
+      .catch(error => console.error('Error loading JSON:', error));
     
-    <button class="floating-button" onclick="toggleMenu()">☰</button>
+    // collapsible 아이템 생성 함수 (직계 자식 ul 토글)
+    function createCollapsibleItem(text) {
+      const li = document.createElement("li");
+      li.textContent = text;
+      li.classList.add("collapsible");
+      li.addEventListener("click", function(e) {
+        const childUl = this.querySelector(":scope > ul");
+        if(childUl) {
+          childUl.style.display = childUl.style.display === "block" ? "none" : "block";
+        }
+        e.stopPropagation();
+      });
+      return li;
+    }
     
-    <script>
-        let correctAnswer = "";
-        let solutionLink = "";
-        let menuVisible = true;
-
-        // JSON 데이터 불러오기
-        fetch('questions.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                generateMenu(data);
-            })
-            .catch(error => console.error('Error loading JSON:', error));
-
-        // collapsible 아이템 생성 함수 (직계 자식 ul 토글)
-        function createCollapsibleItem(text) {
-            const li = document.createElement("li");
-            li.textContent = text;
-            li.classList.add("collapsible");
-            li.addEventListener("click", function(e) {
-                const childUl = this.querySelector(":scope > ul");
-                if(childUl) {
-                    childUl.style.display = childUl.style.display === "block" ? "none" : "block";
-                }
+    // JSON 데이터를 대분류 > 중분류 > 소분류별로 그룹화하여 메뉴 생성
+    function generateMenu(questions) {
+      const grouped = {};
+      // 그룹화: 동일한 대분류, 중분류, 소분류끼리 묶기
+      questions.forEach(item => {
+        const cat = item.대분류;
+        const sub = item.중분류;
+        const small = item.소분류;
+        if (!grouped[cat]) grouped[cat] = {};
+        if (!grouped[cat][sub]) grouped[cat][sub] = {};
+        if (!grouped[cat][sub][small]) grouped[cat][sub][small] = [];
+        grouped[cat][sub][small] = grouped[cat][sub][small].concat(item.문항들);
+      });
+    
+      const questionList = document.getElementById("questionList");
+      // 그룹화된 데이터를 바탕으로 메뉴 생성 (모든 하위 메뉴 초기 상태는 닫힘)
+      for (const cat in grouped) {
+        const categoryLi = createCollapsibleItem(cat);
+        const subList = document.createElement("ul");
+        subList.style.display = "none";
+        categoryLi.appendChild(subList);
+        questionList.appendChild(categoryLi);
+    
+        for (const sub in grouped[cat]) {
+          const subCategoryLi = createCollapsibleItem(sub);
+          const subCategoryList = document.createElement("ul");
+          subCategoryList.style.display = "none";
+          subCategoryLi.appendChild(subCategoryList);
+          subList.appendChild(subCategoryLi);
+    
+          for (const small in grouped[cat][sub]) {
+            const smallCategoryLi = createCollapsibleItem(small);
+            const smallCategoryList = document.createElement("ul");
+            smallCategoryList.style.display = "none";
+            smallCategoryLi.appendChild(smallCategoryList);
+            subCategoryList.appendChild(smallCategoryLi);
+    
+            // 각 문항들을 소분류 아래에 추가
+            grouped[cat][sub][small].forEach(item => {
+              const questionLi = document.createElement("li");
+              questionLi.textContent = item.문항번호;
+              questionLi.addEventListener("click", function(e) {
+                selectQuestion(item);
                 e.stopPropagation();
+              });
+              smallCategoryList.appendChild(questionLi);
             });
-            return li;
+          }
         }
-
-        // JSON 데이터를 대분류 > 중분류 > 소분류별로 그룹화하여 메뉴 생성
-        function generateMenu(questions) {
-            const grouped = {};
-            // 그룹화: 동일한 대분류, 중분류, 소분류끼리 묶기
-            questions.forEach(item => {
-                const cat = item.대분류;
-                const sub = item.중분류;
-                const small = item.소분류;
-                if (!grouped[cat]) grouped[cat] = {};
-                if (!grouped[cat][sub]) grouped[cat][sub] = {};
-                if (!grouped[cat][sub][small]) grouped[cat][sub][small] = [];
-                // 기존 문항들에 새 항목들을 추가 (배열 결합)
-                grouped[cat][sub][small] = grouped[cat][sub][small].concat(item.문항들);
-            });
-
-            const questionList = document.getElementById("questionList");
-            // 그룹화된 데이터를 바탕으로 메뉴 생성 (모든 하위 메뉴 초기 상태는 닫힘)
-            for (const cat in grouped) {
-                const categoryLi = createCollapsibleItem(cat);
-                const subList = document.createElement("ul");
-                subList.style.display = "none";
-                categoryLi.appendChild(subList);
-                questionList.appendChild(categoryLi);
-
-                for (const sub in grouped[cat]) {
-                    const subCategoryLi = createCollapsibleItem(sub);
-                    const subCategoryList = document.createElement("ul");
-                    subCategoryList.style.display = "none";
-                    subCategoryLi.appendChild(subCategoryList);
-                    subList.appendChild(subCategoryLi);
-
-                    for (const small in grouped[cat][sub]) {
-                        const smallCategoryLi = createCollapsibleItem(small);
-                        const smallCategoryList = document.createElement("ul");
-                        smallCategoryList.style.display = "none";
-                        smallCategoryLi.appendChild(smallCategoryList);
-                        subCategoryList.appendChild(smallCategoryLi);
-
-                        // 각 문항들을 소분류 아래에 추가
-                        grouped[cat][sub][small].forEach(item => {
-                            const questionLi = document.createElement("li");
-                            questionLi.textContent = item.문항번호;
-                            questionLi.addEventListener("click", function(e) {
-                                selectQuestion(item);
-                                e.stopPropagation();
-                            });
-                            smallCategoryList.appendChild(questionLi);
-                        });
-                    }
-                }
-            }
-        }
-
-        function toggleMenu() {
-            menuVisible = !menuVisible;
-            document.getElementById("left").style.display = menuVisible ? "block" : "none";
-            document.getElementById("center").style.width = menuVisible ? "65%" : "85%";
-            document.getElementById("right").style.width = "15%";
-        }
-
-        function selectQuestion(question) {
-            document.getElementById("selectedImage").src = question.문항주소;
-            document.getElementById("selectedImage").style.display = "block";
-            document.getElementById("questionTitle").innerText = question.문항제목;
-            document.getElementById("questionTitle").style.display = "block";
-            correctAnswer = question.정답;
-            solutionLink = question.해설주소;
-            document.getElementById("result").innerHTML = "";
-            document.getElementById("solutionLink").innerHTML = "";
-        }
-
-        function checkAnswer() {
-            const userAnswer = document.getElementById("answer").value;
-            const resultDiv = document.getElementById("result");
-            const solutionDiv = document.getElementById("solutionLink");
-
-            if (userAnswer === correctAnswer) {
-                resultDiv.innerHTML = "정답입니다!";
-                solutionDiv.innerHTML = "";
-            } else {
-                resultDiv.innerHTML = "오답입니다!";
-                solutionDiv.innerHTML = `해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>`;
-            }
-        }
-    </script>
+      }
+    }
+    
+    function toggleMenu() {
+      menuVisible = !menuVisible;
+      const left = document.getElementById("left");
+      const center = document.getElementById("center");
+      if (menuVisible) {
+        left.style.width = "20%";
+        center.style.width = "80%";
+      } else {
+        left.style.width = "0";
+        center.style.width = "100%";
+      }
+    }
+    
+    function selectQuestion(question) {
+      document.getElementById("selectedImage").src = question.문항주소;
+      document.getElementById("selectedImage").style.display = "block";
+      document.getElementById("questionTitle").innerText = question.문항제목;
+      document.getElementById("questionTitle").style.display = "block";
+      correctAnswer = question.정답;
+      solutionLink = question.해설주소;
+      document.getElementById("result").innerHTML = "";
+      document.getElementById("solutionLink").innerHTML = "";
+    }
+    
+    function checkAnswer() {
+      const userAnswer = document.getElementById("answer").value;
+      const resultDiv = document.getElementById("result");
+      const solutionDiv = document.getElementById("solutionLink");
+    
+      if (userAnswer === correctAnswer) {
+        resultDiv.innerHTML = "정답입니다!";
+        solutionDiv.innerHTML = "";
+      } else {
+        resultDiv.innerHTML = "오답입니다!";
+        solutionDiv.innerHTML = `해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>`;
+      }
+    }
+  </script>
 </body>
 </html>
