@@ -16,63 +16,22 @@
     #left li:hover { background: rgba(236,240,241,0.2); }
     .collapsible::after { content: "▼"; position: absolute; right: 10px; font-size: 12px; transition: opacity 0.3s ease; }
     .collapsible.open::after { opacity: 0; }
-    #center { flex: 1; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; transition: all 0.3s ease; }
-    #centerHeader { flex: 0 0 10%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; color: #ffffff; background: linear-gradient(135deg, #2c3e50, #34495e); padding: 10px 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); letter-spacing: 1px; }
-    /* centerIntro 영역 대신 pdf/sh.png 이미지 표시 */
-    #centerIntro { 
-      flex: 0 0 auto; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      margin: 20px 0; 
-    }
-    #centerIntro img { max-width: 100%; height: auto; border-radius: 8px; }
-    #questionContent { flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow-y: auto; }
+    #center { flex: 1; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.3s ease; overflow-y: auto; }
+    #centerIntro img { max-width: 60%; height: auto; border-radius: 8px; }
+    #questionContent { display: none; flex-direction: column; align-items: center; justify-content: center; }
     #questionContent img { max-width: 50%; height: auto; margin-top: 20px; border-radius: 8px; }
-    /* 오버레이 영역 */
-    #overlayLeft { 
-      position: absolute; 
-      top: 10px; 
-      left: 10px; 
-      background: rgba(0,0,0,0.5); 
-      color: #fff; 
-      padding: 5px 10px; 
-      border-radius: 4px; 
-      font-size: 14px; 
-      line-height: 1.4;
-    }
-    #overlayRight { 
-      position: absolute; 
-      top: 10px; 
-      right: 10px; 
-      background: rgba(0,0,0,0.5); 
-      color: #fff; 
-      padding: 5px 10px; 
-      border-radius: 4px; 
-      font-size: 14px; 
-      line-height: 1.4;
-    }
+    #overlayContainer { display: flex; justify-content: space-between; width: 50%; margin-top: 10px; }
+    #overlayLeft, #overlayRight { background: rgba(0,0,0,0.5); color: white; padding: 5px 10px; border-radius: 4px; font-size: 14px; }
     .question-title { font-size: 22px; font-weight: 700; margin-top: 10px; color: #34495e; }
     #bottom { height: 10vh; background-color: #ecf0f1; display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; border-top: 1px solid #bdc3c7; }
     #leftBottom, #rightBottom { width: 50%; display: flex; justify-content: center; align-items: center; }
     #answerArea { display: flex; align-items: center; gap: 10px; }
-    #answerArea input[type="text"] { padding: 8px; font-size: 16px; border: 1px solid #bdc3c7; border-radius: 4px; outline: none; transition: border-color 0.3s; }
-    #answerArea input[type="text"]:focus { border-color: #3498db; }
-    #answerArea button { padding: 8px 16px; font-size: 16px; border: none; border-radius: 4px; background-color: #3498db; color: white; cursor: pointer; transition: background 0.3s; }
-    #answerArea button:hover { background-color: #2980b9; }
-    #result { font-weight: bold; text-align: center; color: #e74c3c; }
-    #solutionLink a { color: #3498db; text-decoration: none; font-weight: 700; }
-    #solutionLink a:hover { text-decoration: underline; }
-    .floating-button { position: fixed; top: 10px; left: 10px; background-color: #e74c3c; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 24px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3); transition: background 0.3s; z-index: 100000; }
-    .floating-button:hover { background-color: #c0392b; }
+    #answerArea input { padding: 8px; font-size: 16px; border: 1px solid #bdc3c7; border-radius: 4px; outline: none; }
+    #answerArea button { padding: 8px 16px; font-size: 16px; border: none; border-radius: 4px; background-color: #3498db; color: white; cursor: pointer; }
+    .floating-button { position: fixed; top: 10px; left: 10px; background-color: #e74c3c; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 24px; cursor: pointer; z-index: 1000; }
     @media (max-width: 600px) {
       #left { display: none; }
       #center { width: 100%; padding: 10px; }
-      #centerHeader { font-size: 28px; padding: 10px 20px; }
-      #centerIntro { padding: 12px; margin: 15px 0; }
-      #bottom { flex-direction: column; height: auto; padding: 10px; }
-      #leftBottom, #rightBottom { width: 100%; margin-bottom: 10px; }
-      .floating-button { width: 40px; height: 40px; font-size: 20px; top: 5px; left: 5px; }
     }
   </style>
 </head>
@@ -83,17 +42,15 @@
       <ul id="questionList"></ul>
     </div>
     <div id="center">
-      <div id="centerHeader">개념별 새겨봐야 할 기출문제</div>
       <div id="centerIntro">
         <img src="pdf/sh.png" alt="소개 이미지">
       </div>
       <div id="questionContent">
-        <div id="imageContainer">
-          <img id="selectedImage" src="" alt="선택한 문제 이미지">
+        <div id="overlayContainer">
           <div id="overlayLeft"></div>
           <div id="overlayRight"></div>
         </div>
-        <div id="questionTitle" class="question-title" style="display:none;"></div>
+        <img id="selectedImage" src="" alt="선택한 문제 이미지">
       </div>
     </div>
   </div>
@@ -105,10 +62,8 @@
       </div>
     </div>
     <div id="rightBottom">
-      <div id="resultArea">
-        <div id="result"></div>
-        <div id="solutionLink" style="margin-top: 5px;"></div>
-      </div>
+      <div id="result"></div>
+      <div id="solutionLink"></div>
     </div>
   </div>
   <button class="floating-button" onclick="toggleMenu()">☰</button>
@@ -116,120 +71,39 @@
     let correctAnswer = "";
     let solutionLink = "";
     let menuVisible = false;
-    function createCollapsibleItem(text) {
-      const li = document.createElement("li");
-      li.textContent = text;
-      li.classList.add("collapsible");
-      li.addEventListener("click", function(e) {
-        const childUl = this.querySelector(":scope > ul");
-        if(childUl) {
-          if(childUl.style.display === "block") { childUl.style.display = "none"; this.classList.remove("open"); }
-          else { childUl.style.display = "block"; this.classList.add("open"); }
-        }
-        e.stopPropagation();
-      });
-      return li;
-    }
-    function generateMenu(questions) {
-      const grouped = {};
-      questions.forEach(item => {
-        const subject = item.과목;
-        const cat = item.대분류;
-        const sub = item.중분류;
-        const small = item.소분류;
-        if (!grouped[subject]) grouped[subject] = {};
-        if (!grouped[subject][cat]) grouped[subject][cat] = {};
-        if (!grouped[subject][cat][sub]) grouped[subject][cat][sub] = {};
-        if (!grouped[subject][cat][sub][small]) grouped[subject][cat][sub][small] = [];
-        grouped[subject][cat][sub][small] = grouped[subject][cat][sub][small].concat(item.문항들);
-      });
-      const questionList = document.getElementById("questionList");
-      for (const subject in grouped) {
-        const subjectLi = createCollapsibleItem(subject);
-        const subjectUl = document.createElement("ul");
-        subjectUl.style.display = "none";
-        subjectLi.appendChild(subjectUl);
-        questionList.appendChild(subjectLi);
-        for (const cat in grouped[subject]) {
-          const categoryLi = createCollapsibleItem(cat);
-          const catUl = document.createElement("ul");
-          catUl.style.display = "none";
-          categoryLi.appendChild(catUl);
-          subjectUl.appendChild(categoryLi);
-          for (const sub in grouped[subject][cat]) {
-            const subCategoryLi = createCollapsibleItem(sub);
-            const subUl = document.createElement("ul");
-            subUl.style.display = "none";
-            subCategoryLi.appendChild(subUl);
-            catUl.appendChild(subCategoryLi);
-            for (const small in grouped[subject][cat][sub]) {
-              const smallCategoryLi = createCollapsibleItem(small);
-              const smallUl = document.createElement("ul");
-              smallUl.style.display = "none";
-              smallCategoryLi.appendChild(smallUl);
-              subUl.appendChild(smallCategoryLi);
-              grouped[subject][cat][sub][small].forEach(item => {
-                const questionLi = document.createElement("li");
-                questionLi.textContent = item.문항번호;
-                questionLi.addEventListener("click", function(e) {
-                  selectQuestion(item, small);
-                  if(window.innerWidth <= 600) { 
-                    document.getElementById("left").style.display = "none"; 
-                    menuVisible = false; 
-                  }
-                  e.stopPropagation();
-                });
-                smallUl.appendChild(questionLi);
-              });
-            }
-          }
-        }
-      }
-    }
+    
     function toggleMenu() {
-      const left = document.getElementById("left");
-      if(window.innerWidth <= 600) {
-        if(menuVisible) { left.style.display = "none"; menuVisible = false; }
-        else { 
-          left.style.display = "block"; 
-          left.style.position = "fixed"; 
-          left.style.top = "0"; 
-          left.style.left = "0"; 
-          left.style.width = "100%"; 
-          left.style.height = "100%"; 
-          left.style.padding = "20px"; 
-          left.style.zIndex = "9998"; 
-          menuVisible = true; 
-        }
-      } else {
-        menuVisible = !menuVisible;
-        const center = document.getElementById("center");
-        if(menuVisible) { left.style.width = "50%"; left.style.padding = "20px"; center.style.width = "50%"; }
-        else { left.style.width = "0"; left.style.padding = "0"; center.style.width = "100%"; }
-      }
+      let left = document.getElementById("left");
+      menuVisible = !menuVisible;
+      left.style.display = menuVisible ? "block" : "none";
     }
+
     function selectQuestion(question, smallCategory) {
-      document.getElementById("selectedImage").src = question.문항주소;
-      document.getElementById("selectedImage").style.display = "block";
-      document.getElementById("overlayLeft").innerHTML = `<div>${smallCategory}</div><div>${question.문항번호}</div>`;
-      document.getElementById("overlayRight").innerHTML = `<div>${question.난이도}</div><div>${question.중요도}</div>`;
-      document.getElementById("questionTitle").style.display = "none";
       document.getElementById("centerIntro").style.display = "none";
+      document.getElementById("questionContent").style.display = "flex";
+      document.getElementById("selectedImage").src = question.문항주소;
+      document.getElementById("overlayLeft").innerHTML = `<div>${smallCategory}</div><div>${question.문항번호}</div>`;
+      document.getElementById("overlayRight").innerHTML = `<div>${question.난이도 || "없음"}</div><div>${question.중요도 || "없음"}</div>`;
       correctAnswer = question.정답;
       solutionLink = question.해설주소;
-      document.getElementById("result").innerHTML = "";
-      document.getElementById("solutionLink").innerHTML = "";
     }
+
     function checkAnswer() {
-      const userAnswer = document.getElementById("answer").value;
+      let userAnswer = document.getElementById("answer").value;
       document.getElementById("answer").value = "";
-      const resultDiv = document.getElementById("result");
-      const solutionDiv = document.getElementById("solutionLink");
-      if (userAnswer === correctAnswer) { resultDiv.innerHTML = "정답입니다!"; solutionDiv.innerHTML = ""; }
-      else { resultDiv.innerHTML = "오답입니다!"; solutionDiv.innerHTML = `해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>`; }
+      let resultDiv = document.getElementById("result");
+      let solutionDiv = document.getElementById("solutionLink");
+      if (userAnswer === correctAnswer) {
+        resultDiv.innerHTML = "정답입니다!";
+        solutionDiv.innerHTML = "";
+      } else {
+        resultDiv.innerHTML = "오답입니다!";
+        solutionDiv.innerHTML = `<a href='${solutionLink}' target='_blank'>해설 영상</a>`;
+      }
     }
+
     fetch('questions.json')
-      .then(response => { if (!response.ok) { throw new Error('Network response was not ok'); } return response.json(); })
+      .then(response => response.json())
       .then(data => { generateMenu(data); })
       .catch(error => console.error('Error loading JSON:', error));
   </script>
