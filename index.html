@@ -74,7 +74,6 @@
       overflow: hidden;
       transition: all 0.3s ease;
     }
-    /* centerHeader: 가로 가운데 정렬 + sticky 처리 */
     #centerHeader {
       flex: 0 0 auto;
       display: flex;
@@ -92,60 +91,43 @@
       top: 0;
       z-index: 10;
     }
-    /* 질문 내용 영역 */
     #questionContent {
       flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
       overflow-y: auto;
       padding-top: 20px;
     }
-    /* 기본 상태: block으로 세로 배치 */
-    #questionTitle, #questionMeta {
+    /* 컨테이너로 questionTitle, questionMeta 감싸기 */
+    #questionOverlay {
+      margin-bottom: 10px;
       display: block;
     }
-    #questionTitle {
+    /* 좌측 메뉴 열림 상태: 세로로 배치 (기본) */
+    #questionOverlay:not(.menu-closed) .question-title,
+    #questionOverlay:not(.menu-closed) .question-meta {
+      display: block;
+    }
+    /* 좌측 메뉴 닫힘 상태: 한 줄에 배치 */
+    #questionOverlay.menu-closed {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .question-title {
       font-size: 22px;
       font-weight: 700;
-      margin-top: 10px;
       color: #34495e;
     }
-    #questionMeta {
+    .question-meta {
       font-size: 16px;
-      margin-top: 5px;
       color: #34495e;
     }
     /* 문제 이미지 */
-    #questionContent img {
+    #selectedImage {
       max-width: 50%;
       height: auto;
       margin-top: 20px;
       border-radius: 8px;
-    }
-    /* 좌측 메뉴가 닫혔을 때 overlay 레이아웃 */
-    #questionContent.menu-closed {
-      position: relative;
-      padding-top: 0; /* 이미지 위에 오버레이되도록 */
-    }
-    #questionContent.menu-closed #questionTitle {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: rgba(255,255,255,0.8);
-      padding: 5px 10px;
-      border-radius: 4px;
-      margin: 0;
-    }
-    #questionContent.menu-closed #questionMeta {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: rgba(255,255,255,0.8);
-      padding: 5px 10px;
-      border-radius: 4px;
-      margin: 0;
+      display: block;
     }
     #bottom {
       height: 10vh;
@@ -244,8 +226,11 @@
     <div id="center">
       <div id="centerHeader">개념별 새겨봐야 할 기출문제</div>
       <div id="questionContent">
-        <div id="questionTitle" class="question-title" style="display:none;"></div>
-        <div id="questionMeta" class="question-meta" style="display:none;"></div>
+        <!-- overlay 컨테이너: 좌측 메뉴 상태에 따라 레이아웃 변경 -->
+        <div id="questionOverlay" style="display:none;">
+          <div id="questionTitle" class="question-title"></div>
+          <div id="questionMeta" class="question-meta"></div>
+        </div>
         <img id="selectedImage" src="" alt="선택한 문제 이미지" style="display:none;">
       </div>
     </div>
@@ -266,7 +251,6 @@
   </div>
   <button class="floating-button" onclick="toggleMenu()">☰</button>
   <script>
-    // 초기 화면 상태에 따라 menuVisible 값을 설정합니다.
     let menuVisible = window.innerWidth > 600 ? true : false;
     let correctAnswer = "";
     let solutionLink = "";
@@ -338,6 +322,7 @@
                     document.getElementById("left").style.display = "none"; 
                     menuVisible = false; 
                   }
+                  updateOverlayLayout();
                   e.stopPropagation();
                 });
                 smallUl.appendChild(questionLi);
@@ -378,34 +363,29 @@
           center.style.width = "100%"; 
         }
       }
-      // 메뉴 상태에 따라 질문 내용 영역의 레이아웃 업데이트
-      const content = document.getElementById("questionContent");
+      updateOverlayLayout();
+    }
+
+    function updateOverlayLayout() {
+      const overlay = document.getElementById("questionOverlay");
       if(menuVisible) {
-          content.classList.remove("menu-closed");
+        overlay.classList.remove("menu-closed");
       } else {
-          content.classList.add("menu-closed");
+        overlay.classList.add("menu-closed");
       }
     }
 
     function selectQuestion(question, smallCategory) {
       document.getElementById("selectedImage").src = question.문항주소;
       document.getElementById("selectedImage").style.display = "block";
+      document.getElementById("questionOverlay").style.display = "block";
       document.getElementById("questionTitle").innerText = `${smallCategory} - ${question.문항번호}`;
-      document.getElementById("questionTitle").style.display = "block";
       document.getElementById("questionMeta").innerText = `난이도: ${question.난이도}, 중요도: ${question.중요도}`;
-      document.getElementById("questionMeta").style.display = "block";
       correctAnswer = question.정답;
       solutionLink = question.해설주소;
       document.getElementById("result").innerHTML = "";
       document.getElementById("solutionLink").innerHTML = "";
-      
-      // 선택 시 현재 메뉴 상태에 따라 질문 내용 영역 업데이트
-      const content = document.getElementById("questionContent");
-      if(menuVisible) {
-          content.classList.remove("menu-closed");
-      } else {
-          content.classList.add("menu-closed");
-      }
+      updateOverlayLayout();
     }
 
     function checkAnswer() {
