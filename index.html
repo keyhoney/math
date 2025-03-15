@@ -74,6 +74,7 @@
       overflow: hidden;
       transition: all 0.3s ease;
     }
+    /* centerHeader: 가로 가운데 정렬 및 sticky 처리 */
     #centerHeader {
       flex: 0 0 auto;
       display: flex;
@@ -96,32 +97,43 @@
       overflow-y: auto;
       padding-top: 20px;
     }
-    /* 컨테이너로 questionTitle, questionMeta 감싸기 */
+    /* overlay 컨테이너: 항상 flex로, 기본은 세로 배치 */
     #questionOverlay {
       margin-bottom: 10px;
-      display: block;
-    }
-    /* 좌측 메뉴 열림 상태: 세로로 배치 (기본) */
-    #questionOverlay:not(.menu-closed) .question-title,
-    #questionOverlay:not(.menu-closed) .question-meta {
-      display: block;
-    }
-    /* 좌측 메뉴 닫힘 상태: 한 줄에 배치 */
-    #questionOverlay.menu-closed {
       display: flex;
+      flex-direction: column;
+    }
+    /* 메뉴 닫힘 상태: 가로 배치 */
+    #questionOverlay.menu-closed {
+      flex-direction: row;
       justify-content: space-between;
       align-items: center;
     }
+    /* questionTitle 스타일 */
     .question-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: #34495e;
+      font-size: 24px;
+      font-weight: bold;
+      color: #2c3e50;
+      background: rgba(255,255,255,0.9);
+      padding: 8px 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      margin-bottom: 4px;
     }
+    /* 메뉴 닫힘 상태에서는 margin-bottom 제거 */
+    #questionOverlay.menu-closed .question-title {
+      margin-bottom: 0;
+    }
+    /* questionMeta 스타일 */
     .question-meta {
-      font-size: 16px;
-      color: #34495e;
+      font-size: 18px;
+      color: #2c3e50;
+      background: rgba(255,255,255,0.9);
+      padding: 6px 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
-    /* 문제 이미지 */
+    /* 문제 이미지: overlay 아래에 자연스럽게 위치 */
     #selectedImage {
       max-width: 50%;
       height: auto;
@@ -226,7 +238,7 @@
     <div id="center">
       <div id="centerHeader">개념별 새겨봐야 할 기출문제</div>
       <div id="questionContent">
-        <!-- overlay 컨테이너: 좌측 메뉴 상태에 따라 레이아웃 변경 -->
+        <!-- overlay 컨테이너: questionTitle과 questionMeta를 감쌉니다 -->
         <div id="questionOverlay" style="display:none;">
           <div id="questionTitle" class="question-title"></div>
           <div id="questionMeta" class="question-meta"></div>
@@ -251,6 +263,7 @@
   </div>
   <button class="floating-button" onclick="toggleMenu()">☰</button>
   <script>
+    // 초기 메뉴 상태: 데스크탑이면 보임, 모바일이면 숨김
     let menuVisible = window.innerWidth > 600 ? true : false;
     let correctAnswer = "";
     let solutionLink = "";
@@ -368,6 +381,7 @@
 
     function updateOverlayLayout() {
       const overlay = document.getElementById("questionOverlay");
+      // 메뉴 열림: 세로 배치, 닫힘: 가로 배치
       if(menuVisible) {
         overlay.classList.remove("menu-closed");
       } else {
@@ -378,7 +392,8 @@
     function selectQuestion(question, smallCategory) {
       document.getElementById("selectedImage").src = question.문항주소;
       document.getElementById("selectedImage").style.display = "block";
-      document.getElementById("questionOverlay").style.display = "block";
+      // overlay 항상 flex; updateOverlayLayout() 조정
+      document.getElementById("questionOverlay").style.display = "flex";
       document.getElementById("questionTitle").innerText = `${smallCategory} - ${question.문항번호}`;
       document.getElementById("questionMeta").innerText = `난이도: ${question.난이도}, 중요도: ${question.중요도}`;
       correctAnswer = question.정답;
