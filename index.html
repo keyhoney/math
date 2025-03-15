@@ -74,7 +74,6 @@
       overflow: hidden;
       transition: all 0.3s ease;
     }
-    /* centerHeader: 가로 가운데 정렬 및 sticky 처리 */
     #centerHeader {
       flex: 0 0 auto;
       display: flex;
@@ -97,14 +96,14 @@
       overflow-y: auto;
       padding-top: 20px;
     }
-    /* overlay 컨테이너: questionTitle과 questionMeta를 감싸며,
-       기본(좌측 메뉴 열림) 상태는 세로 배치, 닫힘 상태는 한 줄 flex 배치 */
+    /* 컨테이너로 questionTitle, questionMeta 감싸기 */
     #questionOverlay {
       margin-bottom: 10px;
       display: block;
     }
-    /* 좌측 메뉴 열림 상태: 기본 block(세로 배치) */
-    #questionOverlay:not(.menu-closed) {
+    /* 좌측 메뉴 열림 상태: 세로로 배치 (기본) */
+    #questionOverlay:not(.menu-closed) .question-title,
+    #questionOverlay:not(.menu-closed) .question-meta {
       display: block;
     }
     /* 좌측 메뉴 닫힘 상태: 한 줄에 배치 */
@@ -113,27 +112,16 @@
       justify-content: space-between;
       align-items: center;
     }
-    /* questionTitle 스타일 */
-    #questionOverlay .question-title {
-      font-size: 24px;
-      font-weight: bold;
-      color: #2c3e50;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 8px 12px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-      margin-bottom: 4px;
+    .question-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #34495e;
     }
-    /* questionMeta 스타일 */
-    #questionOverlay .question-meta {
-      font-size: 18px;
-      color: #2c3e50;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 6px 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    .question-meta {
+      font-size: 16px;
+      color: #34495e;
     }
-    /* 문제 이미지: overlay 컨테이너 다음에 자연스럽게 나타남 */
+    /* 문제 이미지 */
     #selectedImage {
       max-width: 50%;
       height: auto;
@@ -263,7 +251,6 @@
   </div>
   <button class="floating-button" onclick="toggleMenu()">☰</button>
   <script>
-    // 좌측 메뉴의 초기 상태: 데스크탑이면 보임, 모바일이면 숨김
     let menuVisible = window.innerWidth > 600 ? true : false;
     let correctAnswer = "";
     let solutionLink = "";
@@ -381,7 +368,6 @@
 
     function updateOverlayLayout() {
       const overlay = document.getElementById("questionOverlay");
-      // 좌측 메뉴가 열려있으면 기본 블록(세로 배치), 닫히면 flex(한 줄 배치)
       if(menuVisible) {
         overlay.classList.remove("menu-closed");
       } else {
