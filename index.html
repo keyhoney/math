@@ -74,9 +74,12 @@
       overflow: hidden;
       transition: all 0.3s ease;
     }
-    /* centerHeader는 항상 상단에 고정되도록 sticky 적용 */
+    /* centerHeader를 flex 컨테이너로 설정해 가로 가운데 정렬 */
     #centerHeader {
       flex: 0 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       font-size: 28px;
       font-weight: bold;
       color: #ffffff;
