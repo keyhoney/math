@@ -17,9 +17,42 @@
     .collapsible::after { content: "▼"; position: absolute; right: 10px; font-size: 12px; transition: opacity 0.3s ease; }
     .collapsible.open::after { opacity: 0; }
     #center { flex: 1; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; transition: all 0.3s ease; }
-    #centerHeader { flex: 0 0 5%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; color: #ffffff; background: linear-gradient(135deg, #2c3e50, #34495e); padding: 10px 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); letter-spacing: 1px; }
-    #questionContent { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    #questionContent img { max-width: 50%; height: auto; margin-top: 20px; border-radius: 8px; }
+    #centerHeader { flex: 0 0 10%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; color: #ffffff; background: linear-gradient(135deg, #2c3e50, #34495e); padding: 10px 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); letter-spacing: 1px; }
+    /* 이미지 컨테이너를 상대 위치로 설정 */
+    #questionContent { 
+      flex: 1; 
+      position: relative; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      overflow-y: auto; 
+    }
+    #imageContainer { position: relative; display: inline-block; width: 100%; }
+    #selectedImage { max-width: 50%; height: auto; border-radius: 8px; display: none; }
+    /* 왼쪽 오버레이: 소분류, 문항번호 */
+    #overlayLeft { 
+      position: absolute; 
+      top: 10px; 
+      left: 10px; 
+      background: rgba(0,0,0,0.5); 
+      color: #fff; 
+      padding: 5px 10px; 
+      border-radius: 4px; 
+      font-size: 14px; 
+      line-height: 1.4;
+    }
+    /* 오른쪽 오버레이: 난이도, 중요도 */
+    #overlayRight { 
+      position: absolute; 
+      top: 10px; 
+      right: 10px; 
+      background: rgba(0,0,0,0.5); 
+      color: #fff; 
+      padding: 5px 10px; 
+      border-radius: 4px; 
+      font-size: 14px; 
+      line-height: 1.4;
+    }
     .question-title { font-size: 22px; font-weight: 700; margin-top: 10px; color: #34495e; }
     #bottom { height: 10vh; background-color: #ecf0f1; display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; border-top: 1px solid #bdc3c7; }
     #leftBottom, #rightBottom { width: 50%; display: flex; justify-content: center; align-items: center; }
@@ -31,37 +64,19 @@
     #result { font-weight: bold; text-align: center; color: #e74c3c; }
     #solutionLink a { color: #3498db; text-decoration: none; font-weight: 700; }
     #solutionLink a:hover { text-decoration: underline; }
-    .floating-button { position: fixed; top: 10px; left: 10px; background-color: #e74c3c; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 24px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3); transition: background 0.3s; z-index: 10000; }
+    .floating-button { position: fixed; top: 10px; left: 10px; background-color: #e74c3c; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 24px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3); transition: background 0.3s; z-index: 100000; }
     .floating-button:hover { background-color: #c0392b; }
     @media (max-width: 600px) {
       #left { display: none; }
       #center { width: 100%; padding: 10px; }
-      #centerHeader { font-size: 20px; padding: 10px 20px; }
+      #centerHeader { font-size: 28px; padding: 10px 20px; }
       #bottom { flex-direction: column; height: auto; padding: 10px; }
       #leftBottom, #rightBottom { width: 100%; margin-bottom: 10px; }
       .floating-button { width: 40px; height: 40px; font-size: 20px; top: 5px; left: 5px; }
     }
-    /* 화면 회전 안내 오버레이 */
-    #rotateMessage {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      color: white;
-      font-size: 24px;
-      text-align: center;
-      padding-top: 50vh;
-      z-index: 100000;
-    }
   </style>
 </head>
 <body>
-  <!-- 회전 안내 메시지 -->
-  <div id="rotateMessage">화면을 회전시켜주세요</div>
-
   <div id="top">
     <div id="left">
       <h2>문항 선택</h2>
@@ -70,8 +85,18 @@
     <div id="center">
       <div id="centerHeader">개념별 새겨봐야 할 기출문제</div>
       <div id="questionContent">
+        <div id="imageContainer">
+          <img id="selectedImage" src="" alt="선택한 문제 이미지">
+          <div id="overlayLeft">
+            <div id="smallCategoryLabel"></div>
+            <div id="questionNumberLabel"></div>
+          </div>
+          <div id="overlayRight">
+            <div id="difficultyLabel"></div>
+            <div id="importanceLabel"></div>
+          </div>
+        </div>
         <div id="questionTitle" class="question-title" style="display:none;"></div>
-        <img id="selectedImage" src="" alt="선택한 문제 이미지" style="display:none;">
       </div>
     </div>
   </div>
@@ -91,46 +116,26 @@
   </div>
   <button class="floating-button" onclick="toggleMenu()">☰</button>
   <script>
-    // 화면 회전 감지 함수
-    function checkOrientation() {
-      if (window.innerHeight > window.innerWidth) {
-        document.getElementById('rotateMessage').style.display = 'block';
-      } else {
-        document.getElementById('rotateMessage').style.display = 'none';
-      }
-    }
-    
-    // 페이지 로드 및 창 크기 변경 시 실행
-    window.addEventListener('load', checkOrientation);
-    window.addEventListener('resize', checkOrientation);
-
-    // 초기 화면 상태에 맞게 menuVisible 변수 설정 (데스크탑에서는 #left가 보이므로 true)
-    let menuVisible = window.innerWidth > 600;
-
+    let correctAnswer = "";
+    let solutionLink = "";
+    let menuVisible = false;
     function createCollapsibleItem(text) {
       const li = document.createElement("li");
       li.textContent = text;
       li.classList.add("collapsible");
       li.addEventListener("click", function(e) {
         const childUl = this.querySelector(":scope > ul");
-        if(childUl) {
-          if(childUl.style.display === "block") {
-            childUl.style.display = "none";
-            this.classList.remove("open");
-          } else {
-            childUl.style.display = "block";
-            this.classList.add("open");
-          }
+        if(childUl) { 
+          if(childUl.style.display === "block") { childUl.style.display = "none"; this.classList.remove("open"); } 
+          else { childUl.style.display = "block"; this.classList.add("open"); } 
         }
         e.stopPropagation();
       });
       return li;
     }
-
     function generateMenu(questions) {
       const grouped = {};
       questions.forEach(item => {
-        // 새 JSON 데이터에는 "과목" 필드가 추가되어 있어야 합니다.
         const subject = item.과목;
         const cat = item.대분류;
         const sub = item.중분류;
@@ -142,43 +147,38 @@
         grouped[subject][cat][sub][small] = grouped[subject][cat][sub][small].concat(item.문항들);
       });
       const questionList = document.getElementById("questionList");
-      // 과목 단계
       for (const subject in grouped) {
         const subjectLi = createCollapsibleItem(subject);
         const subjectUl = document.createElement("ul");
         subjectUl.style.display = "none";
         subjectLi.appendChild(subjectUl);
         questionList.appendChild(subjectLi);
-        // 대분류 단계
         for (const cat in grouped[subject]) {
           const categoryLi = createCollapsibleItem(cat);
           const catUl = document.createElement("ul");
           catUl.style.display = "none";
           categoryLi.appendChild(catUl);
           subjectUl.appendChild(categoryLi);
-          // 중분류 단계
           for (const sub in grouped[subject][cat]) {
             const subCategoryLi = createCollapsibleItem(sub);
             const subUl = document.createElement("ul");
             subUl.style.display = "none";
             subCategoryLi.appendChild(subUl);
             catUl.appendChild(subCategoryLi);
-            // 소분류 단계
             for (const small in grouped[subject][cat][sub]) {
               const smallCategoryLi = createCollapsibleItem(small);
               const smallUl = document.createElement("ul");
               smallUl.style.display = "none";
               smallCategoryLi.appendChild(smallUl);
               subUl.appendChild(smallCategoryLi);
-              // 문항 단계
               grouped[subject][cat][sub][small].forEach(item => {
                 const questionLi = document.createElement("li");
                 questionLi.textContent = item.문항번호;
                 questionLi.addEventListener("click", function(e) {
                   selectQuestion(item, small);
-                  if(window.innerWidth <= 600) {
-                    document.getElementById("left").style.display = "none";
-                    menuVisible = false;
+                  if(window.innerWidth <= 600) { 
+                    document.getElementById("left").style.display = "none"; 
+                    menuVisible = false; 
                   }
                   e.stopPropagation();
                 });
@@ -189,74 +189,53 @@
         }
       }
     }
-
     function toggleMenu() {
       const left = document.getElementById("left");
       if(window.innerWidth <= 600) {
-        if(menuVisible) {
-          left.style.display = "none";
-          menuVisible = false;
-        } else {
-          left.style.display = "block";
-          left.style.position = "fixed";
-          left.style.top = "0";
-          left.style.left = "0";
-          left.style.width = "100%";
-          left.style.height = "100%";
-          left.style.padding = "20px";
-          left.style.zIndex = "9998";
-          menuVisible = true;
+        if(menuVisible) { left.style.display = "none"; menuVisible = false; }
+        else { 
+          left.style.display = "block"; 
+          left.style.position = "fixed"; 
+          left.style.top = "0"; 
+          left.style.left = "0"; 
+          left.style.width = "100%"; 
+          left.style.height = "100%"; 
+          left.style.padding = "20px"; 
+          left.style.zIndex = "9998"; 
+          menuVisible = true; 
         }
       } else {
         menuVisible = !menuVisible;
         const center = document.getElementById("center");
-        if(menuVisible) {
-          left.style.width = "50%";
-          left.style.padding = "20px";
-          center.style.width = "50%";
-        } else {
-          left.style.width = "0";
-          left.style.padding = "0";
-          center.style.width = "100%";
-        }
+        if(menuVisible) { left.style.width = "50%"; left.style.padding = "20px"; center.style.width = "50%"; }
+        else { left.style.width = "0"; left.style.padding = "0"; center.style.width = "100%"; }
       }
     }
-
     function selectQuestion(question, smallCategory) {
       document.getElementById("selectedImage").src = question.문항주소;
       document.getElementById("selectedImage").style.display = "block";
-      document.getElementById("questionTitle").innerText = `${smallCategory} - ${question.문항번호}`;
-      document.getElementById("questionTitle").style.display = "block";
+      // 소분류와 문항 번호를 왼쪽 오버레이에, 난이도와 중요도를 오른쪽 오버레이에 표시
+      document.getElementById("overlayLeft").innerHTML = `<div>${smallCategory}</div><div>${question.문항번호}</div>`;
+      document.getElementById("overlayRight").innerHTML = `<div>${question.난이도}</div><div>${question.중요도}</div>`;
+      document.getElementById("questionTitle").style.display = "none";
+      document.getElementById("centerIntro").style.display = "none";
       correctAnswer = question.정답;
       solutionLink = question.해설주소;
       document.getElementById("result").innerHTML = "";
       document.getElementById("solutionLink").innerHTML = "";
     }
-
     function checkAnswer() {
       const userAnswer = document.getElementById("answer").value;
       document.getElementById("answer").value = "";
       const resultDiv = document.getElementById("result");
       const solutionDiv = document.getElementById("solutionLink");
-      if (userAnswer === correctAnswer) {
-        resultDiv.innerHTML = "정답입니다!";
-        solutionDiv.innerHTML = "";
-      } else {
-        resultDiv.innerHTML = "오답입니다!";
-        solutionDiv.innerHTML = `해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>`;
-      }
+      if (userAnswer === correctAnswer) { resultDiv.innerHTML = "정답입니다!"; solutionDiv.innerHTML = ""; }
+      else { resultDiv.innerHTML = "오답입니다!"; solutionDiv.innerHTML = `해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>`; }
     }
-
     let correctAnswer = "";
     let solutionLink = "";
-
     fetch('questions.json')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
+      .then(response => { if (!response.ok) { throw new Error('Network response was not ok'); } return response.json(); })
       .then(data => { generateMenu(data); })
       .catch(error => console.error('Error loading JSON:', error));
   </script>
