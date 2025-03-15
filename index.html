@@ -103,41 +103,42 @@
       display: flex;
       flex-direction: column;
     }
-    /* 메뉴 닫힘 상태: 가로 배치 */
+    /* 메뉴 닫힘 상태: 가로 배치로 변경 */
     #questionOverlay.menu-closed {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
     }
-    /* questionTitle 스타일 */
+    /* questionTitle 디자인 */
     .question-title {
       font-size: 24px;
       font-weight: bold;
-      color: #2c3e50;
-      background: rgba(255,255,255,0.9);
-      padding: 8px 12px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      margin-bottom: 4px;
+      color: #34495e;
+      background: #ffffff;
+      padding: 10px 15px;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      margin-bottom: 8px;
     }
-    /* 메뉴 닫힘 상태에서는 margin-bottom 제거 */
+    /* 메뉴 닫힘 상태: margin-bottom 제거 */
     #questionOverlay.menu-closed .question-title {
       margin-bottom: 0;
     }
-    /* questionMeta 스타일 */
+    /* questionMeta 디자인 및 우측 정렬 */
     .question-meta {
       font-size: 18px;
       color: #2c3e50;
-      background: rgba(255,255,255,0.9);
-      padding: 6px 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      background: #ffffff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      text-align: right;
     }
-    /* 문제 이미지: overlay 아래에 자연스럽게 위치 */
+    /* 선택한 문제 이미지: 가로 가운데 정렬 */
     #selectedImage {
       max-width: 50%;
       height: auto;
-      margin-top: 20px;
+      margin: 20px auto 0 auto;
       border-radius: 8px;
       display: block;
     }
@@ -381,7 +382,7 @@
 
     function updateOverlayLayout() {
       const overlay = document.getElementById("questionOverlay");
-      // 메뉴 열림: 세로 배치, 닫힘: 가로 배치
+      // 메뉴 열림: flex-direction column, 닫힘: row
       if(menuVisible) {
         overlay.classList.remove("menu-closed");
       } else {
@@ -392,7 +393,6 @@
     function selectQuestion(question, smallCategory) {
       document.getElementById("selectedImage").src = question.문항주소;
       document.getElementById("selectedImage").style.display = "block";
-      // overlay 항상 flex; updateOverlayLayout() 조정
       document.getElementById("questionOverlay").style.display = "flex";
       document.getElementById("questionTitle").innerText = `${smallCategory} - ${question.문항번호}`;
       document.getElementById("questionMeta").innerText = `난이도: ${question.난이도}, 중요도: ${question.중요도}`;
