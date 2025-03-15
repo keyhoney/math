@@ -74,7 +74,7 @@
       overflow: hidden;
       transition: all 0.3s ease;
     }
-    /* centerHeader를 flex 컨테이너로 설정해 가로 가운데 정렬 */
+    /* centerHeader: 가로 가운데 정렬 + sticky 처리 */
     #centerHeader {
       flex: 0 0 auto;
       display: flex;
@@ -92,7 +92,7 @@
       top: 0;
       z-index: 10;
     }
-    /* 질문 내용은 상단부터 쌓이도록 수정 */
+    /* 질문 내용 영역 */
     #questionContent {
       flex: 1;
       display: flex;
@@ -102,17 +102,50 @@
       overflow-y: auto;
       padding-top: 20px;
     }
+    /* 기본 상태: block으로 세로 배치 */
+    #questionTitle, #questionMeta {
+      display: block;
+    }
+    #questionTitle {
+      font-size: 22px;
+      font-weight: 700;
+      margin-top: 10px;
+      color: #34495e;
+    }
+    #questionMeta {
+      font-size: 16px;
+      margin-top: 5px;
+      color: #34495e;
+    }
+    /* 문제 이미지 */
     #questionContent img {
       max-width: 50%;
       height: auto;
       margin-top: 20px;
       border-radius: 8px;
     }
-    .question-title {
-      font-size: 22px;
-      font-weight: 700;
-      margin-top: 10px;
-      color: #34495e;
+    /* 좌측 메뉴가 닫혔을 때 overlay 레이아웃 */
+    #questionContent.menu-closed {
+      position: relative;
+      padding-top: 0; /* 이미지 위에 오버레이되도록 */
+    }
+    #questionContent.menu-closed #questionTitle {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(255,255,255,0.8);
+      padding: 5px 10px;
+      border-radius: 4px;
+      margin: 0;
+    }
+    #questionContent.menu-closed #questionMeta {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255,255,255,0.8);
+      padding: 5px 10px;
+      border-radius: 4px;
+      margin: 0;
     }
     #bottom {
       height: 10vh;
@@ -212,6 +245,7 @@
       <div id="centerHeader">개념별 새겨봐야 할 기출문제</div>
       <div id="questionContent">
         <div id="questionTitle" class="question-title" style="display:none;"></div>
+        <div id="questionMeta" class="question-meta" style="display:none;"></div>
         <img id="selectedImage" src="" alt="선택한 문제 이미지" style="display:none;">
       </div>
     </div>
@@ -316,6 +350,7 @@
 
     function toggleMenu() {
       const left = document.getElementById("left");
+      const center = document.getElementById("center");
       if(window.innerWidth <= 600) {
         if(menuVisible) { 
           left.style.display = "none"; 
@@ -333,7 +368,6 @@
         }
       } else {
         menuVisible = !menuVisible;
-        const center = document.getElementById("center");
         if(menuVisible) { 
           left.style.width = "50%"; 
           left.style.padding = "20px"; 
@@ -344,6 +378,13 @@
           center.style.width = "100%"; 
         }
       }
+      // 메뉴 상태에 따라 질문 내용 영역의 레이아웃 업데이트
+      const content = document.getElementById("questionContent");
+      if(menuVisible) {
+          content.classList.remove("menu-closed");
+      } else {
+          content.classList.add("menu-closed");
+      }
     }
 
     function selectQuestion(question, smallCategory) {
@@ -351,10 +392,20 @@
       document.getElementById("selectedImage").style.display = "block";
       document.getElementById("questionTitle").innerText = `${smallCategory} - ${question.문항번호}`;
       document.getElementById("questionTitle").style.display = "block";
+      document.getElementById("questionMeta").innerText = `난이도: ${question.난이도}, 중요도: ${question.중요도}`;
+      document.getElementById("questionMeta").style.display = "block";
       correctAnswer = question.정답;
       solutionLink = question.해설주소;
       document.getElementById("result").innerHTML = "";
       document.getElementById("solutionLink").innerHTML = "";
+      
+      // 선택 시 현재 메뉴 상태에 따라 질문 내용 영역 업데이트
+      const content = document.getElementById("questionContent");
+      if(menuVisible) {
+          content.classList.remove("menu-closed");
+      } else {
+          content.classList.add("menu-closed");
+      }
     }
 
     function checkAnswer() {
