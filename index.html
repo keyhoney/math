@@ -19,13 +19,17 @@
     #center { flex: 1; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; transition: all 0.3s ease; }
     #centerHeader { flex: 0 0 10%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; color: #ffffff; background: linear-gradient(135deg, #2c3e50, #34495e); padding: 10px 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); letter-spacing: 1px; }
     /* centerIntro 영역 대신 pdf/sh.png 이미지 표시 */
-    #centerIntro { 
-      flex: 0 0 auto; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      margin: 20px 0; 
-    }
+<div id="centerIntro">
+  <img src="pdf/sh.png" alt="소개 이미지">
+</div>
+<div id="questionContent" style="display:none;">
+  <div id="imageContainer">
+    <img id="selectedImage" src="" alt="선택한 문제 이미지" style="display:none;">
+    <div id="overlayLeft"></div>
+    <div id="overlayRight"></div>
+  </div>
+  <div id="questionTitle" class="question-title" style="display:none;"></div>
+</div>
     #centerIntro img { max-width: 100%; height: auto; border-radius: 8px; }
     #questionContent { flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow-y: auto; }
     #questionContent img { max-width: 50%; height: auto; margin-top: 20px; border-radius: 8px; }
@@ -84,15 +88,16 @@
     </div>
     <div id="center">
       <div id="centerHeader">개념별 새겨봐야 할 기출문제</div>
-      <div id="centerIntro">
-        <img src="pdf/sh.png" alt="소개 이미지">
-      </div>
-      <div id="questionContent">
-        <div id="imageContainer">
-          <img id="selectedImage" src="" alt="선택한 문제 이미지">
-          <div id="overlayLeft"></div>
-          <div id="overlayRight"></div>
-        </div>
+<div id="centerIntro">
+  <img src="pdf/sh.png" alt="소개 이미지">
+</div>
+<div id="questionContent" style="display:none;">
+  <div id="imageContainer">
+    <img id="selectedImage" src="" alt="선택한 문제 이미지" style="display:none;">
+    <div id="overlayLeft"></div>
+    <div id="overlayRight"></div>
+  </div>
+</div>
         <div id="questionTitle" class="question-title" style="display:none;"></div>
       </div>
     </div>
@@ -208,18 +213,23 @@
         else { left.style.width = "0"; left.style.padding = "0"; center.style.width = "100%"; }
       }
     }
-    function selectQuestion(question, smallCategory) {
-      document.getElementById("selectedImage").src = question.문항주소;
-      document.getElementById("selectedImage").style.display = "block";
-      document.getElementById("overlayLeft").innerHTML = `<div>${smallCategory}</div><div>${question.문항번호}</div>`;
-      document.getElementById("overlayRight").innerHTML = `<div>${question.난이도}</div><div>${question.중요도}</div>`;
-      document.getElementById("questionTitle").style.display = "none";
-      document.getElementById("centerIntro").style.display = "none";
-      correctAnswer = question.정답;
-      solutionLink = question.해설주소;
-      document.getElementById("result").innerHTML = "";
-      document.getElementById("solutionLink").innerHTML = "";
-    }
+function selectQuestion(question, smallCategory) {
+  // 문제 이미지와 정보 표시
+  document.getElementById("selectedImage").src = question.문항주소;
+  document.getElementById("selectedImage").style.display = "block"; // 문제 이미지 보이기
+  document.getElementById("overlayLeft").innerHTML = `<div>${smallCategory}</div><div>${question.문항번호}</div>`;
+  document.getElementById("overlayRight").innerHTML = `<div>${question.난이도}</div><div>${question.중요도}</div>`;
+  
+  // 초기 상태 설정
+  document.getElementById("centerIntro").style.display = "none"; // 소개 이미지 숨기기
+  document.getElementById("questionContent").style.display = "flex"; // 문제 정보 표시
+  
+  correctAnswer = question.정답;
+  solutionLink = question.해설주소;
+  document.getElementById("result").innerHTML = "";
+  document.getElementById("solutionLink").innerHTML = "";
+}
+
     function checkAnswer() {
       const userAnswer = document.getElementById("answer").value;
       document.getElementById("answer").value = "";
