@@ -191,28 +191,49 @@
         }
       }
     }
-    function toggleMenu() {
-      const left = document.getElementById("left");
-      if(window.innerWidth <= 600) {
-        if(menuVisible) { left.style.display = "none"; menuVisible = false; }
-        else { 
-          left.style.display = "block"; 
-          left.style.position = "fixed"; 
-          left.style.top = "0"; 
-          left.style.left = "0"; 
-          left.style.width = "100%"; 
-          left.style.height = "100%"; 
-          left.style.padding = "20px"; 
-          left.style.zIndex = "9998"; 
-          menuVisible = true; 
-        }
-      } else {
-        menuVisible = !menuVisible;
-        const center = document.getElementById("center");
-        if(menuVisible) { left.style.width = "50%"; left.style.padding = "20px"; center.style.width = "50%"; }
-        else { left.style.width = "0"; left.style.padding = "0"; center.style.width = "100%"; }
-      }
+function toggleMenu() {
+  const left = document.getElementById("left");
+  const center = document.getElementById("center");
+
+  if(window.innerWidth <= 600) {
+    if (!menuVisible) {
+      // 메뉴를 보이도록 설정
+      left.style.display = "block";
+      left.style.position = "fixed";
+      left.style.top = "0";
+      left.style.left = "0";
+      left.style.width = "100%";
+      left.style.height = "100%";
+      left.style.padding = "20px";
+      left.style.zIndex = "9998";
+      menuVisible = true;
+    } else {
+      // 메뉴를 숨기도록 설정
+      left.style.display = "none";
+      menuVisible = false;
     }
+  } else {
+    // 데스크탑 모드에서 메뉴 토글
+    menuVisible = !menuVisible;
+    if (menuVisible) {
+      left.style.width = "50%";
+      left.style.padding = "20px";
+      center.style.width = "50%";
+    } else {
+      left.style.width = "0";
+      left.style.padding = "0";
+      center.style.width = "100%";
+    }
+  }
+}
+
+// 초기 상태 설정
+document.addEventListener("DOMContentLoaded", () => {
+  const left = document.getElementById("left");
+  if (window.innerWidth <= 600) {
+    left.style.display = "none"; // 모바일에서 초기에는 숨기기
+  }
+});
 function selectQuestion(question, smallCategory) {
   // 문제 이미지와 정보 표시
   document.getElementById("selectedImage").src = question.문항주소;
