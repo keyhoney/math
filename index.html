@@ -9,7 +9,7 @@
     // 브라우저 뷰포트 높이를 기반으로 CSS 커스텀 프로퍼티 --vh를 설정합니다.
     function setVh() {
       let vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', ${vh}px);
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
     }
     setVh();
     window.addEventListener('resize', setVh);
@@ -418,8 +418,8 @@
       document.getElementById("selectedImage").src = question.문항주소;
       document.getElementById("selectedImage").style.display = "block";
       document.getElementById("questionOverlay").style.display = "flex";
-      document.getElementById("questionTitle").innerText = ${smallCategory} - ${question.문항번호};
-      document.getElementById("questionMeta").innerText = 난이도: ${question.난이도}, 중요도: ${question.중요도};
+      document.getElementById("questionTitle").innerText = `${smallCategory} - ${question.문항번호}`;
+      document.getElementById("questionMeta").innerText = `난이도: ${question.난이도}, 중요도: ${question.중요도}`;
       correctAnswer = question.정답;
       solutionLink = question.해설주소;
       document.getElementById("result").innerHTML = "";
@@ -437,7 +437,7 @@
         solutionDiv.innerHTML = ""; 
       } else { 
         resultDiv.innerHTML = "오답입니다!"; 
-        solutionDiv.innerHTML = 해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>; 
+        solutionDiv.innerHTML = `해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>`; 
       }
     }
 
