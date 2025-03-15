@@ -1,477 +1,468 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>개념별 새겨봐야 할 기출문제</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <script>
-      function setVh() {
-        let vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty("--vh", `${vh}px`);
-      }
-      setVh();
-      window.addEventListener("resize", setVh);
-    </script>
-    <style>
-      body {
-        margin: 0;
-        font-family: "Noto Sans KR", sans-serif;
-        background: #ffffff;
-        display: flex;
-        flex-direction: column;
-        height: calc(var(--vh, 1vh) * 100);
-        transition: all 0.3s ease;
-      }
-      #top {
-        flex: 1;
-        display: flex;
-        overflow: hidden;
-      }
-      #left {
-        width: 50%;
-        padding: 20px;
-        box-sizing: border-box;
-        background-color: #2c3e50;
-        color: #ecf0f1;
-        overflow-y: auto;
-        transition: all 0.3s ease;
-      }
-      #left h2 {
-        margin: 0;
-        font-size: 20px;
-        text-align: center;
-      }
-      #left ul {
-        list-style: none;
-        padding: 0;
-        margin: 20px 0 0 0;
-      }
-      #left ul ul {
-        border-left: 2px dashed rgba(236, 240, 241, 0.7);
-        margin-left: 10px;
-        padding-left: 10px;
-      }
-      #left li {
-        margin: 5px 0;
-        padding: 5px 10px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background 0.3s;
-        position: relative;
-      }
-      #left li:hover {
-        background: rgba(236, 240, 241, 0.2);
-      }
-      .collapsible::after {
-        content: "▼";
-        position: absolute;
-        right: 10px;
-        font-size: 12px;
-        transition: opacity 0.3s ease;
-      }
-      .collapsible.open::after {
-        opacity: 0;
-      }
-      #center {
-        flex: 1;
-        padding: 20px;
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        transition: all 0.3s ease;
-      }
-      #centerHeader {
-        flex: 0 0 auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 28px;
-        font-weight: bold;
-        color: #ffffff;
-        background: linear-gradient(135deg, #2c3e50, #34495e);
-        padding: 10px 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        letter-spacing: 1px;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-      }
-      #questionContent {
-        flex: 1;
-        overflow-y: auto;
-        padding-top: 20px;
-      }
-      #questionOverlay {
-        margin-bottom: 10px;
-        display: inline-flex;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      #questionOverlay.menu-closed {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .question-title,
-      .question-meta {
-        font-size: 15px;
-        font-weight: 600;
-        color: #2c3e50;
-        background: #ecf0f1;
-        padding: 8px 16px;
-        border: 1px solid #bdc3c7;
-        border-radius: 6px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        width: auto;
-      }
-      .question-meta {
-        align-self: flex-end;
-      }
-      #questionOverlay.menu-closed .question-title {
-        margin-bottom: 0;
-      }
-      #selectedImage {
-        max-width: 85%;
-        height: auto;
-        margin: 20px auto 0 auto;
-        display: block;
-      }
-      #bottom {
-        height: 10vh;
-        background-color: #ecf0f1;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 20px;
-        box-sizing: border-box;
-        border-top: 1px solid #bdc3c7;
-      }
-      #leftBottom,
-      #rightBottom {
-        width: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      #answerArea {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      #answerArea input[type="text"] {
-        padding: 8px;
-        font-size: 16px;
-        border: 1px solid #bdc3c7;
-        border-radius: 4px;
-        outline: none;
-        transition: border-color 0.3s;
-      }
-      #answerArea input[type="text"]:focus {
-        border-color: #3498db;
-      }
-      #answerArea button {
-        padding: 8px 16px;
-        font-size: 16px;
-        border: none;
-        border-radius: 4px;
-        background-color: #3498db;
-        color: white;
-        cursor: pointer;
-        transition: background 0.3s;
-      }
-      #answerArea button:hover {
-        background-color: #2980b9;
-      }
-      #result {
-        font-weight: bold;
-        text-align: center;
-        color: #e74c3c;
-      }
-      #solutionLink a {
-        color: #3498db;
-        text-decoration: none;
-        font-weight: 700;
-      }
-      #solutionLink a:hover {
-        text-decoration: underline;
-      }
-      .floating-button {
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        background-color: #e74c3c;
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        font-size: 24px;
-        cursor: pointer;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        transition: background 0.3s;
-        z-index: 100000;
-      }
-      .floating-button:hover {
-        background-color: #c0392b;
-      }
-      #rotateMessage {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.95);
-        color: #2c3e50;
-        font-size: 24px;
-        display: none;
-        justify-content: center;
-        align-items: center;
-        z-index: 100001;
-        text-align: center;
-        padding: 20px;
-        box-sizing: border-box;
-      }
-      @media (max-width: 600px) {
-        #left {
-          display: none;
-        }
-        #center {
-          width: 100%;
-          padding: 10px;
-        }
-        #centerHeader {
-          font-size: 28px;
-          padding: 10px 20px;
-        }
-        #bottom {
-          flex-direction: column;
-          height: auto;
-          padding: 10px;
-        }
-        #leftBottom,
-        #rightBottom {
-          width: 100%;
-          margin-bottom: 10px;
-        }
-        .floating-button {
-          width: 40px;
-          height: 40px;
-          font-size: 20px;
-          top: 5px;
-          left: 5px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="rotateMessage">화면을 회전해 주세요.</div>
-    <div id="top">
-      <div id="left">
-        <h2>문항 선택</h2>
-        <ul id="questionList"></ul>
-      </div>
-      <div id="center">
-        <div id="centerHeader">개념별 새겨봐야 할 기출문제</div>
-        <div id="questionContent">
-          <div id="questionOverlay" style="display: none;">
-            <div id="questionTitle" class="question-title"></div>
-            <div id="questionMeta" class="question-meta"></div>
-          </div>
-          <img id="selectedImage" src="" alt="선택한 문제 이미지" style="display: none;" />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>개념별 새겨봐야 할 기출문제</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <script>
+    // 브라우저 뷰포트 높이를 기반으로 CSS 커스텀 프로퍼티 --vh를 설정합니다.
+    function setVh() {
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', ${vh}px);
+    }
+    setVh();
+    window.addEventListener('resize', setVh);
+  </script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      height: calc(var(--vh, 1vh) * 100);
+      transition: all 0.3s ease;
+    }
+    #top {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+    #left {
+      width: 50%;
+      padding: 20px;
+      box-sizing: border-box;
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      overflow-y: auto;
+      transition: all 0.3s ease;
+    }
+    #left h2 {
+      margin: 0;
+      font-size: 20px;
+      text-align: center;
+    }
+    #left ul {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0 0 0;
+    }
+    #left ul ul {
+      border-left: 2px dashed rgba(236,240,241,0.7);
+      margin-left: 10px;
+      padding-left: 10px;
+    }
+    #left li {
+      margin: 5px 0;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+      position: relative;
+    }
+    #left li:hover {
+      background: rgba(236,240,241,0.2);
+    }
+    .collapsible::after {
+      content: "▼";
+      position: absolute;
+      right: 10px;
+      font-size: 12px;
+      transition: opacity 0.3s ease;
+    }
+    .collapsible.open::after {
+      opacity: 0;
+    }
+    #center {
+      flex: 1;
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    /* centerHeader: 기존 디자인 그대로 유지 */
+    #centerHeader {
+      flex: 0 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
+      font-weight: bold;
+      color: #ffffff;
+      background: linear-gradient(135deg, #2c3e50, #34495e);
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      letter-spacing: 1px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    #questionContent {
+      flex: 1;
+      overflow-y: auto;
+      padding-top: 20px;
+    }
+    /* #questionOverlay: 항상 flex로 동작하며, 
+       기본은 세로 배치인데 align-items: flex-start로 자식들의 너비가 내용에 맞게 결정되도록 함 */
+    #questionOverlay {
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    /* 메뉴 닫힘 상태: 가로 배치 (flex-direction: row)로 변경 */
+    #questionOverlay.menu-closed {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+    /* 새 디자인: questionTitle과 questionMeta에 동일한 스타일 적용 */
+.question-title, .question-meta {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2c3e50;
+  background: #ecf0f1;
+  padding: 8px 16px;
+  border: 1px solid #bdc3c7;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  width: auto;
+}
+    /* questionMeta: 우측 정렬 */
+.question-meta {
+  align-self: flex-end;
+}
+    /* 메뉴 닫힘 상태: questionTitle의 margin-bottom 제거 */
+    #questionOverlay.menu-closed .question-title {
+      margin-bottom: 0;
+    }
+    /* 선택한 문제 이미지: 가로 가운데 정렬 */
+    #selectedImage {
+      max-width: 85%;
+      height: auto;
+      margin: 20px auto 0 auto;
+      display: block;
+    }
+    #bottom {
+      height: 10vh;
+      background-color: #ecf0f1;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-sizing: border-box;
+      border-top: 1px solid #bdc3c7;
+    }
+    #leftBottom, #rightBottom {
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #answerArea {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #answerArea input[type="text"] {
+      padding: 8px;
+      font-size: 16px;
+      border: 1px solid #bdc3c7;
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    #answerArea input[type="text"]:focus {
+      border-color: #3498db;
+    }
+    #answerArea button {
+      padding: 8px 16px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #answerArea button:hover {
+      background-color: #2980b9;
+    }
+    #result {
+      font-weight: bold;
+      text-align: center;
+      color: #e74c3c;
+    }
+    #solutionLink a {
+      color: #3498db;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    #solutionLink a:hover {
+      text-decoration: underline;
+    }
+    .floating-button {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      transition: background 0.3s;
+      z-index: 100000;
+    }
+    .floating-button:hover {
+      background-color: #c0392b;
+    }
+    /* 회전 안내 메시지 오버레이 */
+    #rotateMessage {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      color: #2c3e50;
+      font-size: 24px;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100001;
+      text-align: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    @media (max-width: 600px) {
+      #left { display: none; }
+      #center { width: 100%; padding: 10px; }
+      #centerHeader { font-size: 28px; padding: 10px 20px; }
+      #bottom { flex-direction: column; height: auto; padding: 10px; }
+      #leftBottom, #rightBottom { width: 100%; margin-bottom: 10px; }
+      .floating-button { width: 40px; height: 40px; font-size: 20px; top: 5px; left: 5px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 회전 안내 메시지 -->
+  <div id="rotateMessage">화면을 회전해 주세요.</div>
+  <div id="top">
+    <div id="left">
+      <h2>문항 선택</h2>
+      <ul id="questionList"></ul>
+    </div>
+    <div id="center">
+      <div id="centerHeader">개념별 새겨봐야 할 기출문제</div>
+      <div id="questionContent">
+        <!-- overlay 컨테이너: questionTitle과 questionMeta를 감쌉니다 -->
+        <div id="questionOverlay" style="display:none;">
+          <div id="questionTitle" class="question-title"></div>
+          <div id="questionMeta" class="question-meta"></div>
         </div>
+        <img id="selectedImage" src="" alt="선택한 문제 이미지" style="display:none;">
       </div>
     </div>
-    <div id="bottom">
-      <div id="leftBottom">
-        <div id="answerArea">
-          <input type="text" id="answer" placeholder="답을 입력하세요" />
-          <button onclick="checkAnswer()">제출</button>
-        </div>
-      </div>
-      <div id="rightBottom">
-        <div id="resultArea">
-          <div id="result"></div>
-          <div id="solutionLink" style="margin-top: 5px;"></div>
-        </div>
+  </div>
+  <div id="bottom">
+    <div id="leftBottom">
+      <div id="answerArea">
+        <input type="text" id="answer" placeholder="답을 입력하세요">
+        <button onclick="checkAnswer()">제출</button>
       </div>
     </div>
-    <button class="floating-button" onclick="toggleMenu()">☰</button>
-    <script>
-      let menuVisible = window.innerWidth > 600 ? true : false;
-      let correctAnswer = "";
-      let solutionLink = "";
-      function createCollapsibleItem(text) {
-        const li = document.createElement("li");
-        li.textContent = text;
-        li.classList.add("collapsible");
-        li.addEventListener("click", function (e) {
-          const childUl = this.querySelector(":scope > ul");
-          if (childUl) {
-            if (childUl.style.display === "block") {
-              childUl.style.display = "none";
-              this.classList.remove("open");
-            } else {
-              childUl.style.display = "block";
-              this.classList.add("open");
-            }
-          }
-          e.stopPropagation();
-        });
-        return li;
-      }
-      function generateMenu(questions) {
-        const grouped = {};
-        questions.forEach((item) => {
-          const subject = item.과목;
-          const cat = item.대분류;
-          const sub = item.중분류;
-          const small = item.소분류;
-          if (!grouped[subject]) grouped[subject] = {};
-          if (!grouped[subject][cat]) grouped[subject][cat] = {};
-          if (!grouped[subject][cat][sub]) grouped[subject][cat][sub] = {};
-          if (!grouped[subject][cat][sub][small]) grouped[subject][cat][sub][small] = [];
-          grouped[subject][cat][sub][small] = grouped[subject][cat][sub][small].concat(
-            item.문항들
-          );
-        });
-        const questionList = document.getElementById("questionList");
-        for (const subject in grouped) {
-          const subjectLi = createCollapsibleItem(subject);
-          const subjectUl = document.createElement("ul");
-          subjectUl.style.display = "none";
-          subjectLi.appendChild(subjectUl);
-          questionList.appendChild(subjectLi);
-          for (const cat in grouped[subject]) {
-            const categoryLi = createCollapsibleItem(cat);
-            const catUl = document.createElement("ul");
-            catUl.style.display = "none";
-            categoryLi.appendChild(catUl);
-            subjectUl.appendChild(categoryLi);
-            for (const sub in grouped[subject][cat]) {
-              const subCategoryLi = createCollapsibleItem(sub);
-              const subUl = document.createElement("ul");
-              subUl.style.display = "none";
-              subCategoryLi.appendChild(subUl);
-              catUl.appendChild(subCategoryLi);
-              for (const small in grouped[subject][cat][sub]) {
-                const smallCategoryLi = createCollapsibleItem(small);
-                const smallUl = document.createElement("ul");
-                smallUl.style.display = "none";
-                smallCategoryLi.appendChild(smallUl);
-                subUl.appendChild(smallCategoryLi);
-                grouped[subject][cat][sub][small].forEach((item) => {
-                  const questionLi = document.createElement("li");
-                  questionLi.textContent = item.문항번호;
-                  questionLi.addEventListener("click", function (e) {
-                    selectQuestion(item, small);
-                    if (window.innerWidth <= 600) {
-                      document.getElementById("left").style.display = "none";
-                      menuVisible = false;
-                    }
-                    updateOverlayLayout();
-                    e.stopPropagation();
-                  });
-                  smallUl.appendChild(questionLi);
+    <div id="rightBottom">
+      <div id="resultArea">
+        <div id="result"></div>
+        <div id="solutionLink" style="margin-top: 5px;"></div>
+      </div>
+    </div>
+  </div>
+  <button class="floating-button" onclick="toggleMenu()">☰</button>
+  <script>
+    let menuVisible = window.innerWidth > 600 ? true : false;
+    let correctAnswer = "";
+    let solutionLink = "";
+
+    function createCollapsibleItem(text) {
+      const li = document.createElement("li");
+      li.textContent = text;
+      li.classList.add("collapsible");
+      li.addEventListener("click", function(e) {
+        const childUl = this.querySelector(":scope > ul");
+        if(childUl) { 
+          if(childUl.style.display === "block") { 
+            childUl.style.display = "none"; 
+            this.classList.remove("open"); 
+          } else { 
+            childUl.style.display = "block"; 
+            this.classList.add("open"); 
+          } 
+        }
+        e.stopPropagation();
+      });
+      return li;
+    }
+
+    function generateMenu(questions) {
+      const grouped = {};
+      questions.forEach(item => {
+        const subject = item.과목;
+        const cat = item.대분류;
+        const sub = item.중분류;
+        const small = item.소분류;
+        if (!grouped[subject]) grouped[subject] = {};
+        if (!grouped[subject][cat]) grouped[subject][cat] = {};
+        if (!grouped[subject][cat][sub]) grouped[subject][cat][sub] = {};
+        if (!grouped[subject][cat][sub][small]) grouped[subject][cat][sub][small] = [];
+        grouped[subject][cat][sub][small] = grouped[subject][cat][sub][small].concat(item.문항들);
+      });
+      const questionList = document.getElementById("questionList");
+      for (const subject in grouped) {
+        const subjectLi = createCollapsibleItem(subject);
+        const subjectUl = document.createElement("ul");
+        subjectUl.style.display = "none";
+        subjectLi.appendChild(subjectUl);
+        questionList.appendChild(subjectLi);
+        for (const cat in grouped[subject]) {
+          const categoryLi = createCollapsibleItem(cat);
+          const catUl = document.createElement("ul");
+          catUl.style.display = "none";
+          categoryLi.appendChild(catUl);
+          subjectUl.appendChild(categoryLi);
+          for (const sub in grouped[subject][cat]) {
+            const subCategoryLi = createCollapsibleItem(sub);
+            const subUl = document.createElement("ul");
+            subUl.style.display = "none";
+            subCategoryLi.appendChild(subUl);
+            catUl.appendChild(subCategoryLi);
+            for (const small in grouped[subject][cat][sub]) {
+              const smallCategoryLi = createCollapsibleItem(small);
+              const smallUl = document.createElement("ul");
+              smallUl.style.display = "none";
+              smallCategoryLi.appendChild(smallUl);
+              subUl.appendChild(smallCategoryLi);
+              grouped[subject][cat][sub][small].forEach(item => {
+                const questionLi = document.createElement("li");
+                questionLi.textContent = item.문항번호;
+                questionLi.addEventListener("click", function(e) {
+                  selectQuestion(item, small);
+                  if(window.innerWidth <= 600) { 
+                    document.getElementById("left").style.display = "none"; 
+                    menuVisible = false; 
+                  }
+                  updateOverlayLayout();
+                  e.stopPropagation();
                 });
-              }
+                smallUl.appendChild(questionLi);
+              });
             }
           }
         }
       }
-      function toggleMenu() {
-        const left = document.getElementById("left");
-        const center = document.getElementById("center");
-        if (window.innerWidth <= 600) {
-          if (menuVisible) {
-            left.style.display = "none";
-            menuVisible = false;
-          } else {
-            left.style.display = "block";
-            left.style.position = "fixed";
-            left.style.top = "0";
-            left.style.left = "0";
-            left.style.width = "100%";
-            left.style.height = "100%";
-            left.style.padding = "20px";
-            left.style.zIndex = "9998";
-            menuVisible = true;
-          }
-        } else {
-          menuVisible = !menuVisible;
-          if (menuVisible) {
-            left.style.width = "50%";
-            left.style.padding = "20px";
-            center.style.width = "50%";
-          } else {
-            left.style.width = "0";
-            left.style.padding = "0";
-            center.style.width = "100%";
-          }
+    }
+
+    function toggleMenu() {
+      const left = document.getElementById("left");
+      const center = document.getElementById("center");
+      if(window.innerWidth <= 600) {
+        if(menuVisible) { 
+          left.style.display = "none"; 
+          menuVisible = false; 
+        } else { 
+          left.style.display = "block"; 
+          left.style.position = "fixed"; 
+          left.style.top = "0"; 
+          left.style.left = "0"; 
+          left.style.width = "100%"; 
+          left.style.height = "100%"; 
+          left.style.padding = "20px"; 
+          left.style.zIndex = "9998"; 
+          menuVisible = true; 
         }
-        updateOverlayLayout();
-      }
-      function updateOverlayLayout() {
-        const overlay = document.getElementById("questionOverlay");
-        if (menuVisible) {
-          overlay.classList.remove("menu-closed");
-        } else {
-          overlay.classList.add("menu-closed");
+      } else {
+        menuVisible = !menuVisible;
+        if(menuVisible) { 
+          left.style.width = "50%"; 
+          left.style.padding = "20px"; 
+          center.style.width = "50%"; 
+        } else { 
+          left.style.width = "0"; 
+          left.style.padding = "0"; 
+          center.style.width = "100%"; 
         }
       }
-      function selectQuestion(question, smallCategory) {
-        document.getElementById("selectedImage").src = question.문항주소;
-        document.getElementById("selectedImage").style.display = "block";
-        document.getElementById("questionOverlay").style.display = "inline-flex";
-        document.getElementById("questionTitle").innerText = `${smallCategory} - ${question.문항번호}`;
-        document.getElementById("questionMeta").innerText = `난이도: ${question.난이도}, 중요도: ${question.중요도}`;
-        correctAnswer = question.정답;
-        solutionLink = question.해설주소;
-        document.getElementById("result").innerHTML = "";
-        document.getElementById("solutionLink").innerHTML = "";
-        updateOverlayLayout();
+      updateOverlayLayout();
+    }
+
+    function updateOverlayLayout() {
+      const overlay = document.getElementById("questionOverlay");
+      // 메뉴 열림: flex-direction column, 닫힘: row
+      if(menuVisible) {
+        overlay.classList.remove("menu-closed");
+      } else {
+        overlay.classList.add("menu-closed");
       }
-      function checkAnswer() {
-        const userAnswer = document.getElementById("answer").value;
-        document.getElementById("answer").value = "";
-        const resultDiv = document.getElementById("result");
-        const solutionDiv = document.getElementById("solutionLink");
-        if (userAnswer === correctAnswer) {
-          resultDiv.innerHTML = "정답입니다!";
-          solutionDiv.innerHTML = "";
-        } else {
-          resultDiv.innerHTML = "오답입니다!";
-          solutionDiv.innerHTML = `해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>`;
-        }
+    }
+
+    function selectQuestion(question, smallCategory) {
+      document.getElementById("selectedImage").src = question.문항주소;
+      document.getElementById("selectedImage").style.display = "block";
+      document.getElementById("questionOverlay").style.display = "flex";
+      document.getElementById("questionTitle").innerText = ${smallCategory} - ${question.문항번호};
+      document.getElementById("questionMeta").innerText = 난이도: ${question.난이도}, 중요도: ${question.중요도};
+      correctAnswer = question.정답;
+      solutionLink = question.해설주소;
+      document.getElementById("result").innerHTML = "";
+      document.getElementById("solutionLink").innerHTML = "";
+      updateOverlayLayout();
+    }
+
+    function checkAnswer() {
+      const userAnswer = document.getElementById("answer").value;
+      document.getElementById("answer").value = "";
+      const resultDiv = document.getElementById("result");
+      const solutionDiv = document.getElementById("solutionLink");
+      if (userAnswer === correctAnswer) { 
+        resultDiv.innerHTML = "정답입니다!"; 
+        solutionDiv.innerHTML = ""; 
+      } else { 
+        resultDiv.innerHTML = "오답입니다!"; 
+        solutionDiv.innerHTML = 해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>; 
       }
-      function checkOrientation() {
-        const rotateMessage = document.getElementById("rotateMessage");
-        if (window.innerHeight > window.innerWidth) {
-          rotateMessage.style.display = "flex";
-        } else {
-          rotateMessage.style.display = "none";
-        }
+    }
+
+    // 화면 회전(포트레이트) 여부에 따라 안내 메시지 표시
+    function checkOrientation() {
+      const rotateMessage = document.getElementById("rotateMessage");
+      if(window.innerHeight > window.innerWidth) {
+        rotateMessage.style.display = "flex";
+      } else {
+        rotateMessage.style.display = "none";
       }
-      window.addEventListener("resize", checkOrientation);
-      window.addEventListener("orientationchange", checkOrientation);
-      checkOrientation();
-      fetch("questions.json")
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          generateMenu(data);
-        })
-        .catch((error) => console.error("Error loading JSON:", error));
-    </script>
-  </body>
+    }
+    window.addEventListener("resize", checkOrientation);
+    window.addEventListener("orientationchange", checkOrientation);
+    checkOrientation();
+
+    fetch('questions.json')
+      .then(response => { 
+        if (!response.ok) { 
+          throw new Error('Network response was not ok'); 
+        } 
+        return response.json(); 
+      })
+      .then(data => { generateMenu(data); })
+      .catch(error => console.error('Error loading JSON:', error));
+  </script>
+</body>
 </html>
