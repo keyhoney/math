@@ -74,6 +74,7 @@
       overflow: hidden;
       transition: all 0.3s ease;
     }
+    /* centerHeader: 가로 가운데 정렬 및 sticky 처리 */
     #centerHeader {
       flex: 0 0 auto;
       display: flex;
@@ -96,14 +97,13 @@
       overflow-y: auto;
       padding-top: 20px;
     }
-    /* 컨테이너로 questionTitle, questionMeta 감싸기 */
+    /* overlay 컨테이너: 기본은 block */
     #questionOverlay {
       margin-bottom: 10px;
       display: block;
     }
-    /* 좌측 메뉴 열림 상태: 세로로 배치 (기본) */
-    #questionOverlay:not(.menu-closed) .question-title,
-    #questionOverlay:not(.menu-closed) .question-meta {
+    /* 좌측 메뉴 열림 상태: 세로로 배치 */
+    #questionOverlay:not(.menu-closed) {
       display: block;
     }
     /* 좌측 메뉴 닫힘 상태: 한 줄에 배치 */
@@ -112,14 +112,25 @@
       justify-content: space-between;
       align-items: center;
     }
-    .question-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: #34495e;
+    /* questionTitle 스타일 */
+    #questionOverlay .question-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2c3e50;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 8px 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      margin-bottom: 4px;
     }
-    .question-meta {
-      font-size: 16px;
-      color: #34495e;
+    /* questionMeta 스타일 */
+    #questionOverlay .question-meta {
+      font-size: 18px;
+      color: #2c3e50;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 6px 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     }
     /* 문제 이미지 */
     #selectedImage {
@@ -301,116 +312,4 @@
           catUl.style.display = "none";
           categoryLi.appendChild(catUl);
           subjectUl.appendChild(categoryLi);
-          for (const sub in grouped[subject][cat]) {
-            const subCategoryLi = createCollapsibleItem(sub);
-            const subUl = document.createElement("ul");
-            subUl.style.display = "none";
-            subCategoryLi.appendChild(subUl);
-            catUl.appendChild(subCategoryLi);
-            for (const small in grouped[subject][cat][sub]) {
-              const smallCategoryLi = createCollapsibleItem(small);
-              const smallUl = document.createElement("ul");
-              smallUl.style.display = "none";
-              smallCategoryLi.appendChild(smallUl);
-              subUl.appendChild(smallCategoryLi);
-              grouped[subject][cat][sub][small].forEach(item => {
-                const questionLi = document.createElement("li");
-                questionLi.textContent = item.문항번호;
-                questionLi.addEventListener("click", function(e) {
-                  selectQuestion(item, small);
-                  if(window.innerWidth <= 600) { 
-                    document.getElementById("left").style.display = "none"; 
-                    menuVisible = false; 
-                  }
-                  updateOverlayLayout();
-                  e.stopPropagation();
-                });
-                smallUl.appendChild(questionLi);
-              });
-            }
-          }
-        }
-      }
-    }
-
-    function toggleMenu() {
-      const left = document.getElementById("left");
-      const center = document.getElementById("center");
-      if(window.innerWidth <= 600) {
-        if(menuVisible) { 
-          left.style.display = "none"; 
-          menuVisible = false; 
-        } else { 
-          left.style.display = "block"; 
-          left.style.position = "fixed"; 
-          left.style.top = "0"; 
-          left.style.left = "0"; 
-          left.style.width = "100%"; 
-          left.style.height = "100%"; 
-          left.style.padding = "20px"; 
-          left.style.zIndex = "9998"; 
-          menuVisible = true; 
-        }
-      } else {
-        menuVisible = !menuVisible;
-        if(menuVisible) { 
-          left.style.width = "50%"; 
-          left.style.padding = "20px"; 
-          center.style.width = "50%"; 
-        } else { 
-          left.style.width = "0"; 
-          left.style.padding = "0"; 
-          center.style.width = "100%"; 
-        }
-      }
-      updateOverlayLayout();
-    }
-
-    function updateOverlayLayout() {
-      const overlay = document.getElementById("questionOverlay");
-      if(menuVisible) {
-        overlay.classList.remove("menu-closed");
-      } else {
-        overlay.classList.add("menu-closed");
-      }
-    }
-
-    function selectQuestion(question, smallCategory) {
-      document.getElementById("selectedImage").src = question.문항주소;
-      document.getElementById("selectedImage").style.display = "block";
-      document.getElementById("questionOverlay").style.display = "block";
-      document.getElementById("questionTitle").innerText = `${smallCategory} - ${question.문항번호}`;
-      document.getElementById("questionMeta").innerText = `난이도: ${question.난이도}, 중요도: ${question.중요도}`;
-      correctAnswer = question.정답;
-      solutionLink = question.해설주소;
-      document.getElementById("result").innerHTML = "";
-      document.getElementById("solutionLink").innerHTML = "";
-      updateOverlayLayout();
-    }
-
-    function checkAnswer() {
-      const userAnswer = document.getElementById("answer").value;
-      document.getElementById("answer").value = "";
-      const resultDiv = document.getElementById("result");
-      const solutionDiv = document.getElementById("solutionLink");
-      if (userAnswer === correctAnswer) { 
-        resultDiv.innerHTML = "정답입니다!"; 
-        solutionDiv.innerHTML = ""; 
-      } else { 
-        resultDiv.innerHTML = "오답입니다!"; 
-        solutionDiv.innerHTML = `해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>`; 
-      }
-    }
-
-    fetch('questions.json')
-      .then(response => { 
-        if (!response.ok) { 
-          throw new Error('Network response was not ok'); 
-        } 
-        return response.json(); 
-      })
-      .then(data => { generateMenu(data); })
-      .catch(error => console.error('Error loading JSON:', error));
-  </script>
-</body>
-</html>
+          for (const sub in gro
