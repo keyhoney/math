@@ -6,7 +6,6 @@
   <title>개념별 새겨봐야 할 기출문제</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
   <script>
-    // 브라우저 뷰포트 높이를 기반으로 CSS 커스텀 프로퍼티 --vh를 설정합니다.
     function setVh() {
       let vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -83,7 +82,6 @@
       overflow: hidden;
       transition: all 0.3s ease;
     }
-    /* centerHeader: 기존 디자인 그대로 유지 */
     #centerHeader {
       flex: 0 0 auto;
       display: flex;
@@ -106,21 +104,17 @@
       overflow-y: auto;
       padding-top: 20px;
     }
-    /* #questionOverlay: 항상 flex로 동작하며, 
-       기본은 세로 배치인데 align-items: flex-start로 자식들의 너비가 내용에 맞게 결정되도록 함 */
     #questionOverlay {
       margin-bottom: 10px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
     }
-    /* 메뉴 닫힘 상태: 가로 배치 (flex-direction: row)로 변경 */
     #questionOverlay.menu-closed {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
     }
-    /* 새 디자인: questionTitle과 questionMeta에 동일한 스타일 적용 */
   .question-title, .question-meta {
     font-size: 15px;
     font-weight: 600;
@@ -132,15 +126,12 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     width: auto;
   }
-    /* questionMeta: 우측 정렬 */
   .question-meta {
     align-self: flex-end;
   }
-    /* 메뉴 닫힘 상태: questionTitle의 margin-bottom 제거 */
     #questionOverlay.menu-closed .question-title {
       margin-bottom: 0;
     }
-    /* 선택한 문제 이미지: 가로 가운데 정렬 */
     #selectedImage {
       max-width: 85%;
       height: auto;
@@ -225,7 +216,6 @@
     .floating-button:hover {
       background-color: #c0392b;
     }
-    /* 회전 안내 메시지 오버레이 */
     #rotateMessage {
       position: fixed;
       top: 0;
@@ -254,7 +244,6 @@
   </style>
 </head>
 <body>
-  <!-- 회전 안내 메시지 -->
   <div id="rotateMessage">화면을 회전해 주세요.</div>
   <div id="top">
     <div id="left">
@@ -264,7 +253,6 @@
     <div id="center">
       <div id="centerHeader">개념별 새겨봐야 할 기출문제</div>
       <div id="questionContent">
-        <!-- overlay 컨테이너: questionTitle과 questionMeta를 감쌉니다 -->
         <div id="questionOverlay" style="display:none;">
           <div id="questionTitle" class="question-title"></div>
           <div id="questionMeta" class="question-meta"></div>
@@ -406,7 +394,6 @@
 
     function updateOverlayLayout() {
       const overlay = document.getElementById("questionOverlay");
-      // 메뉴 열림: flex-direction column, 닫힘: row
       if(menuVisible) {
         overlay.classList.remove("menu-closed");
       } else {
@@ -441,7 +428,6 @@
       }
     }
 
-    // 화면 회전(포트레이트) 여부에 따라 안내 메시지 표시
     function checkOrientation() {
       const rotateMessage = document.getElementById("rotateMessage");
       if(window.innerHeight > window.innerWidth) {
