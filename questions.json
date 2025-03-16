@@ -1,1 +1,339 @@
+[
 
+    {"과목": "수학1", "대분류": "지수함수와 로그함수", "중분류": "지수와 로그", "소분류": "거듭제곱과 거듭제곱근", "문항들": [
+        {
+            "문항번호": "20210612(가)",
+            "문항주소": "mun/20210612(가).png",
+            "정답": "1",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2001/S20200000595/S20200000595_1M4_000000256695.mp4&strStartTm=485&pType=3&isPlay=true"
+        }
+    ]},
+    {"과목": "수학1", "대분류": "지수함수와 로그함수", "중분류": "지수와 로그", "소분류": "지수의 확장", "문항들": [
+        {
+            "문항번호": "20230601",
+            "문항주소": "mun/20230601.png",
+            "정답": "1",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2201/S20220000268/S20220000268_1M4_100030024242.mp4&strStartTm=381&pType=3&isPlay=true"
+        },
+        {
+            "문항번호": "20230911",
+            "문항주소": "mun/20230911.png",
+            "정답": "2",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2201/S20220000415/S20220000415_1M4_100030027366.mp4&strStartTm=1607&pType=2"
+        },
+        {
+            "문항번호": "20220621",
+            "문항주소": "mun/20220621.png",
+            "정답": "24",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2101/S20210000761/S20210000761_1M4_100030001258.mp4&strStartTm=3180&pType=2"
+        }
+    ]},
+    {"과목": "수학1", "대분류": "지수함수와 로그함수", "중분류": "지수와 로그", "소분류": "로그의 뜻과 성질", "문항들": [
+        {
+            "문항번호": "20231101",
+            "문항주소": "mun/20231101.png",
+            "정답": "5",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2201/S20220000620/S20220000620_1M4_100030028820.mp4&strStartTm=277&pType=2"
+        },
+        {
+            "문항번호": "20251108",
+            "문항주소": "mun/20251108.png",
+            "정답": "1",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2401/S20240000737/S20240000737_1M4_100030059807.mp4&strStartTm=401&pType=2"
+        },
+        {
+            "문항번호": "20250908",
+            "문항주소": "mun/20250908.png",
+            "정답": "1",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2401/S20240000528/S20240000528_1M4_100030058240.mp4&strStartTm=593&pType=2"
+        },
+        {
+            "문항번호": "20210911(가)",
+            "문항주소": "mun/20210911(가).png",
+            "정답": "1",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2001/S20200000732/S20200000732_1M4_000000259686.mp4&strStartTm=640&pType=2"
+        },
+        {
+            "문항번호": "20240907",
+            "문항주소": "mun/20240907.png",
+            "정답": "4",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2301/S20230000491/S20230000491_1M4_100030043585.mp4&strStartTm=623&pType=2"
+        },
+        {
+            "문항번호": "20210606(가)",
+            "문항주소": "mun/20210606(가).png",
+            "정답": "3",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2001/S20200000595/S20200000595_1M4_000000256695.mp4&strStartTm=140&pType=2"
+        },
+        {
+            "문항번호": "20210611(나)",
+            "문항주소": "mun/20210611(나).png",
+            "정답": "2",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2001/S20200000594/S20200000594_1M4_000000256689.mp4&strStartTm=809&pType=2"
+        },
+        {
+            "문항번호": "20210917(나)",
+            "문항주소": "mun/20210917(나).png",
+            "정답": "1",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2001/S20200000731/S20200000731_1M4_000000259680.mp4&strStartTm=2832&pType=2"
+        },
+        {
+            "문항번호": "20221113",
+            "문항주소": "mun/20221113.png",
+            "정답": "2",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2101/S20210001189/S20210001189_1M4_100030011705.mp4&strStartTm=1580&pType=2"
+        },
+        {
+            "문항번호": "20211127(가)",
+            "문항주소": "mun/20211127(가).png",
+            "정답": "13",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2001/S20200001011/S20200001011_1M4_000000261772.mp4&strStartTm=2336&pType=2"
+        },
+        {
+            "문항번호": "20230621",
+            "문항주소": "mun/20230621.png",
+            "정답": "426",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2201/S20220000268/S20220000268_1M4_100030024242.mp4&strStartTm=3494&pType=2"
+        }
+    ]},
+    {"과목": "수학1", "대분류": "지수함수와 로그함수", "중분류": "지수와 로그", "소분류": "상용로그", "문항들": [
+        {
+            "문항번호": "20160916(A)",
+            "문항주소": "mun/20160916(A).png",
+            "정답": "2",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://www.ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M1501/S20150000616/S20150000616_1M4_000000132008.mp4&strStartTm=1149&pType=2"
+        }
+    ]},
+    {"과목": "수학1", "대분류": "지수함수와 로그함수", "중분류": "지수함수와 로그함수", "소분류": "지수함수의 뜻과 그래프", "문항들": [
+        {
+            "문항번호": "20250612",
+            "문항주소": "mun/20250612.png",
+            "정답": "3",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2401/S20240000260/S20240000260_1M4_100030054380.mp4&strStartTm=989&pType=2"
+        }
+    ]},
+    {"과목": "수학1", "대분류": "지수함수와 로그함수", "중분류": "지수함수와 로그함수", "소분류": "로그함수의 뜻과 그래프", "문항들": [
+        {
+            "문항번호": "20240607",
+            "문항주소": "mun/20240607.png",
+            "정답": "3",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2301/S20230000297/S20230000297_1M4_100030039324.mp4&strStartTm=643&pType=2"
+        },
+        {
+            "문항번호": "20211113(가)",
+            "문항주소": "mun/20211113(가).png",
+            "정답": "3",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2001/S20200001011/S20200001011_1M4_000000261772.mp4&strStartTm=489&pType=2"
+        },
+        {
+            "문항번호": "20220610",
+            "문항주소": "mun/20220610.png",
+            "정답": "2",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2101/S20210000761/S20210000761_1M4_100030001258.mp4&strStartTm=995&pType=2"
+        },
+        {
+            "문항번호": "20241109",
+            "문항주소": "mun/20241109.png",
+            "정답": "4",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2301/S20230000616/S20230000616_1M4_100030044874.mp4&strStartTm=897&pType=2"
+        },
+        {
+            "문항번호": "20211118(나)",
+            "문항주소": "mun/20211118(나).png",
+            "정답": "3",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2001/S20200001010/S20200001010_1M4_000000261767.mp4&strStartTm=1103&pType=2"
+        },
+        {
+            "문항번호": "20250914",
+            "문항주소": "mun/20250914.png",
+            "정답": "5",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2401/S20240000528/S20240000528_1M4_100030058240.mp4&strStartTm=1703&pType=2"
+        },
+        {
+            "문항번호": "20241121",
+            "문항주소": "mun/20241121.png",
+            "정답": "10",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2301/S20230000616/S20230000616_1M4_100030044874.mp4&strStartTm=3565&pType=2"
+        }
+    ]},
+    {"과목": "수학1", "대분류": "지수함수와 로그함수", "중분류": "지수함수와 로그함수", "소분류": "지수함수의 활용", "문항들": [
+        {
+            "문항번호": "20211107(나)",
+            "문항주소": "mun/20211107(나).png",
+            "정답": "5",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2001/S20200001010/S20200001010_1M4_000000261767.mp4&strStartTm=350&pType=2"
+        },
+        {
+            "문항번호": "20240616",
+            "문항주소": "mun/20240616.png",
+            "정답": "3",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2301/S20230000297/S20230000297_1M4_100030039324.mp4&strStartTm=2949&pType=2"
+        },
+        {
+            "문항번호": "20210619(나)",
+            "문항주소": "mun/20210619(나).png",
+            "정답": "3",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2001/S20200000594/S20200000594_1M4_000000256689.mp4&strStartTm=547&pType=2"
+        },
+        {
+            "문항번호": "20241116",
+            "문항주소": "mun/20241116.png",
+            "정답": "2",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2301/S20230000616/S20230000616_1M4_100030044874.mp4&strStartTm=3001&pType=2"
+        },
+        {
+            "문항번호": "20210618(가)",
+            "문항주소": "mun/20210618(가).png",
+            "정답": "5",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2001/S20200000595/S20200000595_1M4_000000256695.mp4&strStartTm=1663&pType=2"
+        },
+        {
+            "문항번호": "20210915(나)",
+            "문항주소": "mun/20210915(나).png",
+            "정답": "4",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2001/S20200000731/S20200000731_1M4_000000259680.mp4&strStartTm=1503&pType=2"
+        },
+        {
+            "문항번호": "20221109",
+            "문항주소": "mun/20221109.png",
+            "정답": "4",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2101/S20210001189/S20210001189_1M4_100030011705.mp4&strStartTm=742&pType=2"
+        },
+        {
+            "문항번호": "20240914",
+            "문항주소": "mun/20240914.png",
+            "정답": "2",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2301/S20230000491/S20230000491_1M4_100030043585.mp4&strStartTm=1466&pType=2"
+        },
+        {
+            "문항번호": "20251120",
+            "문항주소": "mun/20251120.png",
+            "정답": "36",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2401/S20240000737/S20240000737_1M4_100030059807.mp4&strStartTm=2250&pType=2"
+        },
+        {
+            "문항번호": "20230921",
+            "문항주소": "mun/20230921.png",
+            "정답": "220",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2201/S20220000415/S20220000415_1M4_100030027366.mp4&strStartTm=3869&pType=2"
+        }
+    ]},
+    {"과목": "수학1", "대분류": "지수함수와 로그함수", "중분류": "지수함수와 로그함수", "소분류": "로그함수의 활용", "문항들": [
+        {
+            "문항번호": "20210609(가)",
+            "문항주소": "mun/20210609(가).png",
+            "정답": "4",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2001/S20200000595/S20200000595_1M4_000000256695.mp4&strStartTm=339&pType=2"
+        },
+        {
+            "문항번호": "20231116",
+            "문항주소": "mun/20231116.png",
+            "정답": "10",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2201/S20220000620/S20220000620_1M4_100030028820.mp4&strStartTm=3246&pType=2"
+        },
+        {
+            "문항번호": "20250614",
+            "문항주소": "mun/20250614.png",
+            "정답": "4",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2401/S20240000260/S20240000260_1M4_100030054380.mp4&strStartTm=1691&pType=2"
+        },
+        {
+            "문항번호": "20231121",
+            "문항주소": "mun/20231121.png",
+            "정답": "33",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2201/S20220000620/S20220000620_1M4_100030028820.mp4&strStartTm=3541&pType=2"
+        },
+        {
+            "문항번호": "20220921",
+            "문항주소": "mun/20220921.png",
+            "정답": "192",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2101/S20210001003/S20210001003_1M4_100030008430.mp4&strStartTm=3180&pType=2"
+        },
+        {
+            "문항번호": "20240621",
+            "문항주소": "mun/20240621.png",
+            "정답": "110",
+            "난이도": "♥",
+            "중요도": "★",
+            "해설주소": "https://ebsi.co.kr/ebs/lms/player/retrieveLmsPlayerHtml5Simple.ebs?medUrl=https://WSTR.ebsi.co.kr/M41M2301/S20230000297/S20230000297_1M4_100030039324.mp4&strStartTm=3353&pType=2"
+        }
+    ]}
+]
