@@ -406,7 +406,7 @@
       document.getElementById("selectedImage").style.display = "block";
       document.getElementById("questionOverlay").style.display = "flex";
       document.getElementById("questionTitle").innerText = `${smallCategory} - ${question.문항번호}`;
-      document.getElementById("questionMeta").innerText = `난이도: ${question.난이도}, 중요도: ${question.중요도}`;
+      document.getElementById("questionMeta").innerText = `난이도: ${question.난이도}`;  //* 추후 추가 가능  , 중요도: ${question.중요도}
       correctAnswer = question.정답;
       solutionLink = question.해설주소;
       document.getElementById("result").innerHTML = "";
