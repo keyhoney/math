@@ -22,6 +22,13 @@
             text-align: center;
             width: 320px;
             backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .container.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         h1 {
             color: #ffffff;
@@ -72,6 +79,14 @@
                 alert('잘못된 코드입니다. 다시 시도하세요.');
             }
         }
+
+
+        window.onload = function() {
+            const container = document.querySelector('.container');
+            setTimeout(() => {
+                container.classList.add('visible');
+            }, 250);
+        };
     </script>
 </head>
 <body>
