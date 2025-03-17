@@ -59,8 +59,8 @@
 <body>
   <div class="container">
     <h1>송현여자고등학교</h1>
-    <button onclick="googleSignUp()">구글 아이디</button>
-    <button onclick="appleSignUp()">애플 아이디</button>
+    <button onclick="googleSignUp()">구글 간편 가입</button>
+    <button onclick="appleSignUp()">애플 간편 가입</button>
     <p id="message"></p>
   </div>
 
@@ -90,15 +90,20 @@
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
 
+    // 신규 가입 여부를 판단하는 함수: creationTime과 lastSignInTime이 동일하면 신규 가입으로 판단
+    function isNewUser(user) {
+      return user.metadata.creationTime === user.metadata.lastSignInTime;
+    }
+
     // 구글 간편 가입 함수
     window.googleSignUp = async function() {
       const googleProvider = new GoogleAuthProvider();
       try {
         const result = await signInWithPopup(auth, googleProvider);
         const user = result.user;
-        // 추가 정보에서 신규 사용자 여부 확인
-        if (result.additionalUserInfo?.isNewUser) {
-          // 가입 시 이름이 없는 경우 prompt로 입력 받음
+
+        // 신규 가입인 경우 이름을 추가로 입력받음
+        if (isNewUser(user)) {
           const name = prompt("최초 가입입니다. 이름을 입력해주세요:");
           if (name) {
             await updateProfile(user, { displayName: name });
@@ -117,8 +122,8 @@
       try {
         const result = await signInWithPopup(auth, appleProvider);
         const user = result.user;
-        // 신규 가입자인지 확인
-        if (result.additionalUserInfo?.isNewUser) {
+
+        if (isNewUser(user)) {
           const name = prompt("최초 가입입니다. 이름을 입력해주세요:");
           if (name) {
             await updateProfile(user, { displayName: name });
