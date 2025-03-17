@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>송현여자고등학교 - 로그인 및 회원가입</title>
+  <title>송현여자고등학교 - 간편 가입</title>
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
@@ -59,9 +59,8 @@
 <body>
   <div class="container">
     <h1>송현여자고등학교</h1>
-    <button onclick="googleLogin()">구글 아이디로 로그인</button>
-    <button onclick="appleLogin()">애플 아이디로 로그인</button>
-    <button onclick="goToRegistration()">간편 회원가입</button>
+    <button onclick="googleSignUp()">구글 간편 가입</button>
+    <button onclick="appleSignUp()">애플 간편 가입</button>
     <p id="message"></p>
   </div>
 
@@ -71,7 +70,8 @@
       getAuth, 
       GoogleAuthProvider, 
       OAuthProvider, 
-      signInWithPopup
+      signInWithPopup, 
+      updateProfile 
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
 
@@ -90,33 +90,50 @@
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
 
-    // 구글 로그인 함수
-    window.googleLogin = async function() {
+    // 신규 가입 여부를 판단하는 함수: creationTime과 lastSignInTime이 동일하면 신규 가입으로 판단
+    function isNewUser(user) {
+      return user.metadata.creationTime === user.metadata.lastSignInTime;
+    }
+
+    // 구글 간편 가입 함수
+    window.googleSignUp = async function() {
       const googleProvider = new GoogleAuthProvider();
       try {
-        await signInWithPopup(auth, googleProvider);
-        document.getElementById('message').innerText = '구글 로그인 성공!';
+        const result = await signInWithPopup(auth, googleProvider);
+        const user = result.user;
+
+        // 신규 가입인 경우 이름을 추가로 입력받음
+        if (isNewUser(user)) {
+          const name = prompt("최초 가입입니다. 이름을 입력해주세요:");
+          if (name) {
+            await updateProfile(user, { displayName: name });
+          }
+        }
+        document.getElementById('message').innerText = '구글 간편 가입 성공!';
         window.location.href = 'gsg.html';
       } catch (error) {
         document.getElementById('message').innerText = error.message;
       }
     }
 
-    // 애플 로그인 함수
-    window.appleLogin = async function() {
+    // 애플 간편 가입 함수
+    window.appleSignUp = async function() {
       const appleProvider = new OAuthProvider('apple.com');
       try {
-        await signInWithPopup(auth, appleProvider);
-        document.getElementById('message').innerText = '애플 로그인 성공!';
+        const result = await signInWithPopup(auth, appleProvider);
+        const user = result.user;
+
+        if (isNewUser(user)) {
+          const name = prompt("최초 가입입니다. 이름을 입력해주세요:");
+          if (name) {
+            await updateProfile(user, { displayName: name });
+          }
+        }
+        document.getElementById('message').innerText = '애플 간편 가입 성공!';
         window.location.href = 'gsg.html';
       } catch (error) {
         document.getElementById('message').innerText = error.message;
       }
-    }
-
-    // 간편 회원가입 페이지로 이동
-    window.goToRegistration = function() {
-      window.location.href = 'registration.html';
     }
 
     window.addEventListener('load', function() {
