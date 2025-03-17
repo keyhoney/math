@@ -35,7 +35,7 @@
             font-size: 22px;
             margin-bottom: 20px;
         }
-        input[type="password"] {
+        input[type="password"], input[type="email"] {
             padding: 12px;
             border: none;
             border-radius: 8px;
@@ -65,21 +65,53 @@
             background: linear-gradient(to right, #3e8e41, #86c232);
         }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
     <script>
-        function decodePassword(encoded) {
-            return atob(encoded);
+        const firebaseConfig = {
+          apiKey: "AIzaSyAppDGlVLrSkUKIioS8FADsJ2KyNB5OcFw",
+          authDomain: "gaesaegi-math.firebaseapp.com",
+          projectId: "gaesaegi-math",
+          storageBucket: "gaesaegi-math.firebasestorage.app",
+          messagingSenderId: "211273803590",
+          appId: "1:211273803590:web:1d5eea23c7a88fdbf6e747",
+          measurementId: "G-QRVNX8KX2N"
+        };
+    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+
+        function signUp() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    document.getElementById('message').innerText = '회원가입 성공!';
+                })
+                .catch((error) => {
+                    const errorMessage = error.message;
+                    document.getElementById('message').innerText = errorMessage;
+                });
         }
 
-        function checkCode() {
-            const codeInput = document.getElementById('code').value;
-            const correctCode = decodePassword('MTAyMA==');
-            if (codeInput === correctCode) {
-                window.location.href = 'gsg.html';
-            } else {
-                alert('잘못된 코드입니다. 다시 시도하세요.');
-            }
-        }
+        function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    document.getElementById('message').innerText = '로그인 성공!';
+                    window.location.href = 'gsg.html';
+                })
+                .catch((error) => {
+                    const errorMessage = error.message;
+                    document.getElementById('message').innerText = errorMessage;
+                });
+        }
 
         window.onload = function() {
             const container = document.querySelector('.container');
@@ -92,8 +124,11 @@
 <body>
     <div class="container">
         <h1>송현여자고등학교</h1>
-        <input type="password" id="code" placeholder="입장 코드">
-        <button onclick="checkCode()">확인</button>
+        <input type="email" id="email" placeholder="이메일">
+        <input type="password" id="password" placeholder="비밀번호">
+        <button onclick="signUp()">회원가입</button>
+        <button onclick="login()">로그인</button>
+        <p id="message"></p>
     </div>
 </body>
 </html>
