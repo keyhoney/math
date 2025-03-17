@@ -303,6 +303,7 @@
     let correctAnswer = "";
     let solutionLink = "";
     let currentQuestionNumber = "";
+    let menuVisible = window.innerWidth > 600 ? true : false;
 
     // 메뉴 생성 함수: questions.json 파일에서 데이터를 읽어와 계층형 메뉴를 생성
     function createCollapsibleItem(text) {
@@ -442,7 +443,7 @@
     // Firestore에 제출 정보를 저장하는 함수
     async function storeSubmission(questionId, userAnswer, isCorrect) {
       try {
-        // answers 컬렉션의 문서 ID "SaL7dT92ZqmjS6jRKMCp"에 저장
+        // "answers" 컬렉션의 문서 ID "SaL7dT92ZqmjS6jRKMCp"에 저장
         await setDoc(doc(db, "answers", "SaL7dT92ZqmjS6jRKMCp"), {
           questionId: questionId,
           userAnswer: userAnswer,
@@ -472,7 +473,7 @@
         resultDiv.innerHTML = "오답입니다. 정답은 " + correctAnswer + "입니다."; 
         solutionDiv.innerHTML = `해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>`;
       }
-      // 답안 제출 정보를 Firestore에 저장
+      // Firestore에 답안 제출 정보를 저장
       await storeSubmission(currentQuestionNumber, userAnswer, isCorrect);
     }
 
@@ -499,8 +500,9 @@
       .then(data => { generateMenu(data); })
       .catch(error => console.error('Error loading JSON:', error));
 
-    // 메뉴 표시 여부 변수
-    let menuVisible = window.innerWidth > 600 ? true : false;
+    // 전역에 함수들을 노출 (모듈 스코프에서 인라인 이벤트 핸들러가 접근 가능하도록)
+    window.checkAnswer = checkAnswer;
+    window.toggleMenu = toggleMenu;
   </script>
 </body>
 </html>
