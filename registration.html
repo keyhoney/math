@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>송현여자고등학교 - 회원가입</title>
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: linear-gradient(to right, #141E30, #243B55);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      width: 320px;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .container.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    h1 {
+      color: #ffffff;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(to right, #56ab2f, #a8e063);
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    button:hover {
+      background: linear-gradient(to right, #3e8e41, #86c232);
+    }
+    p {
+      color: #fff;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>회원가입</h1>
+    <button onclick="googleSignUp()">구글 아이디로 회원가입</button>
+    <button onclick="appleSignUp()">애플 아이디로 회원가입</button>
+    <p id="message"></p>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { 
+      getAuth, 
+      GoogleAuthProvider, 
+      OAuthProvider, 
+      signInWithPopup
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAppDGlVLrSkUKIioS8FADsJ2KyNB5OcFw",
+      authDomain: "gaesaegi-math.firebaseapp.com",
+      projectId: "gaesaegi-math",
+      storageBucket: "gaesaegi-math.firebasestorage.app",
+      messagingSenderId: "211273803590",
+      appId: "1:211273803590:web:1d5eea23c7a88fdbf6e747",
+      measurementId: "G-QRVNX8KX2N"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+
+    // 구글 회원가입 함수
+    window.googleSignUp = async function() {
+      const googleProvider = new GoogleAuthProvider();
+      try {
+        await signInWithPopup(auth, googleProvider);
+        document.getElementById('message').innerText = '구글 회원가입 성공!';
+        window.location.href = 'information.html';
+      } catch (error) {
+        document.getElementById('message').innerText = error.message;
+      }
+    }
+
+    // 애플 회원가입 함수
+    window.appleSignUp = async function() {
+      const appleProvider = new OAuthProvider('apple.com');
+      try {
+        await signInWithPopup(auth, appleProvider);
+        document.getElementById('message').innerText = '애플 회원가입 성공!';
+        window.location.href = 'information.html';
+      } catch (error) {
+        document.getElementById('message').innerText = error.message;
+      }
+    }
+
+    window.addEventListener('load', function() {
+      const container = document.querySelector('.container');
+      setTimeout(() => {
+        container.classList.add('visible');
+      }, 250);
+    });
+  </script>
+</body>
+</html>
