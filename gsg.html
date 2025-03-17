@@ -14,6 +14,7 @@
     window.addEventListener('resize', setVh);
   </script>
   <style>
+    /* (생략: 기존 스타일 그대로 유지) */
     body {
       margin: 0;
       font-family: 'Noto Sans KR', sans-serif;
@@ -305,7 +306,7 @@
     let currentQuestionNumber = "";
     let menuVisible = window.innerWidth > 600 ? true : false;
 
-    // 메뉴 생성 함수: questions.json 파일에서 데이터를 읽어와 계층형 메뉴를 생성
+    // 메뉴 생성 함수 (생략: 기존과 동일)
     function createCollapsibleItem(text) {
       const li = document.createElement("li");
       li.textContent = text;
@@ -489,7 +490,6 @@
     window.addEventListener("orientationchange", checkOrientation);
     checkOrientation();
 
-    // Firebase Authentication 및 Firestore가 모두 준비된 후 questions.json을 로드
     fetch('questions.json')
       .then(response => { 
         if (!response.ok) { 
@@ -500,7 +500,7 @@
       .then(data => { generateMenu(data); })
       .catch(error => console.error('Error loading JSON:', error));
 
-    // 전역에 함수들을 노출 (모듈 스코프에서 인라인 이벤트 핸들러가 접근 가능하도록)
+    // 전역에 함수들을 노출하여 inline 이벤트 핸들러에서 접근 가능하도록
     window.checkAnswer = checkAnswer;
     window.toggleMenu = toggleMenu;
   </script>
