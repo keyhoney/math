@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>송현여자고등학교</title>
+  <title>송현여자고등학교 - 간편 가입</title>
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
@@ -59,8 +59,8 @@
 <body>
   <div class="container">
     <h1>송현여자고등학교</h1>
-    <button onclick="googleLogin()">구글 로그인</button>
-    <button onclick="appleLogin()">애플 로그인</button>
+    <button onclick="googleSignUp()">구글 아이디</button>
+    <button onclick="appleSignUp()">애플 아이디</button>
     <p id="message"></p>
   </div>
 
@@ -90,40 +90,41 @@
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
 
-    // 구글 로그인 함수
-    window.googleLogin = async function() {
+    // 구글 간편 가입 함수
+    window.googleSignUp = async function() {
       const googleProvider = new GoogleAuthProvider();
       try {
         const result = await signInWithPopup(auth, googleProvider);
         const user = result.user;
-        // 최초 로그인 시 displayName이 없으면 이름을 입력받아 업데이트
-        if (!user.displayName) {
-          const name = prompt("최초 로그인입니다. 이름을 입력해주세요:");
+        // 추가 정보에서 신규 사용자 여부 확인
+        if (result.additionalUserInfo?.isNewUser) {
+          // 가입 시 이름이 없는 경우 prompt로 입력 받음
+          const name = prompt("최초 가입입니다. 이름을 입력해주세요:");
           if (name) {
             await updateProfile(user, { displayName: name });
           }
         }
-        document.getElementById('message').innerText = '구글 로그인 성공!';
+        document.getElementById('message').innerText = '구글 간편 가입 성공!';
         window.location.href = 'gsg.html';
       } catch (error) {
         document.getElementById('message').innerText = error.message;
       }
     }
 
-    // 애플 로그인 함수
-    window.appleLogin = async function() {
+    // 애플 간편 가입 함수
+    window.appleSignUp = async function() {
       const appleProvider = new OAuthProvider('apple.com');
       try {
         const result = await signInWithPopup(auth, appleProvider);
         const user = result.user;
-        // 최초 로그인 시 displayName이 없으면 이름을 입력받아 업데이트
-        if (!user.displayName) {
-          const name = prompt("최초 로그인입니다. 이름을 입력해주세요:");
+        // 신규 가입자인지 확인
+        if (result.additionalUserInfo?.isNewUser) {
+          const name = prompt("최초 가입입니다. 이름을 입력해주세요:");
           if (name) {
             await updateProfile(user, { displayName: name });
           }
         }
-        document.getElementById('message').innerText = '애플 로그인 성공!';
+        document.getElementById('message').innerText = '애플 간편 가입 성공!';
         window.location.href = 'gsg.html';
       } catch (error) {
         document.getElementById('message').innerText = error.message;
