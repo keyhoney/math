@@ -57,68 +57,6 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>송현여자고등학교</h1>
-    <button onclick="googleSignUp()">구글 간편 로그인</button>
-    <button onclick="appleSignUp()">애플 간편 로그인</button>
-    <p id="message"></p>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { 
-      getAuth, 
-      GoogleAuthProvider, 
-      OAuthProvider, 
-      signInWithPopup
-    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAppDGlVLrSkUKIioS8FADsJ2KyNB5OcFw",
-      authDomain: "gaesaegi-math.firebaseapp.com",
-      projectId: "gaesaegi-math",
-      storageBucket: "gaesaegi-math.firebasestorage.app",
-      messagingSenderId: "211273803590",
-      appId: "1:211273803590:web:1d5eea23c7a88fdbf6e747",
-      measurementId: "G-QRVNX8KX2N"
-    };
-
-    // Firebase 초기화
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const auth = getAuth(app);
-
-    // 구글 간편 가입 함수 (신규 가입 판별 없이 로그인만 수행)
-    window.googleSignUp = async function() {
-      const googleProvider = new GoogleAuthProvider();
-      try {
-        await signInWithPopup(auth, googleProvider);
-        document.getElementById('message').innerText = '구글 간편 로그인 성공!';
-        window.location.href = 'gsg.html';
-      } catch (error) {
-        document.getElementById('message').innerText = error.message;
-      }
-    }
-
-    // 애플 간편 가입 함수 (신규 가입 판별 없이 로그인만 수행)
-    window.appleSignUp = async function() {
-      const appleProvider = new OAuthProvider('apple.com');
-      try {
-        await signInWithPopup(auth, appleProvider);
-        document.getElementById('message').innerText = '애플 간편 로그인 성공!';
-        window.location.href = 'gsg.html';
-      } catch (error) {
-        document.getElementById('message').innerText = error.message;
-      }
-    }
-
-    window.addEventListener('load', function() {
-      const container = document.querySelector('.container');
-      setTimeout(() => {
-        container.classList.add('visible');
-      }, 250);
-    });
-  </script>
+<h1>개새기 프로그램 오픈 준비중</h1>
 </body>
 </html>
