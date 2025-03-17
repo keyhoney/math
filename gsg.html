@@ -14,7 +14,7 @@
     window.addEventListener('resize', setVh);
   </script>
   <style>
-    /* (생략: 기존 스타일 그대로 유지) */
+    /* 기존 스타일 그대로 */
     body {
       margin: 0;
       font-family: 'Noto Sans KR', sans-serif;
@@ -282,7 +282,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, OAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
-    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
     // Firebase 초기화
     const firebaseConfig = {
@@ -306,7 +306,7 @@
     let currentQuestionNumber = "";
     let menuVisible = window.innerWidth > 600 ? true : false;
 
-    // 메뉴 생성 함수 (생략: 기존과 동일)
+    // 메뉴 생성 함수
     function createCollapsibleItem(text) {
       const li = document.createElement("li");
       li.textContent = text;
@@ -441,11 +441,10 @@
       updateOverlayLayout();
     }
 
-    // Firestore에 제출 정보를 저장하는 함수
+    // Firestore에 제출 정보를 addDoc()을 사용하여 저장하는 함수
     async function storeSubmission(questionId, userAnswer, isCorrect) {
       try {
-        // "answers" 컬렉션의 문서 ID "SaL7dT92ZqmjS6jRKMCp"에 저장
-        await setDoc(doc(db, "answers", "SaL7dT92ZqmjS6jRKMCp"), {
+        await addDoc(collection(db, "answers"), {
           questionId: questionId,
           userAnswer: userAnswer,
           isCorrect: isCorrect,
