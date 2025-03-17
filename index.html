@@ -65,12 +65,19 @@
       background: linear-gradient(to right, #3e8e41, #86c232);
     }
   </style>
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>송현여자고등학교</h1>
+    <input type="email" id="email" placeholder="이메일">
+    <input type="password" id="password" placeholder="비밀번호">
+    <button onclick="signUp()">회원가입</button>
+    <button onclick="login()">로그인</button>
+    <p id="message"></p>
+  </div>
+
+  <!-- 모듈 스크립트: 모듈식 방식으로 Firebase 라이브러리 불러오기 -->
   <script type="module">
-    // Firebase 모듈식 방식 사용 (모듈 로딩)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
@@ -90,18 +97,17 @@
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
 
+    // 전역 함수로 등록하여 HTML에서 사용할 수 있도록 함
     window.signUp = function() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          const user = userCredential.user;
           document.getElementById('message').innerText = '회원가입 성공!';
         })
         .catch((error) => {
-          const errorMessage = error.message;
-          document.getElementById('message').innerText = errorMessage;
+          document.getElementById('message').innerText = error.message;
         });
     }
 
@@ -111,13 +117,11 @@
 
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          const user = userCredential.user;
           document.getElementById('message').innerText = '로그인 성공!';
           window.location.href = 'gsg.html';
         })
         .catch((error) => {
-          const errorMessage = error.message;
-          document.getElementById('message').innerText = errorMessage;
+          document.getElementById('message').innerText = error.message;
         });
     }
 
@@ -128,15 +132,5 @@
       }, 250);
     });
   </script>
-</head>
-<body>
-  <div class="container">
-    <h1>송현여자고등학교</h1>
-    <input type="email" id="email" placeholder="이메일">
-    <input type="password" id="password" placeholder="비밀번호">
-    <button onclick="signUp()">회원가입</button>
-    <button onclick="login()">로그인</button>
-    <p id="message"></p>
-  </div>
 </body>
 </html>
