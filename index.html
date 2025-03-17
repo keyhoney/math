@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>송현여자고등학교 - 간편 가입</title>
+  <title>송현여자고등학교</title>
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
@@ -59,8 +59,8 @@
 <body>
   <div class="container">
     <h1>송현여자고등학교</h1>
-    <button onclick="googleSignUp()">구글 간편 가입</button>
-    <button onclick="appleSignUp()">애플 간편 가입</button>
+    <button onclick="googleSignUp()">구글 간편 로그인</button>
+    <button onclick="appleSignUp()">애플 간편 로그인</button>
     <p id="message"></p>
   </div>
 
@@ -70,8 +70,7 @@
       getAuth, 
       GoogleAuthProvider, 
       OAuthProvider, 
-      signInWithPopup, 
-      updateProfile 
+      signInWithPopup
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
 
@@ -90,46 +89,24 @@
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
 
-    // 신규 가입 여부를 판단하는 함수: creationTime과 lastSignInTime이 동일하면 신규 가입으로 판단
-    function isNewUser(user) {
-      return user.metadata.creationTime === user.metadata.lastSignInTime;
-    }
-
-    // 구글 간편 가입 함수
+    // 구글 간편 가입 함수 (신규 가입 판별 없이 로그인만 수행)
     window.googleSignUp = async function() {
       const googleProvider = new GoogleAuthProvider();
       try {
-        const result = await signInWithPopup(auth, googleProvider);
-        const user = result.user;
-
-        // 신규 가입인 경우 이름을 추가로 입력받음
-        if (isNewUser(user)) {
-          const name = prompt("최초 가입입니다. 이름을 입력해주세요:");
-          if (name) {
-            await updateProfile(user, { displayName: name });
-          }
-        }
-        document.getElementById('message').innerText = '구글 간편 가입 성공!';
+        await signInWithPopup(auth, googleProvider);
+        document.getElementById('message').innerText = '구글 간편 로그인 성공!';
         window.location.href = 'gsg.html';
       } catch (error) {
         document.getElementById('message').innerText = error.message;
       }
     }
 
-    // 애플 간편 가입 함수
+    // 애플 간편 가입 함수 (신규 가입 판별 없이 로그인만 수행)
     window.appleSignUp = async function() {
       const appleProvider = new OAuthProvider('apple.com');
       try {
-        const result = await signInWithPopup(auth, appleProvider);
-        const user = result.user;
-
-        if (isNewUser(user)) {
-          const name = prompt("최초 가입입니다. 이름을 입력해주세요:");
-          if (name) {
-            await updateProfile(user, { displayName: name });
-          }
-        }
-        document.getElementById('message').innerText = '애플 간편 가입 성공!';
+        await signInWithPopup(auth, appleProvider);
+        document.getElementById('message').innerText = '애플 간편 로그인 성공!';
         window.location.href = 'gsg.html';
       } catch (error) {
         document.getElementById('message').innerText = error.message;
