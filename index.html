@@ -35,21 +35,6 @@
       font-size: 22px;
       margin-bottom: 20px;
     }
-    input[type="password"], input[type="email"] {
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      width: 296px;
-      margin-bottom: 15px;
-      font-size: 16px;
-      text-align: center;
-      background: rgba(255, 255, 255, 0.2);
-      color: #ffffff;
-      outline: none;
-    }
-    input::placeholder {
-      color: rgba(255, 255, 255, 0.7);
-    }
     button {
       padding: 12px 20px;
       border: none;
@@ -60,26 +45,34 @@
       cursor: pointer;
       transition: all 0.3s ease;
       width: 100%;
+      margin-bottom: 15px;
     }
     button:hover {
       background: linear-gradient(to right, #3e8e41, #86c232);
+    }
+    p {
+      color: #fff;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>송현여자고등학교</h1>
-    <input type="email" id="email" placeholder="이메일">
-    <input type="password" id="password" placeholder="비밀번호">
-    <button onclick="signUp()">회원가입</button>
-    <button onclick="login()">로그인</button>
+    <button onclick="googleLogin()">구글 로그인</button>
+    <button onclick="appleLogin()">애플 로그인</button>
     <p id="message"></p>
   </div>
 
-  <!-- 모듈 스크립트: 모듈식 방식으로 Firebase 라이브러리 불러오기 -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { 
+      getAuth, 
+      GoogleAuthProvider, 
+      OAuthProvider, 
+      signInWithPopup, 
+      updateProfile 
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
 
     const firebaseConfig = {
@@ -97,32 +90,44 @@
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
 
-    // 전역 함수로 등록하여 HTML에서 사용할 수 있도록 함
-    window.signUp = function() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          document.getElementById('message').innerText = '회원가입 성공!';
-        })
-        .catch((error) => {
-          document.getElementById('message').innerText = error.message;
-        });
+    // 구글 로그인 함수
+    window.googleLogin = async function() {
+      const googleProvider = new GoogleAuthProvider();
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        const user = result.user;
+        // 최초 로그인 시 displayName이 없으면 이름을 입력받아 업데이트
+        if (!user.displayName) {
+          const name = prompt("최초 로그인입니다. 이름을 입력해주세요:");
+          if (name) {
+            await updateProfile(user, { displayName: name });
+          }
+        }
+        document.getElementById('message').innerText = '구글 로그인 성공!';
+        window.location.href = 'gsg.html';
+      } catch (error) {
+        document.getElementById('message').innerText = error.message;
+      }
     }
 
-    window.login = function() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          document.getElementById('message').innerText = '로그인 성공!';
-          window.location.href = 'gsg.html';
-        })
-        .catch((error) => {
-          document.getElementById('message').innerText = error.message;
-        });
+    // 애플 로그인 함수
+    window.appleLogin = async function() {
+      const appleProvider = new OAuthProvider('apple.com');
+      try {
+        const result = await signInWithPopup(auth, appleProvider);
+        const user = result.user;
+        // 최초 로그인 시 displayName이 없으면 이름을 입력받아 업데이트
+        if (!user.displayName) {
+          const name = prompt("최초 로그인입니다. 이름을 입력해주세요:");
+          if (name) {
+            await updateProfile(user, { displayName: name });
+          }
+        }
+        document.getElementById('message').innerText = '애플 로그인 성공!';
+        window.location.href = 'gsg.html';
+      } catch (error) {
+        document.getElementById('message').innerText = error.message;
+      }
     }
 
     window.addEventListener('load', function() {
