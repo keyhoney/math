@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>송현여자고등학교 - 정보 입력</title>
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: linear-gradient(to right, #141E30, #243B55);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      width: 320px;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .container.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    h1 {
+      color: #ffffff;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    input[type="text"], input[type="number"] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(to right, #56ab2f, #a8e063);
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+    button:hover {
+      background: linear-gradient(to right, #3e8e41, #86c232);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>학생 정보 입력</h1>
+    <form id="infoForm">
+      <input type="text" id="class" placeholder="반" required>
+      <input type="number" id="number" placeholder="번호" required>
+      <input type="text" id="name" placeholder="이름" required>
+      <button type="submit">제출</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('infoForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // 필요시 입력된 정보를 로컬스토리지나 서버에 저장할 수 있음.
+      window.location.href = 'gsg.html';
+    });
+
+    window.addEventListener('load', function() {
+      const container = document.querySelector('.container');
+      setTimeout(() => {
+        container.classList.add('visible');
+      }, 250);
+    });
+  </script>
+</body>
+</html>
