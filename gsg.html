@@ -17,12 +17,11 @@
     body {
       margin: 0;
       font-family: 'Noto Sans KR', sans-serif;
-      background: linear-gradient(to right, #141E30, #243B55);
+      background: #ffffff;
       display: flex;
       flex-direction: column;
-      height: calc(100vh);
+      height: calc(var(--vh, 1vh) * 100);
       transition: all 0.3s ease;
-      color: #ffffff;
     }
     #top {
       flex: 1;
@@ -33,7 +32,7 @@
       width: 50%;
       padding: 20px;
       box-sizing: border-box;
-      background-color: rgba(44, 62, 80, 0.8);
+      background-color: #2c3e50;
       color: #ecf0f1;
       overflow-y: auto;
       transition: all 0.3s ease;
@@ -45,19 +44,24 @@
       margin: 0;
       font-size: 22px;
       text-align: center;
-      color: #ffffff;
     }
     #left ul {
       list-style: none;
       padding: 0;
       margin: 20px 0 0 0;
     }
+    #left ul ul {
+      border-left: 2px dashed rgba(236,240,241,0.7);
+      margin-left: 10px;
+      padding-left: 10px;
+    }
     #left li {
       margin: 5px 0;
-      padding: 10px;
+      padding: 5px 10px;
       border-radius: 4px;
       cursor: pointer;
       transition: background 0.3s;
+      position: relative;
     }
     #left li:hover {
       background: rgba(236,240,241,0.2);
@@ -80,32 +84,79 @@
       flex-direction: column;
       overflow: hidden;
       transition: all 0.3s ease;
-      color: #ffffff
     }
     #centerHeader {
+      flex: 0 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       font-size: 28px;
       font-weight: bold;
       color: #ffffff;
       background: linear-gradient(135deg, #2c3e50, #34495e);
-      padding: 10px;
+      padding: 10px 20px;
       border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      text-align: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      letter-spacing: 1px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
     #questionContent {
       flex: 1;
       overflow-y: auto;
       padding-top: 20px;
     }
+    #questionOverlay {
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    #questionOverlay.menu-closed {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .question-title, .question-meta {
+      font-size: 15px;
+      font-weight: 600;
+      color: #2c3e50;
+      background: #f0f3f7;
+      padding: 8px 16px;
+      border: 1px solid #bdc3c7;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      width: auto;
+    }
+    .question-meta {
+      align-self: flex-end;
+    }
+    #questionOverlay.menu-closed .question-title {
+      margin-bottom: 0;
+    }
+    #selectedImage {
+      max-width: 85%;
+      height: auto;
+      margin: 20px auto 0 auto;
+      display: block;
+    }
     #bottom {
       height: 10vh;
       background-color: rgba(236, 240, 241, 0.8);
       display: flex;
+      flex-direction: row;
       align-items: center;
       justify-content: space-between;
       padding: 0 20px;
       box-sizing: border-box;
       border-top: 1px solid rgba(189, 195, 199, 0.7);
+    }
+    #leftBottom, #rightBottom {
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     #answerArea {
       display: flex;
@@ -161,7 +212,7 @@
       height: 50px;
       font-size: 24px;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
       transition: background 0.3s;
       z-index: 100000;
     }
@@ -188,8 +239,10 @@
     @media (max-width: 600px) {
       #left { display: none; }
       #center { width: 100%; padding: 10px; }
-      #centerHeader { font-size: 15px; }
+      #centerHeader { font-size: 15px; padding: 10px 20px; }
       #bottom { flex-direction: column; height: auto; padding: 10px; }
+      #leftBottom, #rightBottom { width: 100%; margin-bottom: 10px; }
+      .floating-button { width: 40px; height: 40px; font-size: 20px; top: 5px; left: 5px; }
     }
   </style>
 </head>
