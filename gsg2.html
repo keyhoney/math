@@ -299,6 +299,8 @@
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     import { getFirestore, collection, addDoc, serverTimestamp, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
      import { getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+     import { getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
 
 
     // Firebase 초기화
@@ -348,7 +350,8 @@
       await updateQuestionStats(currentQuestionNumber, isCorrect);
       
       // 질문 메타 정보 업데이트
-      await updateQuestionMeta(currentQuestionNumber);
+      await updateQuestionMeta(currentQuestionNumber, question);
+
     }
 
 
@@ -527,19 +530,20 @@ function selectQuestion(question, smallCategory) {
     }
 
   // 질문 메타 정보를 업데이트하는 함수
-  async function updateQuestionMeta(questionId) {
-    const questionRef = doc(db, "questionStats", questionId);
-    const docSnap = await getDoc(questionRef);
-    
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      const metaDiv = document.getElementById("questionMeta");
-      metaDiv.innerHTML = `난이도: ${question.난이도}, 제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
-    } else {
-      const metaDiv = document.getElementById("questionMeta");
-      metaDiv.innerHTML = `난이도: ${question.난이도}, 제출 횟수: 0, 틀린 횟수: 0`;
-    }
+async function updateQuestionMeta(questionId, question) {
+  const questionRef = doc(db, "questionStats", questionId);
+  const docSnap = await getDoc(questionRef);
+  
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    const metaDiv = document.getElementById("questionMeta");
+    metaDiv.innerHTML = `난이도: ${question.난이도}, 제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
+  } else {
+    const metaDiv = document.getElementById("questionMeta");
+    metaDiv.innerHTML = `난이도: ${question.난이도}, 제출 횟수: 0, 틀린 횟수: 0`;
   }
+}
+
 
 
      async function saveWrongAnswerNote(questionId) {
