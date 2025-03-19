@@ -60,7 +60,17 @@
       transition: background 0.3s;
     }
     #left li:hover {
-      background: rgba(236, 240, 241, 0.2);
+      background: rgba(236,240,241,0.2);
+    }
+    .collapsible::after {
+      content: "▼";
+      position: absolute;
+      right: 10px;
+      font-size: 12px;
+      transition: opacity 0.3s ease;
+    }
+    .collapsible.open::after {
+      opacity: 0;
     }
     #center {
       flex: 1;
