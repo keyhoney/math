@@ -454,19 +454,23 @@
       }
     }
 
-    function selectQuestion(question, smallCategory) {
-      currentQuestionNumber = question.문항번호;
-      document.getElementById("selectedImage").src = question.문항주소;
-      document.getElementById("selectedImage").style.display = "block";
-      document.getElementById("questionOverlay").style.display = "flex";
-      document.getElementById("questionTitle").innerText = `${smallCategory} - ${question.문항번호}`;
-      document.getElementById("questionMeta").innerText = `난이도: ${question.난이도}`;
-      correctAnswer = question.정답;
-      solutionLink = question.해설주소;
-      document.getElementById("result").innerHTML = "";
-      document.getElementById("solutionLink").innerHTML = "";
-      updateOverlayLayout();
-    }
+function selectQuestion(question, smallCategory) {
+  currentQuestionNumber = question.문항번호;
+  document.getElementById("selectedImage").src = question.문항주소;
+  document.getElementById("selectedImage").style.display = "block";
+  document.getElementById("questionOverlay").style.display = "flex";
+  document.getElementById("questionTitle").innerText = `${smallCategory} - ${question.문항번호}`;
+  correctAnswer = question.정답;
+  solutionLink = question.해설주소;
+  
+  // 초기 난이도와 제출 횟수, 틀린 횟수 표시
+  const metaDiv = document.getElementById("questionMeta");
+  metaDiv.innerHTML = `난이도: ${question.난이도}, 제출 횟수: 0, 틀린 횟수: 0`;
+
+  document.getElementById("result").innerHTML = "";
+  document.getElementById("solutionLink").innerHTML = "";
+  updateOverlayLayout();
+}
 
      
     // Firestore에 제출 정보를 저장하는 함수
@@ -504,17 +508,21 @@
       }
     }
 
-    // 질문 메타 정보를 업데이트하는 함수
-    async function updateQuestionMeta(questionId) {
-      const questionRef = doc(db, "questionStats", questionId);
-      const docSnap = await getDoc(questionRef);
-      
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        const metaDiv = document.getElementById("questionMeta");
-        metaDiv.innerHTML = `제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
-      }
-    }
+// 질문 메타 정보를 업데이트하는 함수
+async function updateQuestionMeta(questionId) {
+  const questionRef = doc(db, "questionStats", questionId);
+  const docSnap = await getDoc(questionRef);
+  
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    const metaDiv = document.getElementById("questionMeta");
+    metaDiv.innerHTML = `난이도: ${question.난이도}, 제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
+  } else {
+    // 문서가 존재하지 않는 경우에 대한 처리 (필요시)
+    const metaDiv = document.getElementById("questionMeta");
+    metaDiv.innerHTML = `난이도: ${question.난이도}, 제출 횟수: 0, 틀린 횟수: 0`;
+  }
+}
 
     // 로그인 상태 확인
     onAuthStateChanged(auth, (user) => {
