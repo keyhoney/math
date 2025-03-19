@@ -632,11 +632,10 @@ async function deleteWrongAnswerNote(questionId) {
     // 전역에 함수들을 노출하여 inline 이벤트 핸들러에서 접근 가능하도록
     window.checkAnswer = checkAnswer;
     window.toggleMenu = toggleMenu;
-     window.addEventListener("load", async () => {
+    window.addEventListener("load", async () => {
+    await loadWrongAnswers(); // 페이지 로드 시 오답노트 가져오기
+    });
 
-       document.addEventListener("DOMContentLoaded", async () => {
-  await loadWrongAnswers(); // 페이지 로드 시 오답노트 가져오기
-});
 
 
      
