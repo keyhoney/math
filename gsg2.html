@@ -298,6 +298,8 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     import { getFirestore, collection, addDoc, serverTimestamp, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+     import { getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
 
     // Firebase 초기화
     const firebaseConfig = {
@@ -319,9 +321,7 @@
     let solutionLink = "";
     let currentQuestionNumber = "";
     let menuVisible = window.innerWidth > 600 ? true : false;
-
-
-     let wrongAnswerNotes = {}; // 오답노트 저장용 객체
+    let wrongAnswerNotes = {}; // 오답노트 저장용 객체
 
      
     // 답안 제출 및 결과 확인 함수
@@ -526,21 +526,20 @@ function selectQuestion(question, smallCategory) {
       }
     }
 
-// 질문 메타 정보를 업데이트하는 함수
-async function updateQuestionMeta(questionId) {
-  const questionRef = doc(db, "questionStats", questionId);
-  const docSnap = await getDoc(questionRef);
-  
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-    const metaDiv = document.getElementById("questionMeta");
-    metaDiv.innerHTML = `난이도: ${question.난이도}, 제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
-  } else {
-    // 문서가 존재하지 않는 경우에 대한 처리 (필요시)
-    const metaDiv = document.getElementById("questionMeta");
-    metaDiv.innerHTML = `난이도: ${question.난이도}, 제출 횟수: 0, 틀린 횟수: 0`;
+  // 질문 메타 정보를 업데이트하는 함수
+  async function updateQuestionMeta(questionId) {
+    const questionRef = doc(db, "questionStats", questionId);
+    const docSnap = await getDoc(questionRef);
+    
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      const metaDiv = document.getElementById("questionMeta");
+      metaDiv.innerHTML = `난이도: ${question.난이도}, 제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
+    } else {
+      const metaDiv = document.getElementById("questionMeta");
+      metaDiv.innerHTML = `난이도: ${question.난이도}, 제출 횟수: 0, 틀린 횟수: 0`;
+    }
   }
-}
 
 
      async function saveWrongAnswerNote(questionId) {
@@ -630,8 +629,11 @@ async function deleteWrongAnswerNote(questionId) {
     window.checkAnswer = checkAnswer;
     window.toggleMenu = toggleMenu;
      window.addEventListener("load", async () => {
+
+       document.addEventListener("DOMContentLoaded", async () => {
   await loadWrongAnswers(); // 페이지 로드 시 오답노트 가져오기
 });
+
 
      
   </script>
