@@ -236,6 +236,16 @@
       padding: 20px;
       box-sizing: border-box;
     }
+    .star-icon {
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 20px;
+  color: #ccc; /* 기본 색상 (빈 별표) */
+}
+
+.star-icon.filled {
+  color: gold; /* 채워진 별표 색상 */
+}
     @media (max-width: 600px) {
       #left { display: none; }
       #center { width: 100%; padding: 10px; }
@@ -244,6 +254,7 @@
       #leftBottom, #rightBottom { width: 100%; margin-bottom: 10px; }
       .floating-button { width: 40px; height: 40px; font-size: 20px; top: 5px; left: 5px; }
     }
+  
   </style>
 </head>
 <body>
@@ -258,7 +269,10 @@
       <div id="questionContent">
         <div id="questionOverlay" style="display:none;">
           <div id="questionTitle" class="question-title"></div>
-          <div id="questionMeta" class="question-meta"></div>
+          <div id="questionMeta" class="question-meta">
+  난이도: ${question.난이도}
+  <span id="starIcon" class="star-icon" onclick="toggleStar()">&#9734;</span>
+</div>
         </div>
         <img id="selectedImage" src="" alt="선택한 문제 이미지" style="display:none;">
       </div>
@@ -306,6 +320,10 @@
     let currentQuestionNumber = "";
     let menuVisible = window.innerWidth > 600 ? true : false;
 
+
+     let wrongAnswerNotes = {}; // 오답노트 저장용 객체
+
+     
     // 답안 제출 및 결과 확인 함수
     async function checkAnswer() {
       const userAnswer = document.getElementById("answer").value;
@@ -524,6 +542,58 @@ async function updateQuestionMeta(questionId) {
   }
 }
 
+
+     async function saveWrongAnswerNote(questionId) {
+  try {
+    await setDoc(doc(db, "wrongAnswers", questionId), {
+      questionId: questionId,
+      timestamp: serverTimestamp()
+    });
+    console.log("오답노트에 추가되었습니다.");
+  } catch (error) {
+    console.error("오답노트 저장 실패: ", error);
+  }
+}
+
+async function deleteWrongAnswerNote(questionId) {
+  try {
+    await deleteDoc(doc(db, "wrongAnswers", questionId));
+    console.log("오답노트에서 삭제되었습니다.");
+  } catch (error) {
+    console.error("오답노트 삭제 실패: ", error);
+  }
+}
+
+
+     async function toggleStar() {
+  const starIcon = document.getElementById("starIcon");
+
+  if (wrongAnswerNotes[currentQuestionNumber]) {
+    // 이미 오답노트에 추가된 경우
+    delete wrongAnswerNotes[currentQuestionNumber]; // 삭제
+    starIcon.classList.remove("filled");
+    starIcon.innerHTML = "&#9734;"; // 빈 별표
+    await deleteWrongAnswerNote(currentQuestionNumber); // Firestore에서 삭제
+  } else {
+    // 오답노트에 추가되지 않은 경우
+    wrongAnswerNotes[currentQuestionNumber] = true; // 추가
+    starIcon.classList.add("filled");
+    starIcon.innerHTML = "&#9733;"; // 채워진 별표
+    await saveWrongAnswerNote(currentQuestionNumber); // Firestore에 추가
+  }
+}
+
+
+     async function loadWrongAnswers() {
+  const snapshot = await getDocs(collection(db, "wrongAnswers"));
+  snapshot.forEach(doc => {
+    wrongAnswerNotes[doc.id] = true; // 오답노트에 추가된 문항
+  });
+}
+
+
+     
+
     // 로그인 상태 확인
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -559,6 +629,11 @@ async function updateQuestionMeta(questionId) {
     // 전역에 함수들을 노출하여 inline 이벤트 핸들러에서 접근 가능하도록
     window.checkAnswer = checkAnswer;
     window.toggleMenu = toggleMenu;
+     window.addEventListener("load", async () => {
+  await loadWrongAnswers(); // 페이지 로드 시 오답노트 가져오기
+});
+
+     
   </script>
 </body>
 </html>
