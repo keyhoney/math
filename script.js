@@ -54,11 +54,11 @@ async function checkAnswer() {
 }
 
 // 질문 메타 정보를 업데이트하는 함수
-async function updateQuestionMeta(questionId) {
+async function updateQuestionMeta(questionId, question) {
   const questionRef = doc(db, "questionStats", questionId);
   const docSnap = await getDoc(questionRef);
   
-  let metaDiv = document.getElementById("questionMeta");
+  const metaDiv = document.getElementById("questionMeta");
   if (docSnap.exists()) {
     const data = docSnap.data();
     metaDiv.innerHTML = `난이도: ${question.난이도}, 제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
