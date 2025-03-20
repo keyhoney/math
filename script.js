@@ -1,4 +1,4 @@
-// 업뎃3
+// 업뎃4
 // Firebase 및 Firestore 관련 모듈 import
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
@@ -25,7 +25,6 @@ let solutionLink = "";
 let currentQuestionNumber = "";
 let menuVisible = window.innerWidth > 600 ? true : false;
 
-// 답안 제출 및 결과 확인 함수
 async function checkAnswer() {
   const userAnswer = document.getElementById("answer").value;
   document.getElementById("answer").value = "";
@@ -48,11 +47,31 @@ async function checkAnswer() {
   // 질문 통계 업데이트
   await updateQuestionStats(currentQuestionNumber, isCorrect);
   
- // 질문 메타 정보 업데이트
+  // 질문 메타 정보 업데이트
   await updateQuestionMeta(currentQuestionNumber);
 
-  // 페이지 새로 고침
-  location.reload();
+  // #center의 내용을 업데이트
+  await updateCenterContent();
+}
+
+// #center의 내용을 업데이트하는 함수
+async function updateCenterContent() {
+  const centerDiv = document.getElementById("center");
+  
+  // 필요한 데이터를 Firestore에서 가져오는 예
+  const questionRef = doc(db, "questions", currentQuestionNumber); // 예시: 질문 ID로 가져오기
+  const docSnap = await getDoc(questionRef);
+
+  if (docSnap.exists()) {
+    const questionData = docSnap.data();
+    centerDiv.innerHTML = `
+      <h2>${questionData.title}</h2>
+      <p>${questionData.content}</p>
+      <img src="${questionData.imageUrl}" alt="${questionData.title}">
+    `;
+  } else {
+    centerDiv.innerHTML = "<p>질문을 찾을 수 없습니다.</p>";
+  }
 }
 
 // 질문 메타 정보를 업데이트하는 함수
