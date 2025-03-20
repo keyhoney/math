@@ -63,21 +63,6 @@
       width: 20px;
       height: 20px;
     }
-    /* 애플 버튼 스타일 */
-    .apple-btn {
-      background: #000;
-      color: #fff;
-      border: 1px solid #000;
-    }
-    .apple-btn:hover {
-      background: #333;
-    }
-    .apple-btn img {
-      width: 20px;
-      height: 20px;
-      /* 기존 애플 로고가 검정색이므로 흰색으로 보이도록 변환 */
-      filter: invert(1);
-    }
     p {
       color: #fff;
       font-size: 14px;
@@ -90,10 +75,6 @@
     <button class="google-btn" onclick="googleSignUp()">
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
       구글 간편 로그인
-    </button>
-    <button class="apple-btn" onclick="appleSignUp()">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Logo">
-      애플 간편 로그인
     </button>
     <p id="message"></p>
   </div>
@@ -129,18 +110,6 @@
       try {
         await signInWithPopup(auth, googleProvider);
         document.getElementById('message').innerText = '구글 간편 로그인 성공!';
-        window.location.href = 'gsg.html';
-      } catch (error) {
-        document.getElementById('message').innerText = error.message;
-      }
-    }
-
-    // 애플 간편 로그인 함수
-    window.appleSignUp = async function() {
-      const appleProvider = new OAuthProvider('apple.com');
-      try {
-        await signInWithPopup(auth, appleProvider);
-        document.getElementById('message').innerText = '애플 간편 로그인 성공!';
         window.location.href = 'gsg.html';
       } catch (error) {
         document.getElementById('message').innerText = error.message;
