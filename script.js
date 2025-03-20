@@ -212,9 +212,6 @@ function selectQuestion(question, smallCategory) {
   updateOverlayLayout();
 }
 
-  updateOverlayLayout();
-}
-
 // Firestore에 제출 정보를 저장하는 함수
 async function storeSubmission(questionId, userAnswer, isCorrect) {
   try {
