@@ -50,6 +50,9 @@ async function checkAnswer() {
   
  // 질문 메타 정보 업데이트
   await updateQuestionMeta(currentQuestionNumber);
+
+  // 페이지 새로 고침
+  location.reload();
 }
 
 // 질문 메타 정보를 업데이트하는 함수
