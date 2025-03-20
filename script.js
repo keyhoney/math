@@ -66,6 +66,7 @@ async function updateQuestionMeta(questionId) {
     metaDiv.innerHTML = `난이도: ${question.난이도}, 제출 횟수: 0, 틀린 횟수: 0`;
   }
 }
+
 function createCollapsibleItem(text) {
   const li = document.createElement("li");
   li.textContent = text;
@@ -244,18 +245,6 @@ async function updateQuestionStats(questionId, isCorrect) {
       totalSubmissions: 1,
       wrongSubmissions: isCorrect ? 0 : 1,
     });
-  }
-}
-
-// 질문 메타 정보를 업데이트하는 함수
-async function updateQuestionMeta(questionId) {
-  const questionRef = doc(db, "questionStats", questionId);
-  const docSnap = await getDoc(questionRef);
-  
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-    const metaDiv = document.getElementById("questionMeta");
-    metaDiv.innerHTML = `제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
   }
 }
 
