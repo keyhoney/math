@@ -50,7 +50,19 @@ async function checkAnswer() {
   // 질문 메타 정보 업데이트
   await updateQuestionMeta(currentQuestionNumber);
 
-  //document.getElementById("questionMeta").innerHTML = `난이도: ${question.난이도}, 제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
+  // 화면에 즉시 반영
+  const metaDiv = document.getElementById("questionMeta");
+  const questionRef = doc(db, "questionStats", currentQuestionNumber);
+  const docSnap = await getDoc(questionRef);
+  
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    // 메타 정보 업데이트
+    metaDiv.innerHTML = `난이도: ${data.난이도}, 제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
+  } else {
+    metaDiv.innerHTML = `난이도: ${data.난이도}, 제출 횟수: 0, 틀린 횟수: 0`;
+  }
+  
 }
 
 // 질문 메타 정보를 업데이트하는 함수
