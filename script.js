@@ -54,16 +54,17 @@ async function checkAnswer() {
 }
 
 // 질문 메타 정보를 업데이트하는 함수
-async function updateQuestionMeta(questionId, question) {
+async function updateQuestionMeta(questionId) {
   const questionRef = doc(db, "questionStats", questionId);
   const docSnap = await getDoc(questionRef);
   
   const metaDiv = document.getElementById("questionMeta");
   if (docSnap.exists()) {
     const data = docSnap.data();
-    metaDiv.innerHTML = `난이도: ${question.난이도}, 제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
+    // 여기서 question 객체를 사용하지 않고, 데이터에서 난이도를 가져와야 합니다.
+    metaDiv.innerHTML = `난이도: ${data.난이도}, 제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
   } else {
-    metaDiv.innerHTML = `난이도: ${question.난이도}, 제출 횟수: 0, 틀린 횟수: 0`;
+    metaDiv.innerHTML = `난이도: ${data.난이도}, 제출 횟수: 0, 틀린 횟수: 0`;
   }
 }
 
