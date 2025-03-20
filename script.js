@@ -48,7 +48,7 @@ async function checkAnswer() {
   // 질문 통계 업데이트
   await updateQuestionStats(currentQuestionNumber, isCorrect);
   
-  // 질문 메타 정보 업데이트
+ // 질문 메타 정보 업데이트
   await updateQuestionMeta(currentQuestionNumber);
 }
 
@@ -57,12 +57,11 @@ async function updateQuestionMeta(questionId) {
   const questionRef = doc(db, "questionStats", questionId);
   const docSnap = await getDoc(questionRef);
   
+  let metaDiv = document.getElementById("questionMeta");
   if (docSnap.exists()) {
     const data = docSnap.data();
-    const metaDiv = document.getElementById("questionMeta");
     metaDiv.innerHTML = `난이도: ${question.난이도}, 제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
   } else {
-    const metaDiv = document.getElementById("questionMeta");
     metaDiv.innerHTML = `난이도: ${question.난이도}, 제출 횟수: 0, 틀린 횟수: 0`;
   }
 }
@@ -200,6 +199,7 @@ function selectQuestion(question, smallCategory) {
   document.getElementById("solutionLink").innerHTML = "";
 
   // Fetch question stats and update questionMeta
+  updateQuestionMeta(question.문항번호);
   const questionRef = doc(db, "questionStats", question.문항번호);
   getDoc(questionRef).then((docSnap) => {
     if (docSnap.exists()) {
