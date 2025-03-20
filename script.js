@@ -47,8 +47,16 @@ async function checkAnswer() {
   // 질문 통계 업데이트
   await updateQuestionStats(currentQuestionNumber, isCorrect);
   
-  // 질문 메타 정보 업데이트
-  await updateQuestionMeta(currentQuestionNumber);
+  // Fetch question stats and update questionMeta
+  const questionRef = doc(db, "questionStats", currentQuestionNumber);
+  getDoc(questionRef).then((docSnap) => {
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      document.getElementById("questionMeta").innerHTML = `난이도: ${question.난이도}, 제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
+    } else {
+      document.getElementById("questionMeta").innerHTML = `난이도: ${question.난이도}, 제출 횟수: 0, 틀린 횟수: 0`;
+    }
+  });
 }
 
 function createCollapsibleItem(text) {
@@ -177,11 +185,22 @@ function selectQuestion(question, smallCategory) {
   document.getElementById("selectedImage").style.display = "block";
   document.getElementById("questionOverlay").style.display = "flex";
   document.getElementById("questionTitle").innerText = `${smallCategory} - ${question.문항번호}`;
-  document.getElementById("questionMeta").innerText = `난이도: ${question.난이도}`;
   correctAnswer = question.정답;
   solutionLink = question.해설주소;
   document.getElementById("result").innerHTML = "";
   document.getElementById("solutionLink").innerHTML = "";
+
+  // Fetch question stats and update questionMeta
+  const questionRef = doc(db, "questionStats", question.문항번호);
+  getDoc(questionRef).then((docSnap) => {
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      document.getElementById("questionMeta").innerHTML = `난이도: ${question.난이도}, 제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
+    } else {
+      document.getElementById("questionMeta").innerHTML = `난이도: ${question.난이도}, 제출 횟수: 0, 틀린 횟수: 0`;
+    }
+  });
+
   updateOverlayLayout();
 }
 
