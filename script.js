@@ -50,28 +50,7 @@ async function checkAnswer() {
   // 질문 메타 정보 업데이트
   await updateQuestionMeta(currentQuestionNumber);
 
-  // #center의 내용을 업데이트
-  await updateCenterContent();
-}
-
-// #center의 내용을 업데이트하는 함수
-async function updateCenterContent() {
-  const centerDiv = document.getElementById("center");
-  
-  // 필요한 데이터를 Firestore에서 가져오는 예
-  const questionRef = doc(db, "questions", currentQuestionNumber); // 예시: 질문 ID로 가져오기
-  const docSnap = await getDoc(questionRef);
-
-  if (docSnap.exists()) {
-    const questionData = docSnap.data();
-    centerDiv.innerHTML = `
-      <h2>${questionData.title}</h2>
-      <p>${questionData.content}</p>
-      <img src="${questionData.imageUrl}" alt="${questionData.title}">
-    `;
-  } else {
-    centerDiv.innerHTML = "<p>질문을 찾을 수 없습니다.</p>";
-  }
+  //document.getElementById("questionMeta").innerHTML = `난이도: ${question.난이도}, 제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
 }
 
 // 질문 메타 정보를 업데이트하는 함수
