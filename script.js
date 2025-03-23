@@ -123,6 +123,8 @@ function selectQuestion(question, smallCategory, middleCategory) {
     center.innerHTML = originalCenterContent;
   }
 
+    console.log("중분류:", middleCategory); // 디버그용 로그
+  
   currentQuestionNumber = question.문항번호;
   correctAnswer = question.정답;
   solutionLink = question.해설주소;
