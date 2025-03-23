@@ -57,18 +57,15 @@
   </div>
 
   <div class="section">
-    <h2>🧠 자주 틀리는 분류</h2>
-    <canvas id="wrongCategoryChart"></canvas>
-  </div>
-
-  <div class="section">
     <h2>📋 맞춘 문제 vs 틀린 문제 목록</h2>
     <table>
       <thead>
         <tr>
-          <th>날짜</th>
-          <th>문항 번호</th>
-          <th>정답 여부</th>
+    <th>날짜</th>
+    <th>중분류</th>
+    <th>소분류</th>
+    <th>문항 번호</th>
+    <th>정답 여부</th>
         </tr>
       </thead>
       <tbody id="submissionTable"></tbody>
@@ -153,100 +150,7 @@
         }]
       }
     });
-
-    // 자주 틀리는 분류 차트 함수 호출
-    await updateWrongCategoryChart();
-
-    // 제출 목록 테이블 렌더링
-    const tbody = document.getElementById("submissionTable");
-    submissions.sort((a, b) => b.date.localeCompare(a.date));
-    submissions.forEach(sub => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${sub.date || "-"}</td>
-        <td>${sub.questionId}</td>
-        <td style="color:${sub.isCorrect ? '#2ecc71' : '#e74c3c'}">
-          ${sub.isCorrect ? '정답' : '오답'}
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
-  });
-
-  // 자주 틀리는 중분류 시각화 함수 (변경 없음)
-  async function updateWrongCategoryChart() {
-    const wrongCategoryMap = {};
-    const totalCategoryMap = {};
     
-    const answersRef = collection(db, "answers");
-    const q = query(answersRef, where("userId", "==", auth.currentUser.uid)); // 현재 사용자의 데이터만 조회
-    const snapshot = await getDocs(q);
-    
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      const category = data.중분류; // 중분류 정보 가져오기
-      if (!category) return; // 중분류 정보가 없는 경우 건너뛰기
-
-      // 오답 및 총 제출 횟수 카운트
-      if (!wrongCategoryMap[category]) {
-        wrongCategoryMap[category] = 0;
-        totalCategoryMap[category] = 0;
-      }
-
-      totalCategoryMap[category]++;
-      if (!data.isCorrect) {
-        wrongCategoryMap[category]++;
-      }
-    });
-  
-    const categories = Object.keys(wrongCategoryMap);
-    const wrongRates = categories.map(cat => {
-      const wrongCount = wrongCategoryMap[cat];
-      const totalCount = totalCategoryMap[cat];
-      return (wrongCount / totalCount) * 100; // 오답률 계산
-    });
-  
-    // 오답률 내림차순 정렬
-    const sortedCategories = categories
-      .map((cat, index) => ({ category: cat, wrongRate: wrongRates[index] }))
-      .sort((a, b) => b.wrongRate - a.wrongRate); // 오답률 기준 내림차순 정렬
-  
-    const sortedCategoryNames = sortedCategories.map(item => item.category);
-    const sortedWrongRates = sortedCategories.map(item => item.wrongRate);
-  
-    // 차트 생성
-    const ctx = document.getElementById('wrongCategoryChart');
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: sortedCategoryNames, // 정렬된 중분류
-        datasets: [{
-          label: '오답률 (%)',
-          data: sortedWrongRates, // 오답률 데이터
-          backgroundColor: '#f39c12',
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: '중분류'
-            }
-          },
-          y: {
-            title: {
-              display: true,
-              text: '오답률 (%)'
-            },
-            beginAtZero: true,
-            max: 100
-          }
-        }
-      }
-    });
-  }
 </script>
 </body>
 </html>
