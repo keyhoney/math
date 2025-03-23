@@ -1,4 +1,4 @@
-// 업뎃8
+// 업뎃9
 // Firebase 및 Firestore 관련 모듈 import
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
@@ -69,14 +69,13 @@ async function checkAnswer() {
 async function updateQuestionMeta(questionId) {
   const questionRef = doc(db, "questionStats", questionId);
   const docSnap = await getDoc(questionRef);
-  
   const metaDiv = document.getElementById("questionMeta");
+
   if (docSnap.exists()) {
     const data = docSnap.data();
-    // 여기서 question 객체를 사용하지 않고, 데이터에서 난이도를 가져와야 합니다.
-    metaDiv.innerHTML = `난이도: ${data.난이도}, 제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
+    metaDiv.innerHTML = `난이도: ${questionDifficulty}, 제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
   } else {
-    metaDiv.innerHTML = `난이도: ${data.난이도}, 제출 횟수: 0, 틀린 횟수: 0`;
+    metaDiv.innerHTML = `난이도: ${questionDifficulty}, 제출 횟수: 0, 틀린 횟수: 0`;
   }
 }
 
@@ -209,6 +208,7 @@ function selectQuestion(question, smallCategory) {
   document.getElementById("questionTitle").innerText = `${smallCategory} - ${question.문항번호}`;
   correctAnswer = question.정답;
   solutionLink = question.해설주소;
+  questionDifficulty = question.난이도; //
   document.getElementById("result").innerHTML = "";
   document.getElementById("solutionLink").innerHTML = "";
 
