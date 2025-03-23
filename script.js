@@ -252,7 +252,7 @@ const dashboardLi = document.createElement("li");
 dashboardLi.classList.add("dashboard-menu");
 
 // 아이콘을 추가할 경우, 아래와 같이 이미지 태그를 사용합니다.
-dashboardLi.innerHTML = `<img src="https://img.icons8.com/fluency/20/000000/dashboard-layout.png" alt="대시보드 아이콘">
+dashboardLi.innerHTML = `<img src="https://img.icons8.com/fluency/20/000000/dashboard-layout.png" alt="대시보드 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
                            대시보드`;
 
 dashboardLi.addEventListener("click", (e) => {
