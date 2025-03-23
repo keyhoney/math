@@ -1,4 +1,4 @@
-//최종?!?!
+//최종?!?
 
 // Firebase 및 Firestore 관련 모듈 import
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -28,9 +28,9 @@ let questionDifficulty = "";
 let currentMiddleCategory = "";
 let currentSmallCategory = "";
 let favoriteQuestions = new Set();
-let favoritesList = [];
+let menuVisible = window.innerWidth > 600 ? true : false;
 
-window.questionsMap = {};
+
 //////////////////////////////////////////////////////////////////////
 const center = document.getElementById("center");
 const originalCenterContent = center.innerHTML;
@@ -52,15 +52,7 @@ async function loadFavorites() {
   if (!auth.currentUser) return;
   const q = query(collection(db, "favorites"), where("userId", "==", auth.currentUser.uid));
   const snap = await getDocs(q);
-  favoritesList = []; // 초기화
-  snap.forEach(doc => {
-    const data = doc.data();
-    favoritesList.push({
-      questionId: data.questionId,
-      addedAt: data.addedAt ? data.addedAt.toDate() : null
-    });
-    favoriteQuestions.add(data.questionId);
-  });
+  snap.forEach(doc => favoriteQuestions.add(doc.data().questionId));
   updateFavoriteMarkers();
 }
 
@@ -241,23 +233,24 @@ function createCollapsibleItem(text) {
 // 메뉴 생성 및 문항 렌더링
 function generateMenu(questions) {
   const grouped = {};
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+const dashboardLi = document.createElement("li");
+dashboardLi.classList.add("dashboard-menu");
 
-  // 새 메뉴: "다시 살펴볼 문항" 추가 (왼쪽 메뉴 최상단에 삽입)
-  const reviewLi = document.createElement("li");
-  reviewLi.classList.add("dashboard-menu"); // 원하는 스타일 클래스 적용
-  reviewLi.innerHTML = `<img src="https://img.icons8.com/fluency/20/000000/preview-layout.png" alt="즐겨찾기 아이콘"> 다시 살펴볼 문항`;
-  reviewLi.addEventListener("click", (e) => {
-    showFavorites();
-    if (window.innerWidth <= 600) {
-      document.getElementById("left").style.display = "none";
-      menuVisible = false;
-    }
-    e.stopPropagation();
-  });
-  // questionList는 gs.html의 왼쪽 메뉴 ul 요소
-  questionList.prepend(reviewLi);
+// 아이콘을 추가할 경우, 아래와 같이 이미지 태그를 사용합니다.
+dashboardLi.innerHTML = `<img src="https://img.icons8.com/fluency/20/000000/dashboard-layout.png" alt="대시보드 아이콘">
+                           대시보드`;
 
-  // 기존 질문 데이터를 그룹화
+dashboardLi.addEventListener("click", (e) => {
+  showDashboard();
+  if (window.innerWidth <= 600) {
+    document.getElementById("left").style.display = "none";
+    menuVisible = false;
+  }
+  e.stopPropagation();
+});
+questionList.prepend(dashboardLi);
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   questions.forEach(item => {
     const { 과목, 대분류, 중분류, 소분류, 문항들 } = item;
     grouped[과목] ??= {};
@@ -267,7 +260,6 @@ function generateMenu(questions) {
     grouped[과목][대분류][중분류][소분류].push(...문항들);
   });
 
-  // 그룹별로 메뉴 생성 및 질문 데이터 캐싱
   for (const subject in grouped) {
     const subjectLi = createCollapsibleItem(subject);
     const subjectUl = document.createElement("ul");
@@ -297,26 +289,19 @@ function generateMenu(questions) {
           subUl.appendChild(smallLi);
 
           grouped[subject][cat][sub][small].forEach(q => {
-            // 캐싱: 각 질문의 정보를 questionsMap에 저장 (중분류와 소분류 포함)
-            window.questionsMap[q.문항번호] = {
-              ...q,
-              중분류: sub,
-              소분류: small
-            };
-
-            const qLi = document.createElement("li");
-            qLi.textContent = q.문항번호;
-            qLi.setAttribute("data-question-id", q.문항번호);
-            qLi.addEventListener("click", function(e) {
-              // 소분류(small)와 중분류(sub) 정보를 모두 전달
-              selectQuestion(q, small, sub);
-              if (window.innerWidth <= 600) {
-                document.getElementById("left").style.display = "none";
-                menuVisible = false;
-              }
-              e.stopPropagation();
-            });
-            smallUl.appendChild(qLi);
+  const qLi = document.createElement("li");
+  qLi.textContent = q.문항번호;
+  qLi.setAttribute("data-question-id", q.문항번호);
+  qLi.addEventListener("click", function(e) {
+    // 소분류(small)와 중분류(sub) 정보를 모두 전달
+    selectQuestion(q, small, sub);
+    if (window.innerWidth <= 600) {
+      document.getElementById("left").style.display = "none";
+      menuVisible = false;
+    }
+    e.stopPropagation();
+  });
+  smallUl.appendChild(qLi);
           });
         }
       }
@@ -346,82 +331,6 @@ function toggleMenu() {
   updateOverlayLayout();
 }
 
-// 즐겨찾기 문항 목록 표시 함수
-async function showFavorites() {
-  const center = document.getElementById("center");
-  // center 영역을 즐겨찾기 목록을 보여줄 컨테이너로 교체
-  center.innerHTML = `
-    <div id="favoritesContainer" style="padding:20px;">
-      <h2>다시 살펴볼 문항</h2>
-      <table id="favoritesTable">
-        <thead>
-          <tr>
-            <th>중분류</th>
-            <th>소분류</th>
-            <th>문항 번호</th>
-            <th>최근 제출 시간</th>
-            <th>즐겨찾기 추가 시간</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  `;
-  const tbody = center.querySelector("#favoritesTable tbody");
-
-  // 즐겨찾기 목록(favoritesList)에 있는 각 문항 처리
-  for (const fav of favoritesList) {
-    const questionId = fav.questionId;
-    // questionsMap에서 해당 질문 정보를 조회 (문항 번호, 중분류, 소분류)
-    const questionInfo = window.questionsMap[questionId] || {};
-    const middle = questionInfo.중분류 || "-";
-    const small = questionInfo.소분류 || "-";
-    // 최근 제출 시간 조회 (비동기 함수 호출)
-    const latestSubmissionTime = await getLatestSubmissionTime(questionId);
-    // 테이블 행 생성 (문항 번호 클릭 시 문제 호출)
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${middle}</td>
-      <td>${small}</td>
-      <td><a href="#" onclick="selectQuestionFromFavorites('${questionId}'); return false;">${questionId}</a></td>
-      <td>${latestSubmissionTime || "-"}</td>
-      <td>${fav.addedAt ? fav.addedAt.toLocaleString("ko-KR", { hour12: false }) : "-"}</td>
-    `;
-    tbody.appendChild(tr);
-  }
-}
-
-// 최신 제출 시간을 조회하는 함수
-async function getLatestSubmissionTime(questionId) {
-  const q = query(
-    collection(db, "answers"),
-    where("userId", "==", auth.currentUser.uid),
-    where("questionId", "==", questionId)
-  );
-  const snap = await getDocs(q);
-  let latest = null;
-  snap.forEach(doc => {
-    const data = doc.data();
-    if (data.submittedAt) {
-      const submittedDate = data.submittedAt.toDate();
-      if (!latest || submittedDate > latest) {
-        latest = submittedDate;
-      }
-    }
-  });
-  return latest ? latest.toLocaleString("ko-KR", { hour12: false }) : null;
-}
-
-// 문항 번호를 클릭했을 때 문제를 호출하는 함수
-function selectQuestionFromFavorites(questionId) {
-  const question = window.questionsMap[questionId];
-  if (!question) {
-    alert("문제를 찾을 수 없습니다.");
-    return;
-  }
-  // selectQuestion 함수에 소분류와 중분류 정보를 전달하여 문제 호출
-  selectQuestion(question, question.소분류, question.중분류);
-}
 
 function showDashboard() {
   center.innerHTML = `<iframe src="dashboard.html" style="width:100%; height:100%; border:none;"></iframe>`;
