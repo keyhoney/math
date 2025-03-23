@@ -164,6 +164,26 @@
       await loadQuestions();   // 질문 데이터 로드
       await loadFavorites();   // 즐겨찾기 정보 로드
 
+        // 즐겨찾기 목록 정렬: 중분류 > 소분류 > 즐겨찾기 추가 시간 순 (오름차순)
+  favoritesList.sort((a, b) => {
+    const qA = questionsMap[a.questionId] || {};
+    const qB = questionsMap[b.questionId] || {};
+
+    const middleA = qA.중분류 || "";
+    const middleB = qB.중분류 || "";
+    if (middleA < middleB) return -1;
+    if (middleA > middleB) return 1;
+
+    const smallA = qA.소분류 || "";
+    const smallB = qB.소분류 || "";
+    if (smallA < smallB) return -1;
+    if (smallA > smallB) return 1;
+
+    const timeA = a.addedAt ? a.addedAt.getTime() : 0;
+    const timeB = b.addedAt ? b.addedAt.getTime() : 0;
+    return timeA - timeB;
+  });
+      
       const tbody = document.querySelector("#favoritesTable tbody");
       tbody.innerHTML = ""; // 기존 내용 초기화
 
