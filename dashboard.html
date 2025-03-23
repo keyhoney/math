@@ -52,7 +52,7 @@
   </div>
 
   <div class="section">
-    <h2>📅 최근 30일간 학습 추이</h2>
+    <h2>📅 최근 21일간 학습 추이</h2>
     <canvas id="dailyChart"></canvas>
   </div>
 
@@ -131,18 +131,18 @@
       }
     });
 
-    // 날짜별 제출 추이 (최근 7일)
-    const last30 = [...Array(30)].map((_, i) => {
+    // 날짜별 제출 추이 (최근 21일)
+    const last21 = [...Array(21)].map((_, i) => {
       const d = new Date();
-      d.setDate(d.getDate() - (6 - i));
+      d.setDate(d.getDate() - (20 - i));
       return d.toISOString().slice(0, 10);
     });
-    const dailyCounts = last30.map(date => dateMap[date] || 0);
+    const dailyCounts = last21.map(date => dateMap[date] || 0);
 
     new Chart(document.getElementById("dailyChart"), {
       type: "bar",
       data: {
-        labels: last30,
+        labels: last21,
         datasets: [{
           label: "제출 수",
           data: dailyCounts,
