@@ -1,4 +1,4 @@
-// 하
+// 하 쇼
 
 // Firebase 및 Firestore 관련 모듈 import
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -119,7 +119,7 @@ async function checkAnswer() {
     isCorrect = true;
   } else {
     resultDiv.innerHTML = "오답입니다. 정답은 " + correctAnswer + "입니다.";
-    solutionDiv.innerHTML = 해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>;
+    solutionDiv.innerHTML = `해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>`;
   }
 
   await storeSubmission(currentQuestionNumber, userAnswer, isCorrect);
@@ -130,7 +130,7 @@ async function checkAnswer() {
 
 async function updateQuestionMeta(questionId) {
   const metaDiv = document.getElementById("questionMeta");
-  let metaHTML = 난이도: ${questionDifficulty}, ;
+  let metaHTML = `난이도: ${questionDifficulty}, `;
 
   // 개인별 제출/오답 수 계산
   const answersRef = collection(db, "answers");
@@ -309,7 +309,7 @@ function selectQuestion(question, smallCategory) {
   document.getElementById("selectedImage").src = question.문항주소;
   document.getElementById("selectedImage").style.display = "block";
   document.getElementById("questionOverlay").style.display = "flex";
-  document.getElementById("questionTitle").innerText = ${smallCategory} - ${question.문항번호};
+  document.getElementById("questionTitle").innerText = `${smallCategory} - ${question.문항번호}`;
   document.getElementById("result").innerHTML = "";
   document.getElementById("solutionLink").innerHTML = "";
 
