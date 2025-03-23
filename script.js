@@ -155,14 +155,14 @@ async function updateQuestionMeta(questionId) {
       }
     });
 
-    metaHTML += 제출 횟수: ${total}, 오답 횟수: ${wrong};
+    metaHTML += `제출 횟수: ${total}, 오답 횟수: ${wrong}`;
 
     if (latest) {
       const date = latest.submittedAt?.toDate().toLocaleString("ko-KR", { hour12: false }) || "-";
       const isCorrect = latest.isCorrect;
       const userAnswer = latest.userAnswer || "-";
       const resultText = isCorrect ? "정답" : "오답";
-      metaHTML += <br>최근 제출: ${date} / ${resultText} (내 답: ${userAnswer});
+      metaHTML += <br>`최근 제출: ${date} / ${resultText} (내 답: ${userAnswer})`;
     }
   } catch (err) {
     console.error("개인 제출 정보 조회 실패:", err);
