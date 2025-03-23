@@ -250,17 +250,6 @@ async function updateWrongCategoryChart() {
       });
     });
     
-// 로그인 상태 확인 후 대시보드 표시
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    console.log("사용자가 로그인했습니다:", user);
-    await loadFavorites(); // 즐겨찾기 로딩
-    await updateWrongCategoryChart(); // 오답률 차트 업데이트
-  } else {
-    alert("로그인해 주세요.");
-    window.location.href = "index.html"; // 로그인 페이지로 리디렉션
-  }
-});
     
     
   </script>
