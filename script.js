@@ -225,6 +225,8 @@ function selectQuestion(question, smallCategory) {
   });
 
   updateOverlayLayout();
+  
+  document.getElementById("answer").focus();
 }
 
 // Firestore에 제출 정보를 저장하는 함수
@@ -261,6 +263,22 @@ async function updateQuestionStats(questionId, isCorrect) {
     });
   }
 }
+
+
+// 페이지 로드 후 이벤트 등록
+window.addEventListener("DOMContentLoaded", () => {
+  const answerInput = document.getElementById("answer");
+
+  // Enter 키로 제출 기능
+  answerInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      checkAnswer();
+      // 다시 포커스 이
+      document.getElementById("answer").focus();
+    }
+  });
+});
 
 // 로그인 상태 확인
 onAuthStateChanged(auth, (user) => {
