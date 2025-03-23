@@ -1,8 +1,9 @@
-// 업뎃10
+//업뎃11
+
 // Firebase 및 Firestore 관련 모듈 import
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, serverTimestamp, doc, getDoc, updateDoc, setDoc, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 // Firebase 초기화
 const firebaseConfig = {
@@ -55,16 +56,44 @@ async function checkAnswer() {
 }
 
 async function updateQuestionMeta(questionId) {
+  const metaDiv = document.getElementById("questionMeta");
   const questionRef = doc(db, "questionStats", questionId);
   const docSnap = await getDoc(questionRef);
-  const metaDiv = document.getElementById("questionMeta");
+
+  let metaHTML = `난이도: ${questionDifficulty}, `;
 
   if (docSnap.exists()) {
     const data = docSnap.data();
-    metaDiv.innerHTML = `난이도: ${questionDifficulty}, 제출 횟수: ${data.totalSubmissions}, 틀린 횟수: ${data.wrongSubmissions}`;
+    metaHTML += `제출 횟수: ${data.totalSubmissions}, 오답 횟수: ${data.wrongSubmissions}`;
   } else {
-    metaDiv.innerHTML = `난이도: ${questionDifficulty}, 제출 횟수: 0, 틀린 횟수: 0`;
+    metaHTML += `제출 횟수: 0, 오답 횟수: 0`;
   }
+
+  // 최근 제출 정보 가져오기
+  const answersRef = collection(db, "answers");
+  const q = query(
+    answersRef,
+    where("userId", "==", auth.currentUser?.uid || ""),
+    where("questionId", "==", questionId),
+    orderBy("submittedAt", "desc"),
+    limit(1)
+  );
+
+  try {
+    const querySnap = await getDocs(q);
+    if (!querySnap.empty) {
+      const latest = querySnap.docs[0].data();
+      const date = latest.submittedAt?.toDate().toLocaleString("ko-KR", { hour12: false }) || "-";
+      const isCorrect = latest.isCorrect;
+      const userAnswer = latest.userAnswer || "-";
+      const resultText = isCorrect ? "정답" : "오답";
+      metaHTML += `<br>최근 제출: ${date} / ${resultText} (내 답: ${userAnswer})`;
+    }
+  } catch (err) {
+    console.error("최근 제출 정보 조회 실패:", err);
+  }
+
+  metaDiv.innerHTML = metaHTML;
 }
 
 function createCollapsibleItem(text) {
@@ -275,11 +304,9 @@ fetch('questions.json')
   .then(data => { generateMenu(data); })
   .catch(error => console.error('Error loading JSON:', error));
 
-// 전역에 함수들을 노출하여 inline 이벤트 핸들러에서 접근 가능하도록
 window.checkAnswer = checkAnswer;
 window.toggleMenu = toggleMenu;
 
-// Enter 키로 제출 가능하도록 이벤트 등록
 window.addEventListener("DOMContentLoaded", () => {
   const answerInput = document.getElementById("answer");
   if (answerInput) {
