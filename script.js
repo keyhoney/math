@@ -118,13 +118,17 @@ function addFavoriteIcon(targetElement, questionId) {
 
 // 문항 선택 시 동작
 function selectQuestion(question, smallCategory) {
+  // center에 dashboard iframe이 있을 경우, 원래 콘텐츠로 복원
+  if (document.querySelector("#center iframe")) {
+    center.innerHTML = originalCenterContent;
+  }
+
   currentQuestionNumber = question.문항번호;
   correctAnswer = question.정답;
   solutionLink = question.해설주소;
   questionDifficulty = question.난이도;
-  currentMiddleCategory = question.중분류 || "";
-  currentSmallCategory = smallCategory; // 추가: 소분류 정보 저장
-
+  // (이미 저장되어 있다면 currentMiddleCategory와 currentSmallCategory도 업데이트)
+  
   document.getElementById("selectedImage").src = question.문항주소;
   document.getElementById("selectedImage").style.display = "block";
   document.getElementById("questionOverlay").style.display = "flex";
@@ -324,7 +328,6 @@ function toggleMenu() {
 
 
 function showDashboard() {
-  // center 영역의 기존 내용을 대시보드 iframe으로 대체
   center.innerHTML = `<iframe src="dashboard.html" style="width:100%; height:100%; border:none;"></iframe>`;
 }
 
