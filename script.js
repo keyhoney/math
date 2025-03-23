@@ -1,3 +1,5 @@
+//최종
+
 // Firebase 및 Firestore 관련 모듈 import
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
@@ -18,15 +20,20 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+let correctAnswer = "";
+let solutionLink = "";
+let currentQuestionNumber = "";
+let questionDifficulty = "";
+let menuVisible = window.innerWidth > 600 ? true : false;
 let favoriteQuestions = new Set();
 
-// 즐겨찾기 목록을 로드
+// 즐겨찾기 로딩
 async function loadFavorites() {
   if (!auth.currentUser) return;
   const q = query(collection(db, "favorites"), where("userId", "==", auth.currentUser.uid));
   const snap = await getDocs(q);
   snap.forEach(doc => favoriteQuestions.add(doc.data().questionId));
-  updateFavoriteMarkers(); // 즐겨찾기 상태 반영
+  updateFavoriteMarkers();
 }
 
 // 즐겨찾기 토글
@@ -39,7 +46,7 @@ async function toggleFavorite(questionId, icon) {
   if (!snap.empty) {
     // 즐겨찾기에서 삭제
     await deleteDoc(snap.docs[0].ref);
-    icon.src = "https://img.icons8.com/ios/24/000000/star--v1.png"; // 별 비우기
+    icon.src = "https://img.icons8.com/ios/24/000000/star--v1.png"; // 비어있는 별
     favoriteQuestions.delete(questionId);
   } else {
     // 즐겨찾기 추가
@@ -48,7 +55,7 @@ async function toggleFavorite(questionId, icon) {
       questionId: questionId,
       addedAt: serverTimestamp()
     });
-    icon.src = "https://img.icons8.com/fluency/24/000000/star.png"; // 별 채우기
+    icon.src = "https://img.icons8.com/fluency/24/000000/star.png"; // 채워진 별
     favoriteQuestions.add(questionId);
   }
 
@@ -90,17 +97,6 @@ function addFavoriteIcon(targetElement, questionId) {
 
   targetElement.appendChild(icon);
 }
-
-// 로그인 후 즐겨찾기 로딩
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    console.log("사용자가 로그인했습니다:", user);
-    await loadFavorites();
-  } else {
-    alert("로그인해 주세요.");
-    window.location.href = "index.html"; // 로그인 페이지로 리디렉션
-  }
-});
 
 // 문제 선택 시 즐겨찾기 아이콘 추가
 function selectQuestion(question, smallCategory) {
@@ -188,7 +184,7 @@ function generateMenu(questions) {
   }
 }
 
-// 질문 클릭 시 즐겨찾기 아이콘 추가
+// 즐겨찾기 아이콘 클릭 시 동작
 function createCollapsibleItem(text) {
   const li = document.createElement("li");
   li.textContent = text;
@@ -208,3 +204,50 @@ function createCollapsibleItem(text) {
   });
   return li;
 }
+
+// 메뉴 토글
+function toggleMenu() {
+  const left = document.getElementById("left");
+  const center = document.getElementById("center");
+  if (window.innerWidth <= 600) {
+    if (menuVisible) {
+      left.style.display = "none";
+      menuVisible = false;
+    } else {
+      left.style.display = "block";
+      left.style.position = "fixed";
+      left.style.top = "0";
+      left.style.left = "0";
+      left.style.width = "100%";
+      left.style.height = "100%";
+      left.style.padding = "20px";
+      left.style.zIndex = "9998";
+      menuVisible = true;
+    }
+  } else {
+    menuVisible = !menuVisible;
+    if (menuVisible) {
+      left.style.width = "50%";
+      left.style.padding = "20px";
+      center.style.width = "50%";
+    } else {
+      left.style.width = "0";
+      left.style.padding = "0";
+      center.style.width = "100%";
+    }
+  }
+  updateOverlayLayout();
+}
+
+// 화면 레이아웃 업데이트
+function updateOverlayLayout() {
+  const overlay = document.getElementById("questionOverlay");
+  if (menuVisible) {
+    overlay.classList.remove("menu-closed");
+  } else {
+    overlay.classList.add("menu-closed");
+  }
+}
+
+window.checkAnswer = checkAnswer;
+window.toggleMenu = toggleMenu;
