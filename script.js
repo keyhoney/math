@@ -94,8 +94,8 @@ function addFavoriteIcon(targetElement, questionId) {
   const icon = document.createElement("img");
   icon.className = "favorite-icon";
   icon.src = favoriteQuestions.has(questionId)
-    ? "https://img.icons8.com/fluency/24/000000/star.png"
-    : "https://img.icons8.com/ios/24/000000/star--v1.png";
+    ? "https://img.icons8.com/fluency/15/000000/star.png"
+    : "https://img.icons8.com/ios/15/000000/star--v1.png";
   icon.style.marginLeft = "8px";
   icon.style.cursor = "pointer";
   icon.title = "즐겨찾기 토글";
