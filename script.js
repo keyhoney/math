@@ -25,6 +25,7 @@ let correctAnswer = "";
 let solutionLink = "";
 let currentQuestionNumber = "";
 let questionDifficulty = "";
+let currentMiddleCategory = "";
 let favoriteQuestions = new Set();
 let menuVisible = window.innerWidth > 600 ? true : false;
 
@@ -116,15 +117,11 @@ function addFavoriteIcon(targetElement, questionId) {
 
 // 문항 선택 시 동작
 function selectQuestion(question, smallCategory) {
-  // center 영역에 dashboard iframe이 있는 경우 원래 콘텐츠 복원
-  if (document.querySelector("#center iframe")) {
-    center.innerHTML = originalCenterContent;
-  }
-  
   currentQuestionNumber = question.문항번호;
   correctAnswer = question.정답;
   solutionLink = question.해설주소;
   questionDifficulty = question.난이도;
+  currentMiddleCategory = question.중분류 || ""; // 추가: 중분류 정보를 저장
 
   document.getElementById("selectedImage").src = question.문항주소;
   document.getElementById("selectedImage").style.display = "block";
@@ -198,7 +195,8 @@ async function storeSubmission(questionId, userAnswer, isCorrect) {
       userAnswer,
       isCorrect,
       submittedAt: serverTimestamp(),
-      userId: auth.currentUser?.uid || null
+      userId: auth.currentUser?.uid || null,
+      중분류: currentMiddleCategory // 추가: 중분류 정보를 저장
     });
   } catch (err) {
     console.error("답안 저장 실패:", err);
