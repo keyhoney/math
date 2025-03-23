@@ -3,53 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>나의 학습 대시보드</title>
+  <title>학습 대시보드</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      font-family: 'Noto Sans KR', sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #f8f9fa;
-    }
-    h1 {
-      text-align: center;
-      color: #2c3e50;
-    }
-    .section {
-      margin: 40px 0;
-    }
-    canvas {
-      width: 60%;
-      margin: 0 auto;
-      display: block;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    table, th, td {
-      border: 1px solid #ccc;
-    }
-    th, td {
-      padding: 10px;
-      text-align: center;
-    }
-    th {
-      background-color: #2c3e50;
-      color: white;
-    }
-  </style>
+<style>
+  body {
+    margin: 0;
+    padding: 20px;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #ffffff; 
+    transition: all 0.3s ease;
+  }
+
+  h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+  }
+
+  .section {
+    margin: 40px 0;
+    padding: 20px;
+    background-color: #f0f3f7; 
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  canvas {
+    width: 80%;  
+    margin: 0 auto;
+    display: block;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  table, th, td {
+    border: 1px solid #bdc3c7;
+  }
+
+  th, td {
+    padding: 10px;
+    text-align: center;
+  }
+
+  th {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+  }
+</style>
 </head>
 <body>
   <h1>📊 나의 학습 대시보드</h1>
-
-  <div class="section">
-    <h2>✅ 전체 정답률</h2>
-    <canvas id="overallChart"></canvas>
-  </div>
 
   <div class="section">
     <h2>📅 최근 일주간 학습 추이</h2>
@@ -57,12 +65,17 @@
   </div>
 
   <div class="section">
-    <h2>🧠 자주 틀리는 중분류 (오답률)</h2>
+    <h2>🧠 단원별 정답률</h2>
     <canvas id="middleCategoryChart"></canvas>
+  </div>
+
+    <div class="section">
+    <h2>✅ 전체 정답률</h2>
+    <canvas id="overallChart"></canvas>
   </div>
   
   <div class="section">
-    <h2>📋 맞춘 문제 vs 틀린 문제 목록</h2>
+    <h2>📋 문제 풀이 기록</h2>
     <table>
       <thead>
         <tr>
