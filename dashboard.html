@@ -57,20 +57,20 @@
   </div>
 
   <div class="section">
-  <h2>🧠 자주 틀리는 중분류 (오답률)</h2>
-  <canvas id="middleCategoryChart"></canvas>
-</div>
+    <h2>🧠 자주 틀리는 중분류 (오답률)</h2>
+    <canvas id="middleCategoryChart"></canvas>
+  </div>
   
   <div class="section">
     <h2>📋 맞춘 문제 vs 틀린 문제 목록</h2>
     <table>
       <thead>
         <tr>
-    <th>날짜</th>
-    <th>중분류</th>
-    <th>소분류</th>
-    <th>문항 번호</th>
-    <th>정답 여부</th>
+          <th>날짜</th>
+          <th>중분류</th>
+          <th>소분류</th>
+          <th>문항 번호</th>
+          <th>정답 여부</th>
         </tr>
       </thead>
       <tbody id="submissionTable"></tbody>
@@ -103,6 +103,7 @@
       return;
     }
 
+    // Firestore에서 답안 데이터 불러오기
     const q = query(collection(db, "answers"), where("userId", "==", user.uid));
     const snapshot = await getDocs(q);
 
@@ -110,7 +111,10 @@
     const submissions = [];
     const dateMap = {};
 
-    // 한 번만 순회하여 필요한 데이터를 모두 수집
+    // 중분류별 집계를 위한 객체들
+    const middleTotal = {};
+    const middleWrong = {};
+
     snapshot.forEach(doc => {
       const data = doc.data();
       const dateStr = data.submittedAt ? data.submittedAt.toDate().toISOString().slice(0, 10) : "-";
@@ -134,6 +138,15 @@
       // 날짜별 제출 횟수 카운트
       if (dateStr !== "-") {
         dateMap[dateStr] = (dateMap[dateStr] || 0) + 1;
+      }
+
+      // 중분류별 집계 (중분류 값이 유효한 경우만)
+      const middleCategory = data.중분류;
+      if (middleCategory && middleCategory !== "-") {
+        middleTotal[middleCategory] = (middleTotal[middleCategory] || 0) + 1;
+        if (!data.isCorrect) {
+          middleWrong[middleCategory] = (middleWrong[middleCategory] || 0) + 1;
+        }
       }
     });
 
@@ -169,149 +182,46 @@
       }
     });
 
-    onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    alert("로그인 후 이용해 주세요.");
-    location.href = "index.html";
-    return;
-  }
-
-  const q = query(collection(db, "answers"), where("userId", "==", user.uid));
-  const snapshot = await getDocs(q);
-
-  let correct = 0, wrong = 0;
-  const submissions = [];
-  const dateMap = {};
-
-  // 중분류별 총 제출 건수와 오답 건수를 저장할 객체들
-  const middleTotal = {};
-  const middleWrong = {};
-
-  snapshot.forEach(doc => {
-    const data = doc.data();
-    const dateStr = data.submittedAt ? data.submittedAt.toDate().toISOString().slice(0, 10) : "-";
-    
-    // 정답/오답 카운팅
-    if (data.isCorrect) {
-      correct++;
-    } else {
-      wrong++;
-    }
-    
-    // submissions 배열에 필요한 정보 추가
-    submissions.push({ 
-      date: dateStr, 
-      중분류: data.중분류 || "-", 
-      소분류: data.소분류 || "-", 
-      questionId: data.questionId, 
-      isCorrect: data.isCorrect 
+    // 중분류별 오답률 계산
+    const middleCategories = Object.keys(middleTotal);
+    const errorRatios = middleCategories.map(cat => {
+      // 만약 전체 제출 건수가 0이면 0% 처리
+      return (middleWrong[cat] || 0) / middleTotal[cat] * 100;
     });
 
-    // 날짜별 제출 횟수 카운트
-    if (dateStr !== "-") {
-      dateMap[dateStr] = (dateMap[dateStr] || 0) + 1;
-    }
+    // 내림차순 정렬 (오답률 높은 순)
+    const sortedData = middleCategories.map((cat, index) => ({
+      category: cat,
+      ratio: errorRatios[index]
+    })).sort((a, b) => b.ratio - a.ratio);
 
-    // 중분류별 총 제출 건수와 오답 건수 집계
-    const middleCategory = data.중분류;
-    if (middleCategory) {
-      if (!middleTotal[middleCategory]) {
-        middleTotal[middleCategory] = 0;
-        middleWrong[middleCategory] = 0;
-      }
-      middleTotal[middleCategory]++;
-      if (!data.isCorrect) {
-        middleWrong[middleCategory]++;
-      }
-    }
-  });
+    const sortedCategories = sortedData.map(item => item.category);
+    const sortedRatios = sortedData.map(item => item.ratio);
 
-  // 전체 정답률 차트
-  new Chart(document.getElementById("overallChart"), {
-    type: "doughnut",
-    data: {
-      labels: ["정답", "오답"],
-      datasets: [{
-        data: [correct, wrong],
-        backgroundColor: ["#2ecc71", "#e74c3c"]
-      }]
-    }
-  });
-
-  // 날짜별 제출 추이 (최근 7일)
-  const last7 = [...Array(7)].map((_, i) => {
-    const d = new Date();
-    d.setDate(d.getDate() - (6 - i));
-    return d.toISOString().slice(0, 10);
-  });
-  const dailyCounts = last7.map(date => dateMap[date] || 0);
-
-  new Chart(document.getElementById("dailyChart"), {
-    type: "bar",
-    data: {
-      labels: last7,
-      datasets: [{
-        label: "제출 수",
-        data: dailyCounts,
-        backgroundColor: "#3498db"
-      }]
-    }
-  });
-
-  // 중분류별 오답률 계산
-  const middleCategories = Object.keys(middleTotal);
-  const errorRatios = middleCategories.map(cat => {
-    return (middleWrong[cat] / middleTotal[cat]) * 100;
-  });
-
-  // 내림차순 정렬 (오답률 높은 순)
-  const sortedData = middleCategories.map((cat, index) => ({ category: cat, ratio: errorRatios[index] }))
-    .sort((a, b) => b.ratio - a.ratio);
-  const sortedCategories = sortedData.map(item => item.category);
-  const sortedRatios = sortedData.map(item => item.ratio);
-
-  // 중분류 오답률 차트
-  new Chart(document.getElementById("middleCategoryChart"), {
-    type: "bar",
-    data: {
-      labels: sortedCategories,
-      datasets: [{
-        label: "오답률 (%)",
-        data: sortedRatios,
-        backgroundColor: "#f39c12"
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-          max: 100
+    // 중분류 오답률 차트
+    new Chart(document.getElementById("middleCategoryChart"), {
+      type: "bar",
+      data: {
+        labels: sortedCategories,
+        datasets: [{
+          label: "오답률 (%)",
+          data: sortedRatios,
+          backgroundColor: "#f39c12"
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100
+          }
         }
       }
-    }
-  });
-
-  // 제출 목록 테이블 렌더링
-  const tbody = document.getElementById("submissionTable");
-  submissions.sort((a, b) => b.date.localeCompare(a.date));
-  submissions.forEach(sub => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${sub.date}</td>
-      <td>${sub.중분류}</td>
-      <td>${sub.소분류}</td>
-      <td>${sub.questionId}</td>
-      <td style="color:${sub.isCorrect ? '#2ecc71' : '#e74c3c'}">
-        ${sub.isCorrect ? '정답' : '오답'}
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-});
+    });
 
     // 제출 목록 테이블 렌더링
     const tbody = document.getElementById("submissionTable");
-    // 날짜 내림차순 정렬 (최신이 위로 오도록)
+    // 최신 제출 순서로 정렬 (날짜 내림차순)
     submissions.sort((a, b) => b.date.localeCompare(a.date));
     submissions.forEach(sub => {
       const tr = document.createElement("tr");
@@ -327,8 +237,6 @@
       tbody.appendChild(tr);
     });
   });
-
-  
 </script>
 </body>
 </html>
