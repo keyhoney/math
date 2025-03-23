@@ -1,4 +1,4 @@
-//최종?
+//최종?!
 
 // Firebase 및 Firestore 관련 모듈 import
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -26,6 +26,7 @@ let solutionLink = "";
 let currentQuestionNumber = "";
 let questionDifficulty = "";
 let currentMiddleCategory = "";
+let currentSmallCategory = "";
 let favoriteQuestions = new Set();
 let menuVisible = window.innerWidth > 600 ? true : false;
 
@@ -121,7 +122,8 @@ function selectQuestion(question, smallCategory) {
   correctAnswer = question.정답;
   solutionLink = question.해설주소;
   questionDifficulty = question.난이도;
-  currentMiddleCategory = question.중분류 || ""; // 추가: 중분류 정보를 저장
+  currentMiddleCategory = question.중분류 || "";
+  currentSmallCategory = smallCategory; // 추가: 소분류 정보 저장
 
   document.getElementById("selectedImage").src = question.문항주소;
   document.getElementById("selectedImage").style.display = "block";
@@ -196,7 +198,8 @@ async function storeSubmission(questionId, userAnswer, isCorrect) {
       isCorrect,
       submittedAt: serverTimestamp(),
       userId: auth.currentUser?.uid || null,
-      중분류: currentMiddleCategory // 추가: 중분류 정보를 저장
+      중분류: currentMiddleCategory, // 기존 추가 내용
+      소분류: currentSmallCategory       // 추가: 소분류 정보 저장
     });
   } catch (err) {
     console.error("답안 저장 실패:", err);
