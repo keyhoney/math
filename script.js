@@ -1,4 +1,4 @@
-//최종
+//최종?
 
 // Firebase 및 Firestore 관련 모듈 import
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -27,6 +27,12 @@ let currentQuestionNumber = "";
 let questionDifficulty = "";
 let favoriteQuestions = new Set();
 let menuVisible = window.innerWidth > 600 ? true : false;
+
+
+//////////////////////////////////////////////////////////////////////
+const center = document.getElementById("center");
+const originalCenterContent = center.innerHTML;
+/////////////////////////////////////////////////////////////////////
 
 // 로그인 상태 확인 및 즐겨찾기 로드
 onAuthStateChanged(auth, async (user) => {
@@ -110,6 +116,11 @@ function addFavoriteIcon(targetElement, questionId) {
 
 // 문항 선택 시 동작
 function selectQuestion(question, smallCategory) {
+  // center 영역에 dashboard iframe이 있는 경우 원래 콘텐츠 복원
+  if (document.querySelector("#center iframe")) {
+    center.innerHTML = originalCenterContent;
+  }
+  
   currentQuestionNumber = question.문항번호;
   correctAnswer = question.정답;
   solutionLink = question.해설주소;
@@ -213,6 +224,22 @@ function createCollapsibleItem(text) {
 // 메뉴 생성 및 문항 렌더링
 function generateMenu(questions) {
   const grouped = {};
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  const questionList = document.getElementById("questionList");
+const dashboardLi = document.createElement("li");
+dashboardLi.textContent = "대시보드";
+dashboardLi.style.fontWeight = "bold"; // 강조 효과 (선택사항)
+dashboardLi.addEventListener("click", (e) => {
+  showDashboard();
+  // 모바일 화면이라면 왼쪽 메뉴 숨기기
+  if (window.innerWidth <= 600) {
+    document.getElementById("left").style.display = "none";
+    menuVisible = false;
+  }
+  e.stopPropagation();
+});
+questionList.prepend(dashboardLi);
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   questions.forEach(item => {
     const { 과목, 대분류, 중분류, 소분류, 문항들 } = item;
     grouped[과목] ??= {};
@@ -292,6 +319,13 @@ function toggleMenu() {
   }
   updateOverlayLayout();
 }
+
+
+function showDashboard() {
+  // center 영역의 기존 내용을 대시보드 iframe으로 대체
+  center.innerHTML = `<iframe src="dashboard.html" style="width:100%; height:100%; border:none;"></iframe>`;
+}
+
 
 // 오버레이 위치 조정
 function updateOverlayLayout() {
