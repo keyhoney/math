@@ -1,5 +1,3 @@
-//업뎃11
-
 // Firebase 및 Firestore 관련 모듈 import
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
@@ -10,7 +8,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyAppDGlVLrSkUKIioS8FADsJ2KyNB5OcFw",
   authDomain: "gaesaegi-math.firebaseapp.com",
   projectId: "gaesaegi-math",
-  storageBucket: "gaesaegi-math.firebasestorage.app",
+  storageBucket: "gaesaegi-math.appspot.com",
   messagingSenderId: "211273803590",
   appId: "1:211273803590:web:1d5eea23c7a88fdbf6e747",
   measurementId: "G-QRVNX8KX2N"
@@ -49,7 +47,6 @@ async function checkAnswer() {
   }
 
   await storeSubmission(currentQuestionNumber, userAnswer, isCorrect);
-  await updateQuestionStats(currentQuestionNumber, isCorrect);
   await updateQuestionMeta(currentQuestionNumber);
 
   document.getElementById("answer").focus();
@@ -57,32 +54,34 @@ async function checkAnswer() {
 
 async function updateQuestionMeta(questionId) {
   const metaDiv = document.getElementById("questionMeta");
-  const questionRef = doc(db, "questionStats", questionId);
-  const docSnap = await getDoc(questionRef);
-
   let metaHTML = `난이도: ${questionDifficulty}, `;
 
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-    metaHTML += `제출 횟수: ${data.totalSubmissions}, 오답 횟수: ${data.wrongSubmissions}`;
-  } else {
-    metaHTML += `제출 횟수: 0, 오답 횟수: 0`;
-  }
-
-  // 최근 제출 정보 가져오기
+  // 개인별 제출/오답 수 계산
   const answersRef = collection(db, "answers");
   const q = query(
     answersRef,
     where("userId", "==", auth.currentUser?.uid || ""),
-    where("questionId", "==", questionId),
-    orderBy("submittedAt", "desc"),
-    limit(1)
+    where("questionId", "==", questionId)
   );
 
   try {
     const querySnap = await getDocs(q);
-    if (!querySnap.empty) {
-      const latest = querySnap.docs[0].data();
+    let total = 0;
+    let wrong = 0;
+    let latest = null;
+
+    querySnap.forEach(doc => {
+      const data = doc.data();
+      total++;
+      if (!data.isCorrect) wrong++;
+      if (!latest || data.submittedAt?.toMillis() > latest.submittedAt?.toMillis()) {
+        latest = data;
+      }
+    });
+
+    metaHTML += `제출 횟수: ${total}, 오답 횟수: ${wrong}`;
+
+    if (latest) {
       const date = latest.submittedAt?.toDate().toLocaleString("ko-KR", { hour12: false }) || "-";
       const isCorrect = latest.isCorrect;
       const userAnswer = latest.userAnswer || "-";
@@ -90,7 +89,8 @@ async function updateQuestionMeta(questionId) {
       metaHTML += `<br>최근 제출: ${date} / ${resultText} (내 답: ${userAnswer})`;
     }
   } catch (err) {
-    console.error("최근 제출 정보 조회 실패:", err);
+    console.error("개인 제출 정보 조회 실패:", err);
+    metaHTML += `제출 정보를 불러올 수 없습니다.`;
   }
 
   metaDiv.innerHTML = metaHTML;
@@ -252,24 +252,6 @@ async function storeSubmission(questionId, userAnswer, isCorrect) {
     console.log("답안 제출 정보가 저장되었습니다.");
   } catch (error) {
     console.error("답안 제출 정보 저장 실패: ", error);
-  }
-}
-
-async function updateQuestionStats(questionId, isCorrect) {
-  const questionRef = doc(db, "questionStats", questionId);
-  const docSnap = await getDoc(questionRef);
-
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-    await updateDoc(questionRef, {
-      totalSubmissions: (data.totalSubmissions || 0) + 1,
-      wrongSubmissions: isCorrect ? (data.wrongSubmissions || 0) : (data.wrongSubmissions || 0) + 1,
-    });
-  } else {
-    await setDoc(questionRef, {
-      totalSubmissions: 1,
-      wrongSubmissions: isCorrect ? 0 : 1,
-    });
   }
 }
 
