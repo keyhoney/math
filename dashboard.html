@@ -1,10 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>나의 학습 대시보드</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f8f9fa;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .section {
+      margin: 40px 0;
+    }
+    canvas {
+      max-width: 600px;
+      margin: 0 auto;
+      display: block;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #2c3e50;
+      color: white;
+    }
+  </style>
+</head>
 <body>
-  <h1>문제 풀이 대시보드</h1>
-  <div id="summary">
-    <p>총 제출 수: <span id="totalCount">0</span></p>
-    <p>정답률: <span id="accuracy">0%</span></p>
+  <h1>📊 나의 학습 대시보드</h1>
+
+  <div class="section">
+    <h2>✅ 전체 정답률</h2>
+    <canvas id="overallChart"></canvas>
   </div>
-  <canvas id="chart" width="300" height="300"></canvas>
+
+  <div class="section">
+    <h2>📅 최근 7일간 제출 추이</h2>
+    <canvas id="dailyChart"></canvas>
+  </div>
+
+  <div class="section">
+    <h2>🧠 자주 틀리는 분류</h2>
+    <canvas id="wrongCategoryChart"></canvas>
+  </div>
+
+  <div class="section">
+    <h2>📋 맞춘 문제 vs 틀린 문제 목록</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>날짜</th>
+          <th>문항 번호</th>
+          <th>정답 여부</th>
+        </tr>
+      </thead>
+      <tbody id="submissionTable"></tbody>
+    </table>
+  </div>
+
+  <script type="module" src="dashboard.js"></script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script type="module" src="dashboard.js"></script>
+</html>
