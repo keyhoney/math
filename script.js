@@ -128,6 +128,8 @@ function selectQuestion(question, smallCategory) {
   solutionLink = question.해설주소;
   questionDifficulty = question.난이도;
   // (이미 저장되어 있다면 currentMiddleCategory와 currentSmallCategory도 업데이트)
+    currentMiddleCategory = question.중분류 || ""; // 중분류 저장
+  currentSmallCategory = smallCategory;         // 소분류 저장
   
   document.getElementById("selectedImage").src = question.문항주소;
   document.getElementById("selectedImage").style.display = "block";
@@ -202,8 +204,8 @@ async function storeSubmission(questionId, userAnswer, isCorrect) {
       isCorrect,
       submittedAt: serverTimestamp(),
       userId: auth.currentUser?.uid || null,
-      중분류: currentMiddleCategory, // 기존 추가 내용
-      소분류: currentSmallCategory       // 추가: 소분류 정보 저장
+      중분류: currentMiddleCategory,  // 추가
+      소분류: currentSmallCategory       // 추가
     });
   } catch (err) {
     console.error("답안 저장 실패:", err);
