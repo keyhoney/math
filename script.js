@@ -249,7 +249,6 @@ questionList.prepend(dashboardLi);
     grouped[과목][대분류][중분류][소분류].push(...문항들);
   });
 
-  const questionList = document.getElementById("questionList");
   for (const subject in grouped) {
     const subjectLi = createCollapsibleItem(subject);
     const subjectUl = document.createElement("ul");
