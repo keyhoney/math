@@ -225,13 +225,15 @@ function createCollapsibleItem(text) {
 function generateMenu(questions) {
   const grouped = {};
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  const questionList = document.getElementById("questionList");
 const dashboardLi = document.createElement("li");
-dashboardLi.textContent = "대시보드";
-dashboardLi.style.fontWeight = "bold"; // 강조 효과 (선택사항)
+dashboardLi.classList.add("dashboard-menu");
+
+// 아이콘을 추가할 경우, 아래와 같이 이미지 태그를 사용합니다.
+dashboardLi.innerHTML = `<img src="https://img.icons8.com/fluency/20/000000/dashboard-layout.png" alt="대시보드 아이콘">
+                           대시보드`;
+
 dashboardLi.addEventListener("click", (e) => {
   showDashboard();
-  // 모바일 화면이라면 왼쪽 메뉴 숨기기
   if (window.innerWidth <= 600) {
     document.getElementById("left").style.display = "none";
     menuVisible = false;
