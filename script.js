@@ -287,18 +287,19 @@ questionList.prepend(dashboardLi);
           subUl.appendChild(smallLi);
 
           grouped[subject][cat][sub][small].forEach(q => {
-            const qLi = document.createElement("li");
-            qLi.textContent = q.문항번호;
-            qLi.setAttribute("data-question-id", q.문항번호);
-            qLi.addEventListener("click", function(e) {
-              selectQuestion(q, small);
-              if (window.innerWidth <= 600) {
-                document.getElementById("left").style.display = "none";
-                menuVisible = false;
-              }
-              e.stopPropagation();
-            });
-            smallUl.appendChild(qLi);
+  const qLi = document.createElement("li");
+  qLi.textContent = q.문항번호;
+  qLi.setAttribute("data-question-id", q.문항번호);
+  qLi.addEventListener("click", function(e) {
+    // 소분류(small)와 중분류(sub) 정보를 모두 전달
+    selectQuestion(q, small, sub);
+    if (window.innerWidth <= 600) {
+      document.getElementById("left").style.display = "none";
+      menuVisible = false;
+    }
+    e.stopPropagation();
+  });
+  smallUl.appendChild(qLi);
           });
         }
       }
