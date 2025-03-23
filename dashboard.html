@@ -159,22 +159,80 @@
         }
       });
 
-      // 자주 틀리는 분류 (상위 5개)
-      const topCategories = Object.entries(categoryMap)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 5);
+// 자주 틀리는 중분류 시각화 함수
+async function updateWrongCategoryChart() {
+  const wrongCategoryMap = {};
+  const totalCategoryMap = {};
+  
+  const answersRef = collection(db, "answers");
+  const q = query(answersRef, where("userId", "==", auth.currentUser.uid)); // 현재 사용자의 데이터만 조회
+  const snapshot = await getDocs(q);
+  
+  snapshot.forEach(doc => {
+    const data = doc.data();
+    const category = data.중분류; // 중분류 정보 가져오기
+    if (!category) return; // 중분류 정보가 없는 경우 건너뛰기
 
-      new Chart(document.getElementById("wrongCategoryChart"), {
-        type: "bar",
-        data: {
-          labels: topCategories.map(c => c[0]),
-          datasets: [{
-            label: "오답 수",
-            data: topCategories.map(c => c[1]),
-            backgroundColor: "#f39c12"
-          }]
+    // 오답 및 총 제출 횟수 카운트
+    if (!wrongCategoryMap[category]) {
+      wrongCategoryMap[category] = 0;
+      totalCategoryMap[category] = 0;
+    }
+
+    totalCategoryMap[category]++;
+    if (!data.isCorrect) {
+      wrongCategoryMap[category]++;
+    }
+  });
+
+  const categories = Object.keys(wrongCategoryMap);
+  const wrongRates = categories.map(cat => {
+    const wrongCount = wrongCategoryMap[cat];
+    const totalCount = totalCategoryMap[cat];
+    return (wrongCount / totalCount) * 100; // 오답률 계산
+  });
+
+  // 오답률 내림차순 정렬
+  const sortedCategories = categories
+    .map((cat, index) => ({ category: cat, wrongRate: wrongRates[index] }))
+    .sort((a, b) => b.wrongRate - a.wrongRate); // 오답률 기준 내림차순 정렬
+
+  const sortedCategoryNames = sortedCategories.map(item => item.category);
+  const sortedWrongRates = sortedCategories.map(item => item.wrongRate);
+
+  // 차트 생성
+  const ctx = document.getElementById('wrongCategoryChart');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sortedCategoryNames, // 정렬된 중분류
+      datasets: [{
+        label: '오답률 (%)',
+        data: sortedWrongRates, // 오답률 데이터
+        backgroundColor: '#f39c12',
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: '중분류'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: '오답률 (%)'
+          },
+          beginAtZero: true,
+          max: 100
         }
-      });
+      }
+    }
+  });
+}
 
       // 제출 목록 테이블 렌더링
       const tbody = document.getElementById("submissionTable");
@@ -191,6 +249,20 @@
         tbody.appendChild(tr);
       });
     });
+    
+// 로그인 상태 확인 후 대시보드 표시
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    console.log("사용자가 로그인했습니다:", user);
+    await loadFavorites(); // 즐겨찾기 로딩
+    await updateWrongCategoryChart(); // 오답률 차트 업데이트
+  } else {
+    alert("로그인해 주세요.");
+    window.location.href = "index.html"; // 로그인 페이지로 리디렉션
+  }
+});
+    
+    
   </script>
 </body>
 </html>
