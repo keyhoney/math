@@ -237,7 +237,7 @@ function generateMenu(questions) {
   const reviewLi = document.createElement("li");
 reviewLi.classList.add("dashboard-menu"); // dashboard와 유사한 스타일 클래스 사용
 reviewLi.innerHTML = `<img src="https://img.icons8.com/?size=100&id=i7pW39iEKlWu&format=png&color=000000" alt="즐겨찾기 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
-                        다시 살펴 볼 문항`;
+                        다시 살펴볼 문항`;
 reviewLi.addEventListener("click", (e) => {
   showFavorites(); // favorite.html을 center에 로드하는 함수 호출
   if (window.innerWidth <= 600) {
