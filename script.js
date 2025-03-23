@@ -233,6 +233,20 @@ function createCollapsibleItem(text) {
 // 메뉴 생성 및 문항 렌더링
 function generateMenu(questions) {
   const grouped = {};
+///////////////////////////////////////////////////////
+  const reviewLi = document.createElement("li");
+reviewLi.classList.add("dashboard-menu"); // dashboard와 유사한 스타일 클래스 사용
+reviewLi.innerHTML = `<img src="https://img.icons8.com/fluency/20/000000/preview-layout.png" alt="즐겨찾기 아이콘">
+                        다시 살펴 볼 문항`;
+reviewLi.addEventListener("click", (e) => {
+  showFavorites(); // favorite.html을 center에 로드하는 함수 호출
+  if (window.innerWidth <= 600) {
+    document.getElementById("left").style.display = "none";
+    menuVisible = false;
+  }
+  e.stopPropagation();
+});
+questionList.prepend(reviewLi); // 메뉴 목록의 최상단에 추가
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const dashboardLi = document.createElement("li");
 dashboardLi.classList.add("dashboard-menu");
@@ -331,6 +345,10 @@ function toggleMenu() {
   updateOverlayLayout();
 }
 
+function showFavorites() {
+  const center = document.getElementById("center");
+  center.innerHTML = `<iframe src="favorite.html" style="width:100%; height:100%; border:none;"></iframe>`;
+}
 
 function showDashboard() {
   center.innerHTML = `<iframe src="dashboard.html" style="width:100%; height:100%; border:none;"></iframe>`;
