@@ -117,7 +117,7 @@ function addFavoriteIcon(targetElement, questionId) {
 }
 
 // 문항 선택 시 동작
-function selectQuestion(question, smallCategory) {
+function selectQuestion(question, smallCategory, middleCategory) {
   // center에 dashboard iframe이 있을 경우, 원래 콘텐츠로 복원
   if (document.querySelector("#center iframe")) {
     center.innerHTML = originalCenterContent;
@@ -128,7 +128,7 @@ function selectQuestion(question, smallCategory) {
   solutionLink = question.해설주소;
   questionDifficulty = question.난이도;
   // (이미 저장되어 있다면 currentMiddleCategory와 currentSmallCategory도 업데이트)
-    currentMiddleCategory = question.중분류 || ""; // 중분류 저장
+  currentMiddleCategory = middleCategory || ""; // 전달받은 중분류 저장
   currentSmallCategory = smallCategory;         // 소분류 저장
   
   document.getElementById("selectedImage").src = question.문항주소;
