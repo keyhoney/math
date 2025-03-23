@@ -63,7 +63,7 @@ async function toggleFavorite(questionId, icon) {
 
   if (!snap.empty) {
     await deleteDoc(snap.docs[0].ref);
-    icon.src = "https://img.icons8.com/ios/24/000000/star--v1.png";
+    icon.src = "https://img.icons8.com/ios/15/000000/star--v1.png";
     favoriteQuestions.delete(questionId);
   } else {
     await addDoc(favRef, {
@@ -71,7 +71,7 @@ async function toggleFavorite(questionId, icon) {
       questionId,
       addedAt: serverTimestamp()
     });
-    icon.src = "https://img.icons8.com/fluency/24/000000/star.png";
+    icon.src = "https://img.icons8.com/fluency/15/000000/star.png";
     favoriteQuestions.add(questionId);
   }
 
