@@ -250,7 +250,7 @@ function generateMenu(questions) {
 
 const feedbackLi = document.createElement("li");
 feedbackLi.classList.add("dashboard-menu"); // 기존 스타일 클래스 사용
-feedbackLi.innerHTML = `<img src="https://img.icons8.com/fluency/20/000000/feedback.png" alt="피드백 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
+feedbackLi.innerHTML = `<img src="img/feedback.png" alt="피드백 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
                         피드백`;
 feedbackLi.addEventListener("click", (e) => {
   showFeedback(); // feedback.html을 center에 로드하는 함수 호출
