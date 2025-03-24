@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사용자 정보 입력</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #ffffff;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #f0f3f7;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #34495e;
+    }
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #bdc3c7;
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    input[type="text"]:focus, input[type="number"]:focus {
+      border-color: #3498db;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>사용자 정보 입력</h1>
+    <form id="userInfoForm">
+      <label for="grade">학년:</label>
+      <input type="number" id="grade" placeholder="학년을 입력하세요" required>
+
+      <label for="class">반:</label>
+      <input type="text" id="class" placeholder="반을 입력하세요" required>
+
+      <label for="number">번호:</label>
+      <input type="number" id="number" placeholder="번호를 입력하세요" required>
+
+      <label for="name">이름:</label>
+      <input type="text" id="name" placeholder="이름을 입력하세요" required>
+
+      <button type="submit">제출</button>
+    </form>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAppDGlVLrSkUKIioS8FADsJ2KyNB5OcFw",
+      authDomain: "gaesaegi-math.firebaseapp.com",
+      projectId: "gaesaegi-math",
+      storageBucket: "gaesaegi-math.appspot.com",
+      messagingSenderId: "211273803590",
+      appId: "1:211273803590:web:1d5eea23c7a88fdbf6e747",
+      measurementId: "G-QRVNX8KX2N"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    document.getElementById('userInfoForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const grade = document.getElementById('grade').value;
+      const className = document.getElementById('class').value;
+      const number = document.getElementById('number').value;
+      const name = document.getElementById('name').value;
+
+      try {
+        await addDoc(collection(db, "users"), {
+          grade: grade,
+          class: className,
+          number: number,
+          name: name
+        });
+        alert("사용자 정보가 저장되었습니다.");
+        document.getElementById('userInfoForm').reset();
+      } catch (error) {
+        console.error("사용자 정보 저장 실패:", error);
+        alert("정보 저장에 실패했습니다.");
+      }
+    });
+  </script>
+</body>
+</html>
