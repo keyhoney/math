@@ -42,11 +42,12 @@ const originalCenterContent = center.innerHTML;
       if (user) {
         const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
-        await loadFavorites();
 
         if (!userDoc.exists() || !userDoc.data().grade || !userDoc.data().class || !userDoc.data().number || !userDoc.data().name) {
           alert("사용자 정보를 입력해야 합니다.");
           window.location.href = "newbie.html"; // newbie.html로 이동
+        } else {
+          await loadFavorites(); 
         }
       } else {
         alert("로그인해 주세요.");
