@@ -159,7 +159,6 @@ function selectQuestion(question, smallCategory, middleCategory) {
   updateQuestionMeta(question.문항번호);
   updateOverlayLayout();
 
-  document.getElementById("answer").focus();
 }
 
 // 문항 메타 정보 업데이트
@@ -210,7 +209,6 @@ async function checkAnswer() {
 
   await storeSubmission(currentQuestionNumber, userAnswer, isCorrect);
   await updateQuestionMeta(currentQuestionNumber);
-  document.getElementById("answer").focus();
 }
 
 async function storeSubmission(questionId, userAnswer, isCorrect) {
