@@ -123,6 +123,15 @@
         container.classList.add('visible');
       }, 250);
     });
+
+      // 카카오톡 내장 웹뷰 감지 (user agent에 "KAKAOTALK" 문자열 포함 여부 확인)
+  if (/KAKAOTALK/i.test(navigator.userAgent)) {
+    alert("카카오톡 내장 브라우저에서는 로그인 기능이 제한됩니다. 다음 웹페이지의 안내에 따르세요.");
+    // 리다이렉트할 URL로 이동
+    window.location.href = "https://www.naver.com";
+  }
+
+    
   </script>
 </body>
 </html>
