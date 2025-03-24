@@ -80,22 +80,24 @@
     </form>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"; // setDoc 추가
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAppDGlVLrSkUKIioS8FADsJ2KyNB5OcFw",
-      authDomain: "gaesaegi-math.firebaseapp.com",
-      projectId: "gaesaegi-math",
-      storageBucket: "gaesaegi-math.appspot.com",
-      messagingSenderId: "211273803590",
-      appId: "1:211273803590:web:1d5eea23c7a88fdbf6e747",
-      measurementId: "G-QRVNX8KX2N"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyAppDGlVLrSkUKIioS8FADsJ2KyNB5OcFw",
+    authDomain: "gaesaegi-math.firebaseapp.com",
+    projectId: "gaesaegi-math",
+    storageBucket: "gaesaegi-math.appspot.com",
+    messagingSenderId: "211273803590",
+    appId: "1:211273803590:web:1d5eea23c7a88fdbf6e747",
+    measurementId: "G-QRVNX8KX2N"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
 // 사용자 정보 저장 함수
 document.getElementById('userInfoForm').addEventListener('submit', async (e) => {
