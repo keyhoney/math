@@ -97,28 +97,30 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    document.getElementById('userInfoForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
+// 사용자 정보 저장 함수
+document.getElementById('userInfoForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-      const grade = document.getElementById('grade').value;
-      const className = document.getElementById('class').value;
-      const number = document.getElementById('number').value;
-      const name = document.getElementById('name').value;
+  const grade = document.getElementById('grade').value;
+  const className = document.getElementById('class').value;
+  const number = document.getElementById('number').value;
+  const name = document.getElementById('name').value;
 
-      try {
-        await addDoc(collection(db, "users"), {
-          grade: grade,
-          class: className,
-          number: number,
-          name: name
-        });
-        alert("사용자 정보가 저장되었습니다.");
-        window.location.href = "gsg.html";  // gsg.html로 이동
-      } catch (error) {
-        console.error("사용자 정보 저장 실패:", error);
-        alert("정보 저장에 실패했습니다.");
-      }
+  try {
+    await setDoc(doc(db, "users", auth.currentUser.uid), { // userId를 문서 ID로 사용
+      grade: grade,
+      class: className,
+      number: number,
+      name: name,
+      userId: auth.currentUser.uid // 추가
     });
+    alert("사용자 정보가 저장되었습니다.");
+    window.location.href = "gsg.html";  // gsg.html로 이동
+  } catch (error) {
+    console.error("사용자 정보 저장 실패:", error);
+    alert("정보 저장에 실패했습니다.");
+  }
+});
   </script>
 </body>
 </html>
