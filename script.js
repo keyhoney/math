@@ -1,4 +1,4 @@
-//최종?!?
+//최종
 
 // Firebase 및 Firestore 관련 모듈 import
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -65,7 +65,7 @@ async function toggleFavorite(questionId, icon) {
 
   if (!snap.empty) {
     await deleteDoc(snap.docs[0].ref);
-    icon.src = "https://img.icons8.com/ios/15/000000/star--v1.png";
+    icon.src = "img/fvn.png";
     favoriteQuestions.delete(questionId);
   } else {
     await addDoc(favRef, {
@@ -73,7 +73,7 @@ async function toggleFavorite(questionId, icon) {
       questionId,
       addedAt: serverTimestamp()
     });
-    icon.src = "https://img.icons8.com/fluency/15/000000/star.png";
+    icon.src = "img/fvy.png";
     favoriteQuestions.add(questionId);
   }
 
@@ -102,8 +102,8 @@ function addFavoriteIcon(targetElement, questionId) {
   const icon = document.createElement("img");
   icon.className = "favorite-icon";
   icon.src = favoriteQuestions.has(questionId)
-    ? "https://img.icons8.com/fluency/15/000000/star.png"
-    : "https://img.icons8.com/ios/15/000000/star--v1.png";
+    ? "img/fvy.png"
+    : "img/fvn.png";
   icon.style.marginLeft = "8px";
   icon.style.cursor = "pointer";
   icon.title = "즐겨찾기 토글";
@@ -236,7 +236,7 @@ function generateMenu(questions) {
 ///////////////////////////////////////////////////////
   const reviewLi = document.createElement("li");
 reviewLi.classList.add("dashboard-menu"); // dashboard와 유사한 스타일 클래스 사용
-reviewLi.innerHTML = `<img src="https://img.icons8.com/?size=100&id=i7pW39iEKlWu&format=png&color=000000" alt="즐겨찾기 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
+reviewLi.innerHTML = `<img src="img/fv.png" alt="즐겨찾기 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
                         다시 살펴볼 문항`;
 reviewLi.addEventListener("click", (e) => {
   showFavorites(); // favorite.html을 center에 로드하는 함수 호출
@@ -252,7 +252,7 @@ const dashboardLi = document.createElement("li");
 dashboardLi.classList.add("dashboard-menu");
 
 // 아이콘을 추가할 경우, 아래와 같이 이미지 태그를 사용합니다.
-dashboardLi.innerHTML = `<img src="https://img.icons8.com/fluency/20/000000/dashboard-layout.png" alt="대시보드 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
+dashboardLi.innerHTML = `<img src="img/ds.png" alt="대시보드 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
                            대시보드`;
 
 dashboardLi.addEventListener("click", (e) => {
