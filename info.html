@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>웹 사용 안내</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* 전체 레이아웃 및 폰트 설정 */
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      max-width: 800px;
+      width: 100%;
+      background-color: #f0f3f7;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+    h2 {
+      font-size: 22px;
+      color: #2c3e50;
+      border-bottom: 2px solid #bdc3c7;
+      padding-bottom: 10px;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+    p, li {
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+    ul {
+      list-style: disc;
+      margin-left: 20px;
+      margin-bottom: 20px;
+    }
+    .highlight {
+      font-weight: bold;
+      color: #e74c3c;
+    }
+    .redirect-btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 12px 24px;
+      background-color: #2ecc71;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .redirect-btn:hover {
+      background-color: #27ae60;
+    }
+    .btn-container {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>웹 사용 안내</h1>
+    <p>안녕하세요! 이 페이지는 처음 웹에 방문한 학생을 위한 사용 안내 페이지입니다. 웹의 좌측 메뉴에서 원하는 문항을 선택하여 문제를 풀 수 있으며, 다양한 기능들이 제공됩니다.</p>
+    
+    <h2>좌측 메뉴 구성</h2>
+    <ul>
+      <li>
+        <span class="highlight">문항 선택</span>: 출제연월 및 문항 번호의 조합으로 구성된 문제 목록이 표시됩니다. 각 문항 옆에 있는 하트의 개수는 난이도를 나타냅니다.
+      </li>
+      <li>
+        <span class="highlight">다시 살펴 볼 문항</span>: 별표 아이콘을 눌러 즐겨찾기에 추가한 문항들이 모여 한 눈에 확인할 수 있습니다. 즐겨찾기에 추가된 문항은 메뉴에서 주황색으로 강조되어 표시됩니다.
+      </li>
+      <li>
+        <span class="highlight">대시보드</span>: 최근 일주일간의 풀이 수, 단원별 정답률, 전체 정답률과 지금까지 풀었던 문제들의 기록이 종합되어 표시됩니다.
+      </li>
+    </ul>
+    
+    <h2>문항 선택 및 문제 풀이</h2>
+    <ul>
+      <li>
+        문항을 선택하면 중앙 영역에 해당 문제의 이미지와 기본 정보가 나타납니다.
+      </li>
+      <li>
+        상단에는 문제의 기본 정보와 함께 <span class="highlight">답 제출 횟수</span>, <span class="highlight">오답 제출 횟수</span>, <span class="highlight">최근 제출 일시</span>, <span class="highlight">최근 정답 여부</span>가 표시됩니다.
+      </li>
+      <li>
+        <span class="highlight">좌측 하단</span>에는 답을 입력할 수 있는 입력란과 제출 버튼이 있으며, 제출 후 <span class="highlight">우측 하단</span>에 정답 여부가 표시됩니다.
+      </li>
+      <li>
+        오답인 경우 정답과 함께 <span class="highlight">EBS 해설 영상</span>으로 연결되는 링크가 제공되어, 해설 영상을 통해 풀이 방법을 확인할 수 있습니다.
+      </li>
+    </ul>
+    
+    <h2>즐겨찾기 기능</h2>
+    <ul>
+      <li>
+        각 문항 좌측 상단의 별표 아이콘을 클릭하면 해당 문항이 <span class="highlight">다시 살펴 볼 문항</span> 목록에 추가됩니다.
+      </li>
+      <li>
+        즐겨찾기에 추가된 문항은 좌측 메뉴에서 주황색으로 강조되어 표시되며, 다시 별표 아이콘을 누르면 즐겨찾기에서 제거됩니다.
+      </li>
+    </ul>
+    
+    <h2>다시 살펴 볼 문항 메뉴</h2>
+    <ul>
+      <li>
+        이 메뉴에서는 사용자가 즐겨찾기에 추가한 문항들이 모여 있으며, 각 문항의 <span class="highlight">중분류</span>, <span class="highlight">소분류</span>, <span class="highlight">문항 번호</span>, <span class="highlight">최근 제출 시간</span>, <span class="highlight">즐겨찾기에 추가한 시간</span>이 표 형태로 제공됩니다.
+      </li>
+    </ul>
+    
+    <h2>대시보드 메뉴</h2>
+    <ul>
+      <li>
+        대시보드에서는 최근 일주일 동안의 문항 풀이 수, 각 단원(중분류)별 정답률, 전체 정답률과 지금까지 풀었던 문제들의 모든 기록을 한눈에 확인할 수 있습니다.
+      </li>
+    </ul>
+    
+    <p>이제 웹에 접속해 원하는 기능을 선택하여 다양한 문제를 풀어보고, 즐겨찾기와 대시보드를 통해 학습 기록을 확인해보세요!</p>
+    <div class="btn-container">
+      <button class="redirect-btn" onclick="window.location.href='gsg.html'">문제 풀러 가기</button>
+    </div>
+  </div>
+
+
+
+</body>
+</html>
