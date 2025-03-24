@@ -279,6 +279,20 @@ dashboardLi.addEventListener("click", (e) => {
   e.stopPropagation();
 });
 questionList.prepend(dashboardLi);
+
+  const infoiLi = document.createElement("li");
+infoiLi.classList.add("dashboard-menu");
+infoiLi.innerHTML = `<img src="img/info.png" alt="정보 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
+                     웹 이용 방법 안내`;
+infoiLi.addEventListener("click", (e) => {
+  showInfoi(); // infoi.html을 center에 불러오는 함수 호출
+  if (window.innerWidth <= 600) {
+    document.getElementById("left").style.display = "none";
+    menuVisible = false;
+  }
+  e.stopPropagation();
+});
+questionList.prepend(infoiLi);
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   questions.forEach(item => {
     const { 과목, 대분류, 중분류, 소분류, 문항들 } = item;
@@ -369,6 +383,10 @@ function showDashboard() {
   center.innerHTML = `<iframe src="dashboard.html" style="width:100%; height:100%; border:none;"></iframe>`;
 }
 
+function showInfoi() {
+  const center = document.getElementById("center");
+  center.innerHTML = `<iframe src="infoi.html" style="width:100%; height:100%; border:none;"></iframe>`;
+}
 
 // 오버레이 위치 조정
 function updateOverlayLayout() {
