@@ -113,7 +113,7 @@
           name: name
         });
         alert("사용자 정보가 저장되었습니다.");
-        document.getElementById('userInfoForm').reset();
+        window.location.href = "gsg.html";  // gsg.html로 이동
       } catch (error) {
         console.error("사용자 정보 저장 실패:", error);
         alert("정보 저장에 실패했습니다.");
