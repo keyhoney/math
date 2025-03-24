@@ -117,7 +117,7 @@ document.getElementById('userInfoForm').addEventListener('submit', async (e) => 
       userId: auth.currentUser.uid // 추가
     });
     alert("사용자 정보가 저장되었습니다.");
-    window.location.href = "gsg.html";  // gsg.html로 이동
+    window.location.href = "info.html";
   } catch (error) {
     console.error("사용자 정보 저장 실패:", error);
     alert("정보 저장에 실패했습니다.");
