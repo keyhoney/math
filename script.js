@@ -44,7 +44,7 @@ const originalCenterContent = center.innerHTML;
         const userDoc = await getDoc(userDocRef);
         await loadFavorites();
 
-        if (!userDoc.exists()) {
+        if (!userDoc.exists() || !userDoc.data().grade || !userDoc.data().class || !userDoc.data().number || !userDoc.data().name) {
           alert("사용자 정보를 입력해야 합니다.");
           window.location.href = "newbie.html"; // newbie.html로 이동
         }
