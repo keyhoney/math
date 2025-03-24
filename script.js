@@ -247,6 +247,21 @@ function createCollapsibleItem(text) {
 function generateMenu(questions) {
   const grouped = {};
 ///////////////////////////////////////////////////////
+
+const feedbackLi = document.createElement("li");
+feedbackLi.classList.add("dashboard-menu"); // 기존 스타일 클래스 사용
+feedbackLi.innerHTML = `<img src="https://img.icons8.com/fluency/20/000000/feedback.png" alt="피드백 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
+                        피드백`;
+feedbackLi.addEventListener("click", (e) => {
+  showFeedback(); // feedback.html을 center에 로드하는 함수 호출
+  if (window.innerWidth <= 600) {
+    document.getElementById("left").style.display = "none";
+    menuVisible = false;
+  }
+  e.stopPropagation();
+});
+questionList.prepend(feedbackLi); // 좌측 메뉴 최상단에 추가
+  
   const reviewLi = document.createElement("li");
 reviewLi.classList.add("dashboard-menu"); // dashboard와 유사한 스타일 클래스 사용
 reviewLi.innerHTML = `<img src="img/fv.png" alt="즐겨찾기 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
@@ -370,6 +385,11 @@ function toggleMenu() {
     center.style.width = menuVisible ? "50%" : "100%";
   }
   updateOverlayLayout();
+}
+
+function showFeedback() {
+  const center = document.getElementById("center");
+  center.innerHTML = `<iframe src="feedback.html" style="width:100%; height:100%; border:none;"></iframe>`;
 }
 
 function showFavorites() {
