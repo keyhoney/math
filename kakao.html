@@ -1,1 +1,105 @@
-
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로그인 안내</title>
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: linear-gradient(to right, #141E30, #243B55);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .container.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    h1 {
+      color: #ffffff;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .url-box {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 10px;
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      word-break: break-all;
+    }
+    .url-text {
+      color: #ffffff;
+      font-size: 16px;
+      flex: 1;
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .copy-btn {
+      background: #ffffff;
+      color: #141E30;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-left: 10px;
+    }
+    .copy-btn:hover {
+      background: #f0f0f0;
+    }
+    p {
+      color: #ffffff;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="container">
+    <h1>로그인 안내</h1>
+    <div class="url-box">
+      <div class="url-text" id="urlText">https://keyhoney.github.io/math/</div>
+      <button class="copy-btn" id="copyButton">복사</button>
+    </div>
+    <p>Safari, Samsung Internet, Whale 등<br>브라우저 앱을 실행하여 웹사이트에 다시 접속해주세요.</p>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const container = document.getElementById("container");
+      setTimeout(() => {
+        container.classList.add("visible");
+      }, 100);
+    });
+    document.getElementById("copyButton").addEventListener("click", function() {
+      const textToCopy = document.getElementById("urlText").textContent;
+      navigator.clipboard.writeText(textToCopy).then(function() {
+        alert("주소가 클립보드에 복사되었습니다.");
+      }, function(err) {
+        alert("복사에 실패했습니다: " + err);
+      });
+    });
+  </script>
+</body>
+</html>
