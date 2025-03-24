@@ -62,6 +62,14 @@
       border-collapse: collapse;
       margin-top: 20px;
     }
+    /* colgroup로 열 너비 지정: 작성자와 작성일은 20%, 내용은 60% */
+    colgroup col.writer,
+    colgroup col.date {
+      width: 20%;
+    }
+    colgroup col.content {
+      width: 60%;
+    }
     th, td {
       border: 1px solid #bdc3c7;
       padding: 10px;
@@ -87,11 +95,16 @@
       <button type="submit">제출</button>
     </form>
     <table id="feedbackTable">
+      <colgroup>
+        <col class="writer">
+        <col class="content">
+        <col class="date">
+      </colgroup>
       <thead>
         <tr>
           <th>작성자</th>
-          <th>작성일시</th>
           <th>내용</th>
+          <th>작성일</th>
         </tr>
       </thead>
       <tbody>
@@ -119,7 +132,6 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // 로그인 상태 확인 후 피드백 로드
     onAuthStateChanged(auth, user => {
       if (!user) {
         alert("로그인 후 이용해 주세요.");
@@ -154,17 +166,17 @@
     function loadFeedbacks() {
       const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"));
       const tbody = document.querySelector("#feedbackTable tbody");
-      // 실시간 업데이트
       onSnapshot(q, snapshot => {
         tbody.innerHTML = "";
         snapshot.forEach(doc => {
           const data = doc.data();
-          const createdAt = data.createdAt ? data.createdAt.toDate().toLocaleString("ko-KR", { hour12: false }) : "-";
+          // 작성일: createdAt 날짜만 (toLocaleDateString)
+          const createdDate = data.createdAt ? data.createdAt.toDate().toLocaleDateString("ko-KR") : "-";
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${data.userName}</td>
-            <td>${createdAt}</td>
             <td>${data.content}</td>
+            <td>${createdDate}</td>
           `;
           tbody.appendChild(tr);
         });
