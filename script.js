@@ -38,22 +38,29 @@ const originalCenterContent = center.innerHTML;
 
 // 로그인 상태 확인 및 즐겨찾기 로드
 
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const userDocRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userDocRef);
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    const userDocRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userDocRef);
 
-        if (!userDoc.exists() || !userDoc.data().grade || !userDoc.data().class || !userDoc.data().number || !userDoc.data().name) {
-          alert("사용자 정보를 입력해야 합니다.");
-          window.location.href = "newbie.html"; // newbie.html로 이동
-        } else {
-          await loadFavorites(); 
-        }
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      console.log("User Data:", userData); // 디버깅용 로그
+      if (!userData.grade || !userData.class || !userData.number || !userData.name) {
+        alert("사용자 정보를 입력해야 합니다.");
+        window.location.href = "newbie.html"; // newbie.html로 이동
       } else {
-        alert("로그인해 주세요.");
-        window.location.href = "index.html";
+        await loadFavorites(); 
       }
-    });
+    } else {
+      alert("사용자 정보를 입력해야 합니다.");
+      window.location.href = "newbie.html"; // newbie.html로 이동
+    }
+  } else {
+    alert("로그인해 주세요.");
+    window.location.href = "index.html";
+  }
+});
 
 // 즐겨찾기 로드
 async function loadFavorites() {
