@@ -37,15 +37,22 @@ const originalCenterContent = center.innerHTML;
 /////////////////////////////////////////////////////////////////////
 
 // 로그인 상태 확인 및 즐겨찾기 로드
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    console.log("사용자가 로그인했습니다:", user);
-    await loadFavorites();
-  } else {
-    alert("로그인해 주세요.");
-    window.location.href = "index.html";
-  }
-});
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+        await loadFavorites();
+
+        if (!userDoc.exists()) {
+          alert("사용자 정보를 입력해야 합니다.");
+          window.location.href = "newbie.html"; // newbie.html로 이동
+        }
+      } else {
+        alert("로그인해 주세요.");
+        window.location.href = "index.html";
+      }
+    });
 
 // 즐겨찾기 로드
 async function loadFavorites() {
