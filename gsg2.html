@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>개념별 새겨봐야 할 기출문제</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles2.css">
+  <script src="script2.js" type="module"></script>
+</head>
+<body>
+  <div id="rotateMessage">화면을 회전해 주세요.</div>
+  <div id="top">
+    <div id="left">
+      <h2>문항 선택</h2>
+      <ul id="questionList"></ul>
+    </div>
+    <div id="center">
+      <div id="centerHeader">
+        개념별 새겨봐야 할 기출문제
+        <button id="noteToggleButton" onclick="toggleNote()">노트 열기</button>
+      </div>
+      <div id="questionContent">
+        <div id="questionOverlay" style="display:none;">
+          <div id="questionTitle" class="question-title"></div>
+          <div id="questionMeta" class="question-meta"></div>
+        </div>
+        <img id="selectedImage" src="" alt="선택한 문제 이미지" style="display:none;">
+      </div>
+    </div>
+  </div>
+  <div id="bottom">
+    <div id="leftBottom">
+      <div id="answerArea">
+        <input type="text" id="answer" placeholder="답을 입력하세요">
+        <button onclick="checkAnswer()">제출</button>
+      </div>
+    </div>
+    <div id="rightBottom">
+      <div id="resultArea">
+        <div id="result"></div>
+        <div id="solutionLink" style="margin-top: 5px;"></div>
+      </div>
+    </div>
+  </div>
+  <button class="floating-button" onclick="toggleMenu()">☰</button>
+</body>
+</html>
