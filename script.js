@@ -205,7 +205,7 @@ async function checkAnswer() {
   const isCorrect = userAnswer === correctAnswer;
 
   resultDiv.innerHTML = isCorrect ? "정답입니다!" : `오답입니다. 정답은 ${correctAnswer}입니다.`;
-  solutionDiv.innerHTML = isCorrect ? "" : `해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>`;
+  solutionDiv.innerHTML = isCorrect ? `필요하면 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>` : `해설 영상을 보세요: <a href='${solutionLink}' target='_blank'>해설 영상</a>`;
 
   await storeSubmission(currentQuestionNumber, userAnswer, isCorrect);
   await updateQuestionMeta(currentQuestionNumber);
