@@ -30,13 +30,13 @@ let currentSmallCategory = "";
 let favoriteQuestions = new Set();
 let menuVisible = window.innerWidth > 600 ? true : false;
 
-// 추가: 노트 토글 관련 변수
-let noteOpen = false; // 노트 열림 상태 플래그
+// 노트 토글 관련 변수
+let noteOpen = false;
 
-// center와 questionContent 요소 참조
+// center 관련 요소
 const center = document.getElementById("center");
+const centerMain = document.getElementById("centerMain");
 const questionContent = document.getElementById("questionContent");
-const originalQuestionContent = questionContent.innerHTML; // 최초 질문 콘텐츠 저장
 
 //////////////////////////////////////////////////////////////////////
 const originalCenterContent = center.innerHTML;
@@ -50,16 +50,16 @@ onAuthStateChanged(auth, async (user) => {
 
     if (userDoc.exists()) {
       const userData = userDoc.data();
-      console.log("User Data:", userData); // 디버깅용 로그
+      console.log("User Data:", userData);
       if (!userData.grade || !userData.class || !userData.number || !userData.name) {
         alert("사용자 정보를 입력해야 합니다.");
-        window.location.href = "newbie.html"; // newbie.html로 이동
+        window.location.href = "newbie.html";
       } else {
         await loadFavorites(); 
       }
     } else {
       alert("사용자 정보를 입력해야 합니다.");
-      window.location.href = "newbie.html"; // newbie.html로 이동
+      window.location.href = "newbie.html";
     }
   } else {
     alert("로그인해 주세요.");
@@ -138,20 +138,18 @@ function addFavoriteIcon(targetElement, questionId) {
 
 // 문항 선택 시 동작
 function selectQuestion(question, smallCategory, middleCategory) {
-  // center에 dashboard iframe이 있을 경우, 원래 콘텐츠로 복원
   if (document.querySelector("#center iframe")) {
     center.innerHTML = originalCenterContent;
   }
 
-  console.log("중분류:", middleCategory); // 디버그용 로그
+  console.log("중분류:", middleCategory);
   
   currentQuestionNumber = question.문항번호;
   correctAnswer = question.정답;
   solutionLink = question.해설주소;
   questionDifficulty = question.난이도;
-  // (이미 저장되어 있다면 currentMiddleCategory와 currentSmallCategory도 업데이트)
-  currentMiddleCategory = middleCategory || ""; // 전달받은 중분류 저장
-  currentSmallCategory = smallCategory;         // 소분류 저장
+  currentMiddleCategory = middleCategory || "";
+  currentSmallCategory = smallCategory;
   
   document.getElementById("selectedImage").src = question.문항주소;
   document.getElementById("selectedImage").style.display = "block";
@@ -251,7 +249,6 @@ function createCollapsibleItem(text) {
 function generateMenu(questions) {
   const grouped = {};
 
-  // 피드백, 즐겨찾기, 대시보드, 웹 이용 방법 안내 메뉴 추가
   const feedbackLi = document.createElement("li");
   feedbackLi.classList.add("dashboard-menu");
   feedbackLi.innerHTML = `<img src="img/feedback.png" alt="피드백 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
@@ -308,7 +305,6 @@ function generateMenu(questions) {
   });
   questionList.prepend(infoiLi);
 
-  // 그룹핑 처리
   questions.forEach(item => {
     const { 과목, 대분류, 중분류, 소분류, 문항들 } = item;
     grouped[과목] ??= {};
@@ -351,7 +347,6 @@ function generateMenu(questions) {
             qLi.textContent = q.문항번호;
             qLi.setAttribute("data-question-id", q.문항번호);
             qLi.addEventListener("click", function(e) {
-              // 소분류와 중분류 정보를 모두 전달
               selectQuestion(q, small, sub);
               if (window.innerWidth <= 600) {
                 document.getElementById("left").style.display = "none";
@@ -367,10 +362,9 @@ function generateMenu(questions) {
   }
 }
 
-// 메뉴 토글 (모바일 대응 포함)
+// 메뉴 토글 (모바일 대응)
 function toggleMenu() {
   const left = document.getElementById("left");
-  const center = document.getElementById("center");
   if (window.innerWidth <= 600) {
     menuVisible = !menuVisible;
     left.style.display = menuVisible ? "block" : "none";
@@ -389,52 +383,48 @@ function toggleMenu() {
   updateOverlayLayout();
 }
 
-// 노트 토글 함수: center 헤더 우측의 "노트 열기" 버튼을 통해 동작
+// 노트 토글 함수:
+// - center의 콘텐츠에는 영향 없이, centerMain 영역 내에 새 #right div를 생성/제거합니다.
 function toggleNote() {
   const noteToggleButton = document.getElementById("noteToggleButton");
   const left = document.getElementById("left");
 
   if (!noteOpen) {
-    // 노트 열기: left 패널 숨기고 center 내 질문 콘텐츠를 좌측 50%(기존 콘텐츠), 우측 50%(iframe으로 note.html)로 분할
     noteOpen = true;
     noteToggleButton.innerText = "노트 닫기";
     left.style.display = "none";
 
-    // 질문 영역 클리어 후 두 영역 생성
-    questionContent.innerHTML = "";
+    // centerMain을 flex로 변경하여 좌측(questionContent)와 우측(note) 영역으로 분할
+    centerMain.style.display = "flex";
+    // 좌측 영역: 질문 콘텐츠 (너비 50%)
+    questionContent.style.width = "50%";
 
-    // 좌측 영역: 기존 콘텐츠 복원 (50%)
-    const mainDiv = document.createElement("div");
-    mainDiv.id = "mainContentDiv";
-    mainDiv.style.width = "50%";
-    mainDiv.style.float = "left";
-    mainDiv.innerHTML = originalQuestionContent;
-
-    // 우측 영역: note.html을 로드하는 iframe (50%)
-    const noteDiv = document.createElement("div");
-    noteDiv.id = "noteDiv";
+    // 우측 영역: 노트를 담을 div (#right) (너비 50%)
+    let noteDiv = document.createElement("div");
+    noteDiv.id = "right";
     noteDiv.style.width = "50%";
-    noteDiv.style.float = "right";
     noteDiv.innerHTML = `<iframe src="note.html" style="width:100%; height:100%; border:none;"></iframe>`;
-
-    questionContent.appendChild(mainDiv);
-    questionContent.appendChild(noteDiv);
+    centerMain.appendChild(noteDiv);
   } else {
-    // 노트 닫기: left 패널 보이고 center 영역의 질문 콘텐츠 원복 (100% 차지)
     noteOpen = false;
     noteToggleButton.innerText = "노트 열기";
-    left.style.display = "block"; // 필요시 미디어쿼리 반영 가능
-    questionContent.innerHTML = originalQuestionContent;
+    left.style.display = "block";
+    
+    // 노트 영역 제거
+    const noteDiv = document.getElementById("right");
+    if (noteDiv) noteDiv.remove();
+    
+    // centerMain 레이아웃을 원래대로 (질문 콘텐츠가 100% 폭)
+    centerMain.style.display = "block";
+    questionContent.style.width = "100%";
   }
 }
 
 function showFeedback() {
-  const center = document.getElementById("center");
   center.innerHTML = `<iframe src="feedback.html" style="width:100%; height:100%; border:none;"></iframe>`;
 }
 
 function showFavorites() {
-  const center = document.getElementById("center");
   center.innerHTML = `<iframe src="favorite.html" style="width:100%; height:100%; border:none;"></iframe>`;
 }
 
@@ -443,7 +433,6 @@ function showDashboard() {
 }
 
 function showInfoi() {
-  const center = document.getElementById("center");
   center.innerHTML = `<iframe src="infoi.html" style="width:100%; height:100%; border:none;"></iframe>`;
 }
 
