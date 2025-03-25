@@ -1,4 +1,4 @@
-//최종2
+//최종
 
 // Firebase 및 Firestore 관련 모듈 import
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -33,7 +33,7 @@ let menuVisible = window.innerWidth > 600 ? true : false;
 // 노트 토글 관련 변수
 let noteOpen = false;
 
-// center 관련 요소
+// center 관련 요소 참조
 const center = document.getElementById("center");
 const centerMain = document.getElementById("centerMain");
 const questionContent = document.getElementById("questionContent");
@@ -383,8 +383,8 @@ function toggleMenu() {
   updateOverlayLayout();
 }
 
-// 노트 토글 함수:
-// - center의 콘텐츠에는 영향 없이, centerMain 영역 내에 새 #right div를 생성/제거합니다.
+// 노트 토글 함수
+// centerMain 영역에 영향 없이, 별도의 #right 영역을 생성/제거합니다.
 function toggleNote() {
   const noteToggleButton = document.getElementById("noteToggleButton");
   const left = document.getElementById("left");
@@ -399,10 +399,11 @@ function toggleNote() {
     // 좌측 영역: 질문 콘텐츠 (너비 50%)
     questionContent.style.width = "50%";
 
-    // 우측 영역: 노트를 담을 div (#right) (너비 50%)
+    // 우측 영역: 노트를 담을 div (#right) (너비 50%, 높이는 centerMain 전체 높이)
     let noteDiv = document.createElement("div");
     noteDiv.id = "right";
     noteDiv.style.width = "50%";
+    noteDiv.style.height = "100%";
     noteDiv.innerHTML = `<iframe src="note.html" style="width:100%; height:100%; border:none;"></iframe>`;
     centerMain.appendChild(noteDiv);
   } else {
