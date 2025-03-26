@@ -9,7 +9,27 @@
   <script src="script.js" type="module"></script>
 </head>
 <body>
+
+
+  
   <div id="rotateMessage">화면을 회전해 주세요.</div>
+    <div id="bottom">
+    <div id="leftBottom">
+      <div id="answerArea">
+        <input type="text" id="answer" placeholder="답을 입력하세요">
+        <button onclick="checkAnswer()">제출</button>
+      </div>
+    </div>
+    <div id="rightBottom">
+      <div id="resultArea">
+        <div id="result"></div>
+        <div id="solutionLink" style="margin-top: 5px;"></div>
+      </div>
+    </div>
+  </div>
+
+  
+  
   <div id="top">
     <div id="left">
       <h2>문항 선택</h2>
@@ -33,20 +53,9 @@
       </div>
     </div>
   </div>
-  <div id="bottom">
-    <div id="leftBottom">
-      <div id="answerArea">
-        <input type="text" id="answer" placeholder="답을 입력하세요">
-        <button onclick="checkAnswer()">제출</button>
-      </div>
-    </div>
-    <div id="rightBottom">
-      <div id="resultArea">
-        <div id="result"></div>
-        <div id="solutionLink" style="margin-top: 5px;"></div>
-      </div>
-    </div>
-  </div>
+
+
+  
   <button class="floating-button" onclick="toggleMenu()">☰</button>
 </body>
 </html>
