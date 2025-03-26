@@ -30,14 +30,19 @@ let currentSmallCategory = "";
 let favoriteQuestions = new Set();
 let menuVisible = window.innerWidth > 600 ? true : false;
 
+// 노트 토글 관련 변수
+let noteOpen = false;
+
+// center 관련 요소 참조
+const center = document.getElementById("center");
+const centerMain = document.getElementById("centerMain");
+const questionContent = document.getElementById("questionContent");
 
 //////////////////////////////////////////////////////////////////////
-const center = document.getElementById("center");
 const originalCenterContent = center.innerHTML;
 /////////////////////////////////////////////////////////////////////
 
 // 로그인 상태 확인 및 즐겨찾기 로드
-
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     const userDocRef = doc(db, "users", user.uid);
@@ -45,16 +50,16 @@ onAuthStateChanged(auth, async (user) => {
 
     if (userDoc.exists()) {
       const userData = userDoc.data();
-      console.log("User Data:", userData); // 디버깅용 로그
+      console.log("User Data:", userData);
       if (!userData.grade || !userData.class || !userData.number || !userData.name) {
         alert("사용자 정보를 입력해야 합니다.");
-        window.location.href = "newbie.html"; // newbie.html로 이동
+        window.location.href = "newbie.html";
       } else {
         await loadFavorites(); 
       }
     } else {
       alert("사용자 정보를 입력해야 합니다.");
-      window.location.href = "newbie.html"; // newbie.html로 이동
+      window.location.href = "newbie.html";
     }
   } else {
     alert("로그인해 주세요.");
@@ -133,20 +138,18 @@ function addFavoriteIcon(targetElement, questionId) {
 
 // 문항 선택 시 동작
 function selectQuestion(question, smallCategory, middleCategory) {
-  // center에 dashboard iframe이 있을 경우, 원래 콘텐츠로 복원
   if (document.querySelector("#center iframe")) {
     center.innerHTML = originalCenterContent;
   }
 
-    console.log("중분류:", middleCategory); // 디버그용 로그
+  console.log("중분류:", middleCategory);
   
   currentQuestionNumber = question.문항번호;
   correctAnswer = question.정답;
   solutionLink = question.해설주소;
   questionDifficulty = question.난이도;
-  // (이미 저장되어 있다면 currentMiddleCategory와 currentSmallCategory도 업데이트)
-  currentMiddleCategory = middleCategory || ""; // 전달받은 중분류 저장
-  currentSmallCategory = smallCategory;         // 소분류 저장
+  currentMiddleCategory = middleCategory || "";
+  currentSmallCategory = smallCategory;
   
   document.getElementById("selectedImage").src = question.문항주소;
   document.getElementById("selectedImage").style.display = "block";
@@ -158,7 +161,6 @@ function selectQuestion(question, smallCategory, middleCategory) {
   addFavoriteIcon(document.getElementById("questionTitle"), question.문항번호);
   updateQuestionMeta(question.문항번호);
   updateOverlayLayout();
-
 }
 
 // 문항 메타 정보 업데이트
@@ -219,8 +221,8 @@ async function storeSubmission(questionId, userAnswer, isCorrect) {
       isCorrect,
       submittedAt: serverTimestamp(),
       userId: auth.currentUser?.uid || null,
-      중분류: currentMiddleCategory,  // 추가
-      소분류: currentSmallCategory       // 추가
+      중분류: currentMiddleCategory,
+      소분류: currentSmallCategory
     });
   } catch (err) {
     console.error("답안 저장 실패:", err);
@@ -246,67 +248,63 @@ function createCollapsibleItem(text) {
 // 메뉴 생성 및 문항 렌더링
 function generateMenu(questions) {
   const grouped = {};
-///////////////////////////////////////////////////////
 
-const feedbackLi = document.createElement("li");
-feedbackLi.classList.add("dashboard-menu"); // 기존 스타일 클래스 사용
-feedbackLi.innerHTML = `<img src="img/feedback.png" alt="피드백 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
-                        오류 제보 및 피드백`;
-feedbackLi.addEventListener("click", (e) => {
-  showFeedback(); // feedback.html을 center에 로드하는 함수 호출
-  if (window.innerWidth <= 600) {
-    document.getElementById("left").style.display = "none";
-    menuVisible = false;
-  }
-  e.stopPropagation();
-});
-questionList.prepend(feedbackLi); // 좌측 메뉴 최상단에 추가
-  
+  const feedbackLi = document.createElement("li");
+  feedbackLi.classList.add("dashboard-menu");
+  feedbackLi.innerHTML = `<img src="img/feedback.png" alt="피드백 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
+                          오류 제보 및 피드백`;
+  feedbackLi.addEventListener("click", (e) => {
+    showFeedback();
+    if (window.innerWidth <= 600) {
+      document.getElementById("left").style.display = "none";
+      menuVisible = false;
+    }
+    e.stopPropagation();
+  });
+  questionList.prepend(feedbackLi);
+
   const reviewLi = document.createElement("li");
-reviewLi.classList.add("dashboard-menu"); // dashboard와 유사한 스타일 클래스 사용
-reviewLi.innerHTML = `<img src="img/fv.png" alt="즐겨찾기 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
+  reviewLi.classList.add("dashboard-menu");
+  reviewLi.innerHTML = `<img src="img/fv.png" alt="즐겨찾기 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
                         다시 살펴볼 문항`;
-reviewLi.addEventListener("click", (e) => {
-  showFavorites(); // favorite.html을 center에 로드하는 함수 호출
-  if (window.innerWidth <= 600) {
-    document.getElementById("left").style.display = "none";
-    menuVisible = false;
-  }
-  e.stopPropagation();
-});
-questionList.prepend(reviewLi); // 메뉴 목록의 최상단에 추가
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const dashboardLi = document.createElement("li");
-dashboardLi.classList.add("dashboard-menu");
+  reviewLi.addEventListener("click", (e) => {
+    showFavorites();
+    if (window.innerWidth <= 600) {
+      document.getElementById("left").style.display = "none";
+      menuVisible = false;
+    }
+    e.stopPropagation();
+  });
+  questionList.prepend(reviewLi);
 
-// 아이콘을 추가할 경우, 아래와 같이 이미지 태그를 사용합니다.
-dashboardLi.innerHTML = `<img src="img/ds.png" alt="대시보드 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
-                           대시보드`;
-
-dashboardLi.addEventListener("click", (e) => {
-  showDashboard();
-  if (window.innerWidth <= 600) {
-    document.getElementById("left").style.display = "none";
-    menuVisible = false;
-  }
-  e.stopPropagation();
-});
-questionList.prepend(dashboardLi);
+  const dashboardLi = document.createElement("li");
+  dashboardLi.classList.add("dashboard-menu");
+  dashboardLi.innerHTML = `<img src="img/ds.png" alt="대시보드 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
+                             대시보드`;
+  dashboardLi.addEventListener("click", (e) => {
+    showDashboard();
+    if (window.innerWidth <= 600) {
+      document.getElementById("left").style.display = "none";
+      menuVisible = false;
+    }
+    e.stopPropagation();
+  });
+  questionList.prepend(dashboardLi);
 
   const infoiLi = document.createElement("li");
-infoiLi.classList.add("dashboard-menu");
-infoiLi.innerHTML = `<img src="img/info.png" alt="정보 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
-                     웹 이용 방법 안내`;
-infoiLi.addEventListener("click", (e) => {
-  showInfoi(); // infoi.html을 center에 불러오는 함수 호출
-  if (window.innerWidth <= 600) {
-    document.getElementById("left").style.display = "none";
-    menuVisible = false;
-  }
-  e.stopPropagation();
-});
-questionList.prepend(infoiLi);
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  infoiLi.classList.add("dashboard-menu");
+  infoiLi.innerHTML = `<img src="img/info.png" alt="정보 아이콘" style="width:20px; height:auto; vertical-align:middle; margin-right:8px;">
+                       웹 이용 방법 안내`;
+  infoiLi.addEventListener("click", (e) => {
+    showInfoi();
+    if (window.innerWidth <= 600) {
+      document.getElementById("left").style.display = "none";
+      menuVisible = false;
+    }
+    e.stopPropagation();
+  });
+  questionList.prepend(infoiLi);
+
   questions.forEach(item => {
     const { 과목, 대분류, 중분류, 소분류, 문항들 } = item;
     grouped[과목] ??= {};
@@ -345,19 +343,18 @@ questionList.prepend(infoiLi);
           subUl.appendChild(smallLi);
 
           grouped[subject][cat][sub][small].forEach(q => {
-  const qLi = document.createElement("li");
-  qLi.textContent = q.문항번호;
-  qLi.setAttribute("data-question-id", q.문항번호);
-  qLi.addEventListener("click", function(e) {
-    // 소분류(small)와 중분류(sub) 정보를 모두 전달
-    selectQuestion(q, small, sub);
-    if (window.innerWidth <= 600) {
-      document.getElementById("left").style.display = "none";
-      menuVisible = false;
-    }
-    e.stopPropagation();
-  });
-  smallUl.appendChild(qLi);
+            const qLi = document.createElement("li");
+            qLi.textContent = q.문항번호;
+            qLi.setAttribute("data-question-id", q.문항번호);
+            qLi.addEventListener("click", function(e) {
+              selectQuestion(q, small, sub);
+              if (window.innerWidth <= 600) {
+                document.getElementById("left").style.display = "none";
+                menuVisible = false;
+              }
+              e.stopPropagation();
+            });
+            smallUl.appendChild(qLi);
           });
         }
       }
@@ -365,10 +362,9 @@ questionList.prepend(infoiLi);
   }
 }
 
-// 메뉴 토글 (모바일 대응 포함)
+// 메뉴 토글 (모바일 대응)
 function toggleMenu() {
   const left = document.getElementById("left");
-  const center = document.getElementById("center");
   if (window.innerWidth <= 600) {
     menuVisible = !menuVisible;
     left.style.display = menuVisible ? "block" : "none";
@@ -387,13 +383,49 @@ function toggleMenu() {
   updateOverlayLayout();
 }
 
+// 노트 토글 함수
+// centerMain 영역에 영향 없이, 별도의 #right 영역을 생성/제거합니다.
+function toggleNote() {
+  const noteToggleButton = document.getElementById("noteToggleButton");
+  const left = document.getElementById("left");
+
+  if (!noteOpen) {
+    noteOpen = true;
+    noteToggleButton.innerText = "노트 닫기";
+    left.style.display = "none";
+
+    // centerMain을 flex로 변경하여 좌측(questionContent)와 우측(note) 영역으로 분할
+    centerMain.style.display = "flex";
+    // 좌측 영역: 질문 콘텐츠 (너비 40%)
+    questionContent.style.width = "40%";
+
+    // 우측 영역: 노트를 담을 div (#right) (너비 60%, 높이는 centerMain 전체 높이)
+    let noteDiv = document.createElement("div");
+    noteDiv.id = "right";
+    noteDiv.style.width = "60%";
+    noteDiv.style.height = "100%";
+    noteDiv.innerHTML = `<iframe src="note.html" style="width:100%; height:100%; border:none;"></iframe>`;
+    centerMain.appendChild(noteDiv);
+  } else {
+    noteOpen = false;
+    noteToggleButton.innerText = "노트 열기";
+    left.style.display = "block";
+    
+    // 노트 영역 제거
+    const noteDiv = document.getElementById("right");
+    if (noteDiv) noteDiv.remove();
+    
+    // centerMain 레이아웃을 원래대로 (질문 콘텐츠가 100% 폭)
+    centerMain.style.display = "block";
+    questionContent.style.width = "100%";
+  }
+}
+
 function showFeedback() {
-  const center = document.getElementById("center");
   center.innerHTML = `<iframe src="feedback.html" style="width:100%; height:100%; border:none;"></iframe>`;
 }
 
 function showFavorites() {
-  const center = document.getElementById("center");
   center.innerHTML = `<iframe src="favorite.html" style="width:100%; height:100%; border:none;"></iframe>`;
 }
 
@@ -402,7 +434,6 @@ function showDashboard() {
 }
 
 function showInfoi() {
-  const center = document.getElementById("center");
   center.innerHTML = `<iframe src="infoi.html" style="width:100%; height:100%; border:none;"></iframe>`;
 }
 
@@ -430,6 +461,7 @@ fetch('questions.json')
 // 전역 함수 등록
 window.checkAnswer = checkAnswer;
 window.toggleMenu = toggleMenu;
+window.toggleNote = toggleNote;
 
 // 엔터키로 정답 제출
 window.addEventListener("DOMContentLoaded", () => {
