@@ -443,14 +443,14 @@ function updateOverlayLayout() {
   overlay.classList.toggle("menu-closed", !menuVisible);
 }
 
-// 화면 회전 안내
+//화면 회전 안내
 //function checkOrientation() {
   //const msg = document.getElementById("rotateMessage");
   //msg.style.display = window.innerHeight > window.innerWidth ? "flex" : "none";
 //}
-window.addEventListener("resize", checkOrientation);
-window.addEventListener("orientationchange", checkOrientation);
-checkOrientation();
+//window.addEventListener("resize", checkOrientation);
+//window.addEventListener("orientationchange", checkOrientation);
+//checkOrientation();
 
 // JSON 문항 불러오기
 fetch('questions.json')
