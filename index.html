@@ -85,8 +85,8 @@
     import { 
       getAuth, 
       GoogleAuthProvider, 
-      OAuthProvider, 
-      signInWithPopup
+      signInWithPopup,
+      onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
 
@@ -105,11 +105,11 @@
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
 
-        // 로그인 상태 확인
+    // 로그인 상태 확인
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // 사용자가 로그인 상태일 때
-        window.location.href = "gsg.html";
+        window.location.href = 'gsg.html';
       }
     });
 
@@ -132,13 +132,11 @@
       }, 250);
     });
 
-      // 카카오톡 내장 웹뷰 감지 (user agent에 "KAKAOTALK" 문자열 포함 여부 확인)
-  if (/KAKAOTALK/i.test(navigator.userAgent)) {
-    alert("카카오톡 내장 브라우저에서는 로그인 기능이 제한됩니다. 다음 웹페이지의 안내에 따르세요.");
-    // 리다이렉트할 URL로 이동
-    window.location.href = "kakao.html";
-  }
-
+    // 카카오톡 내장 웹뷰 감지
+    if (/KAKAOTALK/i.test(navigator.userAgent)) {
+      alert("카카오톡 내장 브라우저에서는 로그인 기능이 제한됩니다. 다음 웹페이지의 안내에 따르세요.");
+      window.location.href = "kakao.html";
+    }
     
   </script>
 </body>
