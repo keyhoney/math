@@ -396,13 +396,13 @@ function toggleNote() {
 
     // centerMain을 flex로 변경하여 좌측(questionContent)와 우측(note) 영역으로 분할
     centerMain.style.display = "flex";
-    // 좌측 영역: 질문 콘텐츠 (너비 50%)
-    questionContent.style.width = "50%";
+    // 좌측 영역: 질문 콘텐츠 (너비 40%)
+    questionContent.style.width = "40%";
 
-    // 우측 영역: 노트를 담을 div (#right) (너비 50%, 높이는 centerMain 전체 높이)
+    // 우측 영역: 노트를 담을 div (#right) (너비 60%, 높이는 centerMain 전체 높이)
     let noteDiv = document.createElement("div");
     noteDiv.id = "right";
-    noteDiv.style.width = "50%";
+    noteDiv.style.width = "60%";
     noteDiv.style.height = "100%";
     noteDiv.innerHTML = `<iframe src="note.html" style="width:100%; height:100%; border:none;"></iframe>`;
     centerMain.appendChild(noteDiv);
