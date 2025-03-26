@@ -105,8 +105,7 @@ body {
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #ffeb3b;
-  border: 1px solid #fbc02d;
+  background-color: #ffffff;
   padding: 5px 10px;
   border-radius: 4px;
   box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
