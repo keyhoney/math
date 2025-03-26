@@ -105,13 +105,15 @@ body {
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #ffffff;
+  background: linear-gradient(to right top, #ff42d6, #4aabbb); /* 그라데이션 배경 */
+  color: white; /* 텍스트 색상 */
   padding: 5px 10px;
   border-radius: 4px;
   box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
   font-weight: bold;
   cursor: pointer;
   font-size: 16px;
+  border: none; /* 기본 테두리 제거 */
 }
 
 /* centerMain는 header 아래의 콘텐츠 영역로, 높이를 꽉 채우도록 설정 */
