@@ -277,13 +277,15 @@
         link.click();
       });
       
-      canvas.upperCanvasEl.addEventListener("pointerdown", function (e) {
-        if (e.pointerType === "touch") {
-          canvas.isDrawingMode = false;
-        } else if (currentTool !== "areaSelect") {
-          canvas.isDrawingMode = true;
-        }
-      });
+canvas.upperCanvasEl.addEventListener("pointerdown", function (e) {
+  if (e.pointerType === "touch") {
+    e.preventDefault(); // 터치 입력 방지
+    canvas.isDrawingMode = false;
+  } else {
+    canvas.isDrawingMode = true;
+  }
+});
+    
     });
 document.addEventListener("DOMContentLoaded", function () {
   const canvasContainer = document.querySelector(".canvas-container");
