@@ -444,10 +444,10 @@ function updateOverlayLayout() {
 }
 
 // 화면 회전 안내
-function checkOrientation() {
-  const msg = document.getElementById("rotateMessage");
-  msg.style.display = window.innerHeight > window.innerWidth ? "flex" : "none";
-}
+//function checkOrientation() {
+  //const msg = document.getElementById("rotateMessage");
+  //msg.style.display = window.innerHeight > window.innerWidth ? "flex" : "none";
+//}
 window.addEventListener("resize", checkOrientation);
 window.addEventListener("orientationchange", checkOrientation);
 checkOrientation();
