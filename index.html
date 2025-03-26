@@ -105,6 +105,14 @@
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
 
+        // 로그인 상태 확인
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // 사용자가 로그인 상태일 때
+        window.location.href = 'gsg.html';
+      }
+    });
+
     // 구글 간편 로그인 함수
     window.googleSignUp = async function() {
       const googleProvider = new GoogleAuthProvider();
