@@ -134,30 +134,54 @@
   </div>
   
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const canvasContainer = document.querySelector(".canvas-container");
-      const canvasElement = document.getElementById("c");
-      const canvas = new fabric.Canvas("c", {
-        isDrawingMode: true,
-        backgroundColor: "transparent" // 캔버스 배경은 컨테이너 배경이 보이도록
-      });
+  document.addEventListener("DOMContentLoaded", function () {
+    const canvasContainer = document.querySelector(".canvas-container");
+    const canvasElement = document.getElementById("c");
+    const canvas = new fabric.Canvas("c", {
+      isDrawingMode: true,
+      backgroundColor: "transparent"
+    });
       
-      // 뷰포트 높이의 3배로 캔버스 확장
-      function resizeCanvas() {
-        const containerWidth = canvasContainer.clientWidth;
-        const extendedHeight = window.innerHeight * 3;
-        canvas.setWidth(containerWidth);
-        canvas.setHeight(extendedHeight);
-        canvas.renderAll();
-      }
-      resizeCanvas();
-      window.addEventListener("resize", resizeCanvas);
+    function resizeCanvas() {
+      const containerWidth = canvasContainer.clientWidth;
+      const extendedHeight = window.innerHeight * 3;
+      canvas.setWidth(containerWidth);
+      canvas.setHeight(extendedHeight);
+      canvas.renderAll();
+    }
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
       
       // 스크롤 시 Fabric.js 내부 오프셋 재계산
-      canvasContainer.addEventListener("scroll", function() {
-        canvas.calcOffset();
-      });
+    canvasContainer.addEventListener("scroll", function() {
+      canvas.calcOffset();
+    });
+
+    let isTouching = false;
+    let startY = 0;
+    let scrollTop = 0;
+
+    canvasContainer.addEventListener("touchstart", function (e) {
+      isTouching = true;
+      startY = e.touches[0].clientY;
+      scrollTop = canvasContainer.scrollTop;
+    });
+
+    canvasContainer.addEventListener("touchmove", function (e) {
+      if (isTouching) {
+        let moveY = e.touches[0].clientY;
+        let diffY = startY - moveY;
+        canvasContainer.scrollTop = scrollTop + diffY;
+        e.preventDefault();
+      }
+    });
+
+    canvasContainer.addEventListener("touchend", function () {
+      isTouching = false;
+    });
       
+
+
       // Undo 상태 히스토리
       let canvasHistory = [];
       function saveState() {
