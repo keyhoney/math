@@ -16,11 +16,13 @@
       display: flex;
       flex-direction: column;
     }
+    /* 메인 콘텐츠 영역: 좌측 사이드바와 캔버스 컨테이너 */
     .main-content {
+      flex: 1;
       display: flex;
-      height: 100vh;
       overflow: hidden;
     }
+    /* 좌측 사이드바: 모든 설정 및 메뉴들을 세로 배열 */
     .sidebar {
       width: 120px;
       background: #2c3e50;
@@ -31,6 +33,7 @@
       gap: 10px;
       overflow: hidden;
     }
+    /* 설정 블록: 펜 색상, 크기 선택을 위한 영역 */
     .setting-block {
       display: flex;
       flex-direction: column;
@@ -39,7 +42,7 @@
     .setting-label {
       padding: 5px 10px;
       background-color: #2c3e50;
-      color: #ffffff;
+      color: #2c3e50;
       font-size: 14px;
       border-radius: 5px;
       width: 100%;
@@ -55,6 +58,7 @@
       text-align: center;
       width: 100%;
     }
+    /* 메뉴 버튼 스타일: 모든 버튼의 너비를 동일하게 */
     .tool-btn {
       width: 100%;
       padding: 2px;
@@ -72,31 +76,35 @@
       background-color: #afceff;
       color: #000000;
     }
+    /* 캔버스 컨테이너: 남은 모든 공간 차지 */
     .canvas-container {
       flex: 1;
       position: relative;
-      overflow-y: auto;
-      overflow-x: hidden;
-      background-color: #fff;
-      background-image: repeating-linear-gradient(0deg, transparent, transparent 24px, #f0f0f0 25px);
-      margin: 0;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      border: 1px solid #ddd;
+      overflow: hidden;
+      background-color: #FFffff;
     }
     canvas {
+      border: 0px solid #FFffff;
+      border-radius: 0px;
       display: block;
       width: 100%;
+      height: 100%;
     }
   </style>
+
+  <!-- Fabric.js 라이브러리 로드 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
 </head>
 <body>
   <div class="main-content">
+    <!-- 좌측 사이드바: 설정 + 메뉴 -->
     <div class="sidebar">
+      <!-- 펜 색상 설정 -->
       <div class="setting-block">
-        <div class="setting-label">색상</div>
+        <div class="setting-label">펜 색상</div>
         <input type="color" id="penColor" value="#000000" class="setting-input">
       </div>
+      <!-- 크기 설정 -->
       <div class="setting-block">
         <div class="setting-label">크기</div>
         <select id="penSize" class="setting-input">
@@ -107,232 +115,218 @@
         </select>
       </div>
       <hr style="width:100%; margin:10px 0;">
+      <!-- 도구 버튼 -->
       <button class="tool-btn active" data-tool="pen">펜</button>
       <button class="tool-btn" data-tool="waterdrop">워터드롭</button>
       <button class="tool-btn" data-tool="areaSelect">영역 선택</button>
-      <button class="tool-btn" data-tool="strokeEraser">획지우개</button>
       <button class="tool-btn" data-tool="eraser">지우개</button>
       <hr style="width:100%; margin:10px 0;">
+      <!-- 실행/액션 버튼 -->
       <button class="tool-btn" id="undo">실행 취소</button>
       <button class="tool-btn" id="clear">전체 지우기</button>
       <button class="tool-btn" id="save">필기 저장</button>
     </div>
+    <!-- 캔버스 컨테이너 -->
     <div class="canvas-container">
       <canvas id="c"></canvas>
     </div>
   </div>
   
   <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const canvasContainer = document.querySelector(".canvas-container");
-    const canvasElement = document.getElementById("c");
-    const canvas = new fabric.Canvas("c", {
-      isDrawingMode: true,
-      backgroundColor: "transparent"
-    });
+    document.addEventListener("DOMContentLoaded", function () {
+      const canvasElement = document.getElementById("c");
+      const canvasContainer = document.querySelector(".canvas-container");
+      const canvas = new fabric.Canvas("c", {
+        isDrawingMode: true,
+        backgroundColor: "#ffffff"
+      });
       
-    function resizeCanvas() {
-      const containerWidth = canvasContainer.clientWidth;
-      const extendedHeight = window.innerHeight * 3;
-      canvas.setWidth(containerWidth);
-      canvas.setHeight(extendedHeight);
-      canvas.renderAll();
-    }
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-      
-    canvasContainer.addEventListener("scroll", function() {
-      canvas.calcOffset();
-    });
-
-    let isTouching = false;
-    let startY = 0;
-    let scrollTop = 0;
-
-    canvasContainer.addEventListener("touchstart", function (e) {
-      isTouching = true;
-      startY = e.touches[0].clientY;
-      scrollTop = canvasContainer.scrollTop;
-    });
-
-    canvasContainer.addEventListener("touchmove", function (e) {
-      if (isTouching) {
-        let moveY = e.touches[0].clientY;
-        let diffY = startY - moveY;
-        canvasContainer.scrollTop = scrollTop + diffY;
-        e.preventDefault();
+      // 캔버스는 사이드바를 제외한 남은 영역을 모두 채움
+      function resizeCanvas() {
+        const containerWidth = canvasContainer.clientWidth;
+        const containerHeight = canvasContainer.clientHeight;
+        canvas.setWidth(containerWidth);
+        canvas.setHeight(containerHeight);
+        canvas.renderAll();
       }
-    });
-
-    canvasContainer.addEventListener("touchend", function () {
-      isTouching = false;
-    });
-
-    let canvasHistory = [];
-    function saveState() {
-      canvasHistory.push(JSON.stringify(canvas));
-    }
-    canvas.on("path:created", function (opt) {
-      const path = opt.path;
-      if (currentTool === "strokeEraser") {
-        eraseIntersectingPaths(path);
-      } else {
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+      
+      // Undo 상태 히스토리
+      let canvasHistory = [];
+      function saveState() {
+        canvasHistory.push(JSON.stringify(canvas));
+      }
+      canvas.on("path:created", function (opt) {
+        const path = opt.path;
+        if (currentTool === "eraser") {
+          eraseIntersectingPaths(path);
+        } else {
+          saveState();
+        }
+      });
+      saveState();
+      
+      // 현재 선택한 도구 (기본값: pen)
+      let currentTool = "pen";
+      
+      function updateTool() {
+        canvas.off("mouse:down");
+        if (currentTool === "pen") {
+          canvas.isDrawingMode = true;
+          canvas.selection = false;
+          canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+          canvas.freeDrawingBrush.color = document.getElementById("penColor").value;
+          canvas.freeDrawingBrush.width = parseInt(document.getElementById("penSize").value, 10);
+          canvas.freeDrawingBrush.globalCompositeOperation = "source-over";
+          canvas.freeDrawingBrush.opacity = 1;
+        } else if (currentTool === "waterdrop") {
+          canvas.isDrawingMode = true;
+          canvas.selection = false;
+          canvas.freeDrawingBrush = new fabric.CircleBrush(canvas);
+          canvas.freeDrawingBrush.color = document.getElementById("penColor").value;
+          canvas.freeDrawingBrush.width = parseInt(document.getElementById("penSize").value, 10);
+          canvas.freeDrawingBrush.globalCompositeOperation = "source-over";
+          canvas.freeDrawingBrush.opacity = 1;
+        } else if (currentTool === "areaSelect") {
+          canvas.isDrawingMode = false;
+          canvas.selection = true;
+        } else if (currentTool === "eraser") {
+          canvas.isDrawingMode = true;
+          canvas.selection = false;
+          canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+          canvas.freeDrawingBrush.width = parseInt(document.getElementById("penSize").value, 10);
+          // 지우개용 브러시는 색상이 중요하지 않음
+          canvas.freeDrawingBrush.color = "#ffffff";
+          canvas.freeDrawingBrush.globalCompositeOperation = "source-over";
+          canvas.freeDrawingBrush.opacity = 1;
+        }
+      }
+      
+      function rectsIntersect(r1, r2) {
+        return !(
+          r2.left > r1.left + r1.width ||
+          r2.left + r2.width < r1.left ||
+          r2.top > r1.top + r1.height ||
+          r2.top + r2.height < r1.top
+        );
+      }
+      
+      function eraseIntersectingPaths(eraserPath) {
+        const eraserBox = eraserPath.getBoundingRect();
+        let objectsToRemove = [];
+        canvas.getObjects().forEach((obj) => {
+          if (obj === eraserPath) return;
+          const objBox = obj.getBoundingRect();
+          if (rectsIntersect(eraserBox, objBox)) {
+            objectsToRemove.push(obj);
+          }
+        });
+        objectsToRemove.forEach((obj) => {
+          canvas.remove(obj);
+        });
+        canvas.remove(eraserPath);
+        canvas.renderAll();
         saveState();
       }
-    });
-    saveState();
       
-    let currentTool = "pen";
-    let originalPenSize = parseInt(document.getElementById("penSize").value, 10);
-    let originalPenColor = document.getElementById("penColor").value;
-    let tempEraserSize, tempEraserColor;
-      
-    function updateTool() {
-      if (currentTool === "pen" || currentTool === "waterdrop") {
-        canvas.isDrawingMode = true;
-        canvas.selection = false;
-        canvas.freeDrawingBrush = currentTool === "pen" ? new fabric.PencilBrush(canvas) : new fabric.CircleBrush(canvas);
-        canvas.freeDrawingBrush.color = originalPenColor;
-        canvas.freeDrawingBrush.width = originalPenSize;
-        canvas.freeDrawingBrush.globalCompositeOperation = "source-over";
-        canvas.freeDrawingBrush.opacity = 1;
-      } else if (currentTool === "areaSelect") {
-        canvas.isDrawingMode = false;
-        canvas.selection = true;
-      } else if (currentTool === "strokeEraser") {
-        canvas.isDrawingMode = true;
-        canvas.selection = false;
-        canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
-        canvas.freeDrawingBrush.color = "#ffffff";
-        canvas.freeDrawingBrush.width = parseInt(document.getElementById("penSize").value, 10);
-        canvas.freeDrawingBrush.globalCompositeOperation = "source-over";
-        canvas.freeDrawingBrush.opacity = 1;
-      } else if (currentTool === "eraser") {
-        canvas.isDrawingMode = true;
-        canvas.selection = false;
-        canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
-        tempEraserSize = 10;
-        tempEraserColor = "#ffffff";
-        canvas.freeDrawingBrush.width = tempEraserSize;
-        canvas.freeDrawingBrush.color = tempEraserColor;
-        canvas.freeDrawingBrush.globalCompositeOperation = "source-over";
-        canvas.freeDrawingBrush.opacity = 1;
-      }
-    }
-      
-    function rectsIntersect(r1, r2) {
-      return !(
-        r2.left > r1.left + r1.width ||
-        r2.left + r2.width < r1.left ||
-        r2.top > r1.top + r1.height ||
-        r2.top + r2.height < r1.top
-      );
-    }
-      
-    function eraseIntersectingPaths(eraserPath) {
-      const eraserBox = eraserPath.getBoundingRect();
-      let objectsToRemove = [];
-      canvas.getObjects().forEach((obj) => {
-        if (obj === eraserPath) return;
-        const objBox = obj.getBoundingRect();
-        if (rectsIntersect(eraserBox, objBox)) {
-          objectsToRemove.push(obj);
-        }
-      });
-      objectsToRemove.forEach((obj) => {
-        canvas.remove(obj);
-      });
-      canvas.remove(eraserPath);
-      canvas.renderAll();
-      saveState();
-    }
-      
-    const toolButtons = document.querySelectorAll(".sidebar .tool-btn[data-tool]");
-    toolButtons.forEach((btn) => {
-      btn.addEventListener("click", function () {
-        toolButtons.forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        
-        if (currentTool === "pen" || currentTool === "waterdrop") {
-          originalPenSize = parseInt(document.getElementById("penSize").value, 10);
-          originalPenColor = document.getElementById("penColor").value;
-        }
-        
-        currentTool = btn.getAttribute("data-tool");
-        updateTool();
-      });
-    });
-      
-    document.getElementById("penColor").addEventListener("change", function () {
-      if (currentTool === "pen" || currentTool === "waterdrop") {
-        originalPenColor = this.value;
-        updateTool();
-      }
-    });
-      
-    document.getElementById("penSize").addEventListener("change", function () {
-      if (currentTool === "pen" || currentTool === "waterdrop" || currentTool === "strokeEraser") {
-        originalPenSize = parseInt(this.value, 10);
-        updateTool();
-      }
-    });
-      
-    document.getElementById("undo").addEventListener("click", function () {
-      if (canvasHistory.length > 1) {
-        canvasHistory.pop();
-        const lastState = canvasHistory[canvasHistory.length - 1];
-        canvas.loadFromJSON(lastState, function () {
-          canvas.renderAll();
+      const toolButtons = document.querySelectorAll(".sidebar .tool-btn[data-tool]");
+      toolButtons.forEach((btn) => {
+        btn.addEventListener("click", function () {
+          toolButtons.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentTool = btn.getAttribute("data-tool");
+          updateTool();
         });
-      }
-    });
+      });
       
-    document.getElementById("clear").addEventListener("click", function () {
-      canvas.clear();
-      canvas.backgroundColor = "transparent";
-      canvas.renderAll();
-      saveState();
-    });
+      document.getElementById("penColor").addEventListener("change", function () {
+        if (currentTool === "pen" || currentTool === "waterdrop") updateTool();
+      });
+      document.getElementById("penSize").addEventListener("change", function () {
+        if (
+          currentTool === "pen" ||
+          currentTool === "waterdrop" ||
+          currentTool === "eraser"
+        )
+          updateTool();
+      });
       
-    document.getElementById("save").addEventListener("click", function () {
-      const dataURL = canvas.toDataURL({ format: "png" });
-      const link = document.createElement("a");
-      link.href = dataURL;
-      link.download = "drawing.png";
-      link.click();
-    });
+      document.getElementById("undo").addEventListener("click", function () {
+        if (canvasHistory.length > 1) {
+          canvasHistory.pop();
+          const lastState = canvasHistory[canvasHistory.length - 1];
+          canvas.loadFromJSON(lastState, function () {
+            canvas.renderAll();
+          });
+        }
+      });
       
-    canvas.upperCanvasEl.addEventListener("pointerdown", function (e) {
-      if(e.pointerType === "touch"){
-        e.preventDefault();
-      }
-      if(currentTool !== "areaSelect"){
-        canvas.isDrawingMode = true;
-      } else {
-        canvas.isDrawingMode = false;
-      }
-    });
+      document.getElementById("clear").addEventListener("click", function () {
+        canvas.clear();
+        canvas.backgroundColor = "#ffffff";
+        canvas.renderAll();
+        saveState();
+      });
       
-    const placeholderText = new fabric.Text("필기 노트", {
-      left: canvas.width / 2,
-      top: canvas.height / 10,
-      fontSize: 100,
-      fill: "#ccc",
-      selectable: false,
-      evented: false,
-      originX: "center",
-      originY: "center"
-    });
-    canvas.add(placeholderText);
+      document.getElementById("save").addEventListener("click", function () {
+        const dataURL = canvas.toDataURL({ format: "png" });
+        const link = document.createElement("a");
+        link.href = dataURL;
+        link.download = "drawing.png";
+        link.click();
+      });
       
-    let hasDrawn = false;
-    canvas.on("path:created", function () {
-      if (!hasDrawn) {
-        canvas.remove(placeholderText);
-        hasDrawn = true;
-      }
+canvas.upperCanvasEl.addEventListener("pointerdown", function (e) {
+  if (e.pointerType === "touch") {
+    e.preventDefault(); // 터치 입력 방지
+    canvas.isDrawingMode = false;
+  } else {
+    canvas.isDrawingMode = true;
+  }
+});
+    
     });
+document.addEventListener("DOMContentLoaded", function () {
+  const canvasContainer = document.querySelector(".canvas-container");
+  const canvas = new fabric.Canvas("c", {
+    isDrawingMode: true,
+    backgroundColor: "#ffffff"
   });
+
+  function resizeCanvas() {
+    const containerWidth = canvasContainer.clientWidth;
+    const containerHeight = canvasContainer.clientHeight;
+    canvas.setWidth(containerWidth);
+    canvas.setHeight(containerHeight);
+    canvas.renderAll();
+  }
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas);
+
+  // 초기 "필기 노트" 텍스트 추가
+  const placeholderText = new fabric.Text("필기 노트", {
+    left: canvas.width / 2,
+    top: canvas.height / 2,
+    fontSize: 100,
+    fill: "#ccc",
+    selectable: false,
+    evented: false,
+    originX: "center",
+    originY: "center"
+  });
+  canvas.add(placeholderText);
+
+  // 사용자가 필기를 시작하면 플레이스홀더 제거
+  let hasDrawn = false;
+  canvas.on("path:created", function () {
+    if (!hasDrawn) {
+      canvas.remove(placeholderText);
+      hasDrawn = true;
+    }
+  });
+});
+
   </script>
 </body>
 </html>
