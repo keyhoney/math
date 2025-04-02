@@ -121,7 +121,7 @@ body {
   flex: 1;
   width: 100%;
   transition: all 0.3s ease;
-  overflow: hidden;
+  overflow: hidden auto;
 }
 
 /* 기본 질문 콘텐츠 */
