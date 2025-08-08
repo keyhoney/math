@@ -1,52 +1,234 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>개념별 새겨봐야 할 기출문제</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js" type="module"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>개인화 맞춤형 수학 문제 - 여학생 친화적 수학 학습 시스템</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+    <text y='.9em' font-size='90'>📚</text>
+    </svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+      /* gsg.html 전용 고급 레이아웃 개선 */
+      .page-container { max-width: 1280px; margin: 0 auto; padding: 16px; }
+      .main-layout { display: grid; grid-template-columns: 320px 1fr 360px; gap: 24px; align-items: start; }
+      /* 좌측 사이드바 */
+      .sidebar { position: sticky; top: 88px; height: calc(100vh - 120px); overflow: auto; border-radius: 14px; backdrop-filter: saturate(120%) blur(4px); }
+      .sidebar h2 { margin: 12px 16px; font-size: 18px; opacity: .9; }
+      #questionList { padding: 8px 8px 16px; }
+      /* 중앙 영역 */
+      .content-header { position: sticky; top: 72px; z-index: 2; }
+      .iframe-container { border-radius: 16px; overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,.12); min-height: 58vh; background: rgba(0,0,0,.06); }
+      #questionFrame { width: 100%; height: 68vh; border: 0; opacity: 0; transition: opacity .35s ease; display: block; }
+      #questionFrame.loaded { opacity: 1; }
+      .frame-skeleton { position: relative; height: 0; }
+      .frame-skeleton::before { content: ""; position: absolute; inset: -68vh 0 0 0; background: linear-gradient(120deg, rgba(255,255,255,.18), rgba(255,255,255,.32), rgba(255,255,255,.18)); border-radius: 16px; animation: shimmer 1.3s infinite; filter: blur(.2px); }
+      @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+      .iframe-container iframe.loaded ~ .frame-skeleton { opacity: 0; pointer-events: none; transition: opacity .3s ease, transform .3s ease; transform: translateY(8px); }
+      .content-bottom { display: grid; grid-template-columns: 1fr; gap: 16px; padding-top: 16px; }
+      .navigation-buttons { display: grid; grid-auto-flow: column; gap: 12px; justify-content: start; }
+      .nav-btn { padding: 14px 18px; font-weight: 600; border-radius: 12px; }
+      .answer-area { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+      .answer-input { padding: 14px 16px; border-radius: 12px; font-size: 16px; }
+      .check-btn { padding: 14px 18px; border-radius: 12px; font-weight: 700; }
+      .result-area { min-height: 48px; display: grid; gap: 6px; }
+      .kbd-hints { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 12px; opacity: .9; }
+      .kbd { padding: 6px 10px; border-radius: 10px; background: rgba(255,255,255,.18); box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
+      /* 우측 패널 */
+      .right-panel { position: sticky; top: 88px; height: fit-content; border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+      .note-content textarea { min-height: 180px; border-radius: 12px; }
+      .note-actions { display: grid; grid-auto-flow: column; gap: 10px; justify-content: end; }
+      /* 회전 안내 */
+      #rotateMessage { position: fixed; inset-inline: 0; top: 56px; margin: 0 auto; width: fit-content; padding: 10px 14px; border-radius: 10px; }
+      /* 사이드바 아이템 고급 스타일 */
+      #questionList .dashboard-menu-item, #questionList .category-header, #questionList .subcategory-header, #questionList .question-item {
+        border-radius: 12px; margin: 6px 8px; padding: 10px 12px; transition: transform .16s ease, background .2s ease, box-shadow .2s ease; cursor: pointer;
+      }
+      #questionList .dashboard-menu-item:hover, #questionList .category-header:hover, #questionList .subcategory-header:hover, #questionList .question-item:hover {
+        transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,.08);
+      }
+      #questionList .collapse-icon { opacity: .65; }
+      #questionList .menu-separator hr { opacity: .35; }
+      /* 플로팅 즐겨찾기 버튼 강화 */
+      .floating-button.favorite-button { width: 56px; height: 56px; border-radius: 50%; font-size: 22px; display: grid; place-items: center; box-shadow: 0 12px 28px rgba(0,0,0,.18); transition: transform .18s ease, box-shadow .18s ease; }
+      .floating-button.favorite-button:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 16px 36px rgba(0,0,0,.22); }
+      /* 반응형 */
+      @media (max-width: 1200px) {
+        .main-layout { grid-template-columns: 280px 1fr; }
+        .right-panel { display: none; }
+      }
+      @media (max-width: 860px) {
+        .page-container { padding: 8px; }
+        .main-layout { grid-template-columns: 1fr; gap: 16px; }
+        .sidebar { top: 72px; height: auto; max-height: 42vh; }
+        .content-header { top: 64px; }
+        #questionFrame { height: 56vh; }
+      }
+    </style>
 </head>
 <body>
-  <div id="rotateMessage">화면을 회전해 주세요.</div>
-  <div id="top">
-    <div id="left">
-      <h2>문항 선택</h2>
-      <ul id="questionList"></ul>
-    </div>
-    <div id="center">
-      <div id="centerHeader">
-        개념별 새겨봐야 할 기출문제
-        <button id="noteToggleButton" onclick="toggleNote()">노트 열기</button>
-      </div>
-      <!-- center의 메인 콘텐츠 영역 -->
-      <div id="centerMain">
-        <div id="questionContent">
-          <div id="questionOverlay" style="display:none;">
-            <div id="questionTitle" class="question-title"></div>
-            <div id="questionMeta" class="question-meta"></div>
-          </div>
-          <img id="selectedImage" src="" alt="선택한 문제 이미지" style="display:none;">
+    <!-- 상단 헤더: 반응형 내비게이션 -->
+    <div class="app-header">
+        <button class="menu-toggle-btn" type="button" onclick="toggleMenu()" aria-label="메뉴 열기">☰</button>
+        <div class="brand">송현여고 수학</div>
+        <div class="app-actions">
+            <button class="btn btn-secondary" type="button" onclick="goToDashboard()">대시보드</button>
+            <button class="btn btn-outline" type="button" onclick="toggleNote()">메모</button>
         </div>
-        <!-- 노트 영역(#right)은 toggleNote()에서 동적으로 추가/제거됩니다 -->
-      </div>
     </div>
-  </div>
-    <div id="bottom">
-    <div id="leftBottom">
-      <div id="answerArea">
-        <input type="text" id="answer" placeholder="답을 입력하세요">
-        <button onclick="checkAnswer()">제출</button>
-      </div>
+    <!-- 세로 모드 안내 메시지 -->
+    <div id="rotateMessage">세로 모드로 전환해주세요</div>
+    
+    <!-- 모바일 메뉴 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <span>메뉴</span>
+            <button class="mobile-menu-close" onclick="closeMobileMenu()">&times;</button>
+        </div>
+        <div class="mobile-menu-content" id="mobileMenuContent">
+            <!-- 모바일 메뉴 내용은 JavaScript로 동적으로 추가됩니다-->
+        </div>
     </div>
-    <div id="rightBottom">
-      <div id="resultArea">
-        <div id="result"></div>
-        <div id="solutionLink" style="margin-top: 5px;"></div>
-      </div>
+    
+    <!-- 로딩 인디케이터 -->
+    <div class="loading-indicator" id="loadingIndicator">
+        <div class="loading-spinner"></div>
+        <div>문제를 불러오는 중...</div>
     </div>
-  </div>  
-  <button class="floating-button" onclick="toggleMenu()">☰</button>
+    
+    <div class="page-container">
+    <!-- 메인 레이아웃 -->
+    <div class="main-layout">
+        <!-- 왼쪽 사이드바 -->
+        <div class="sidebar" id="left">
+            <h2>문제 선택</h2>
+            <ul id="questionList">
+                <!-- 문제 목록은 JavaScript로 동적으로 추가됩니다-->
+            </ul>
+        </div>
+        
+        <!-- 중앙 콘텐츠 영역 -->
+        <div class="main-content" id="center">
+            <!-- 헤더 -->
+            <div class="content-header" id="centerHeader">
+                <div class="header-content">
+                    <div class="header-title">
+                        <div class="title-icon">📚</div>
+                        <span>개인화 맞춤형 수학 문제</span>
+                    </div>
+                    <div class="header-actions">
+                        <button id="noteToggleButton" onclick="toggleNote()" class="note-btn">
+                            <span class="note-icon">📝</span>
+                            <span class="note-text">메모</span>
+                        </button>
+                        <button class="dashboard-btn" onclick="goToDashboard()">
+                            <span class="dashboard-icon">📊</span>
+                            <span class="dashboard-text">대시보드</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 메인 콘텐츠 -->
+            <div class="content-main" id="centerMain">
+                <!-- 문제 표시 영역 -->
+                <div class="iframe-container">
+                    <iframe id="questionFrame" src="" style="display: none;"></iframe>
+                    <div class="frame-skeleton" aria-hidden="true"></div>
+                </div>
+                
+                <!-- 하단 영역 -->
+                <div class="content-bottom">
+                    <!-- 네비게이션 버튼 -->
+                    <div class="navigation-buttons">
+                        <button class="nav-btn" type="button" onclick="navigateToPreviousQuestion()">
+                            <span>←</span>
+                            <span>이전 문제</span>
+                        </button>
+                        <button class="nav-btn" type="button" onclick="navigateToNextQuestion()">
+                            <span>다음 문제</span>
+                            <span>→</span>
+                        </button>
+                    </div>
+                    
+                    <!-- 답안 입력 영역 -->
+                    <div class="answer-area">
+                        <input type="text" id="answer" class="answer-input" placeholder="답안 입력">
+                        <button class="check-btn" type="button" onclick="checkAnswer()">확인</button>
+                    </div>
+                    
+                    <!-- 결과 표시 영역 -->
+                    <div class="result-area" aria-live="polite">
+                        <div id="result"></div>
+                        <div id="solutionLink"></div>
+                    </div>
+
+                    <!-- 키보드 힌트 -->
+                    <div class="kbd-hints" aria-hidden="true">
+                        <div class="kbd">← 이전 문제</div>
+                        <div class="kbd">→ 다음 문제</div>
+                        <div class="kbd">Enter 정답 확인</div>
+                        <div class="kbd">Esc 이미지 닫기</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 오른쪽 패널 (메모) -->
+        <div class="right-panel" id="rightPanel">
+            <h3>📝 학습 메모</h3>
+            <div class="note-content">
+                <textarea id="noteText" placeholder="이 문제에 대한 메모를 작성해보세요..."></textarea>
+                <div class="note-actions">
+                    <button class="save-note-btn" type="button" onclick="saveNote()">저장</button>
+                    <button class="clear-note-btn" type="button" onclick="clearNote()">지우기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    
+    <!-- 떠다니는 즐겨찾기 버튼 -->
+    <button class="floating-button favorite-button" type="button" onclick="toggleFavorite()" title="즐겨찾기">
+        ❤️
+    </button>
+    
+    <!-- 문제 모달 -->
+    <div class="image-modal" id="imageModal">
+        <div class="image-modal-content">
+            <img id="modalImage" src="" alt="문제 이미지">
+            <button class="modal-close-btn" onclick="closeQuestionModal()">&times;</button>
+        </div>
+    </div>
+    
+    <!-- script.js를 모듈로 로드 -->
+    <script type="module" src="script.js"></script>
+    
+    <!-- 추가 스크립트: 중복 정의 제거 및 필수 보완만 적용 -->
+    <script>
+      // 모바일 메뉴 닫기: script.js와 클래스명 일치
+      window.closeMobileMenu = function() {
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenu) mobileMenu.classList.remove('open');
+      };
+
+      // 모달 닫기만 단순 DOM 조작으로 유지
+      window.closeQuestionModal = function() {
+        const modal = document.getElementById('imageModal');
+        if (modal) modal.style.display = 'none';
+      };
+
+      // 화면 회전: 전역 checkOrientation이 있으면 사용
+      window.addEventListener('orientationchange', function() {
+        if (typeof window.checkOrientation === 'function') {
+          window.checkOrientation();
+        }
+      });
+      if (typeof window.checkOrientation === 'function') {
+        window.checkOrientation();
+      }
+    </script>
 </body>
 </html>
+
